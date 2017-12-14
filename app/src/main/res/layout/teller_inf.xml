@@ -1,0 +1,145 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal" >
+
+    <LinearLayout
+        android:layout_width="@dimen/teller_area_width"
+        android:layout_height="@dimen/teller_area_height"
+        android:layout_margin="@dimen/teller_widget_margin"
+        android:background="@color/white" >
+
+        <ImageView
+            android:id="@+id/teller_photo"
+            android:layout_width="@dimen/teller_head_width"
+            android:layout_height="@dimen/teller_head_height"
+            android:layout_margin="1dp"
+            android:background="@color/gray"
+            android:scaleType="fitXY" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/teller_head_height"
+        android:layout_margin="@dimen/teller_widget_margin"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:orientation="horizontal" >
+
+            <com.joesmate.widget.CustomText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:singleLine="true"
+                android:text="工 号："
+                android:textColor="@color/white"
+                android:textSize="@dimen/teller_text_size" />
+
+            <com.joesmate.widget.CustomText
+                android:id="@+id/teller_id"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="marquee"
+                android:gravity="left"
+                android:marqueeRepeatLimit="marquee_forever"
+                android:scrollHorizontally="true"
+                android:singleLine="true"
+                android:textColor="@color/white"
+                android:textSize="@dimen/teller_text_size" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:orientation="horizontal" >
+
+            <com.joesmate.widget.CustomText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:singleLine="true"
+                android:text="姓 名："
+                android:textColor="@color/white"
+                android:textSize="@dimen/teller_text_size" />
+
+            <com.joesmate.widget.CustomText
+                android:id="@+id/teller_name"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="marquee"
+                android:gravity="left"
+                android:marqueeRepeatLimit="marquee_forever"
+                android:scrollHorizontally="true"
+                android:singleLine="true"
+                android:textColor="@color/white"
+                android:textSize="@dimen/teller_text_size" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:orientation="horizontal" >
+
+            <com.joesmate.widget.CustomText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:singleLine="true"
+                android:text="岗 位："
+                android:textColor="@color/white"
+                android:textSize="@dimen/teller_text_size" />
+
+            <com.joesmate.widget.CustomText
+                android:id="@+id/teller_job"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="marquee"
+                android:gravity="left"
+                android:marqueeRepeatLimit="marquee_forever"
+                android:scrollHorizontally="true"
+                android:singleLine="true"
+                android:textColor="@color/white"
+                android:textSize="@dimen/teller_text_size" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:orientation="horizontal" >
+
+            <com.joesmate.widget.CustomText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:singleLine="true"
+                android:text="工 龄："
+                android:textColor="@color/white"
+                android:textSize="@dimen/teller_text_size" />
+
+            <com.joesmate.widget.CustomText
+                android:id="@+id/teller_age"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="marquee"
+                android:gravity="left"
+                android:marqueeRepeatLimit="marquee_forever"
+                android:scrollHorizontally="true"
+                android:singleLine="true"
+                android:textColor="@color/white"
+                android:textSize="@dimen/teller_text_size" />
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

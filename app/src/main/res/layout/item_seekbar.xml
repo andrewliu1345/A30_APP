@@ -1,0 +1,41 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/content_blue"
+    android:gravity="center_vertical"
+    android:orientation="horizontal" >
+
+    <View
+        android:layout_width="@dimen/keyboard_items_margin_left"
+        android:layout_height="fill_parent"
+        android:background="@color/title_blue" />
+
+    <com.joesmate.widget.CustomText
+        android:id="@+id/item_seekbar_title"
+        android:layout_width="0dp"
+        android:layout_height="fill_parent"
+        android:layout_weight="0.2"
+        android:gravity="center_vertical|left"
+        android:text="音量"
+        android:textColor="@color/white"
+        android:textSize="@dimen/page_base_content_size" />
+
+    <SeekBar
+        android:id="@+id/item_seekbar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.6" />
+
+    <com.joesmate.widget.CustomText
+        android:id="@+id/item_seekbar_value"
+        android:layout_width="0dp"
+        android:layout_height="fill_parent"
+        android:layout_weight="0.2"
+        android:gravity="center_vertical|right"
+        android:paddingRight="@dimen/page_base_widget_margin"
+        android:text="90"
+        android:textColor="@color/white"
+        android:textSize="@dimen/page_base_content_size" />
+
+</LinearLayout>

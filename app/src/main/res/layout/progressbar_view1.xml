@@ -1,0 +1,26 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:gravity="center"
+    android:orientation="vertical" >
+
+    <com.joesmate.widget.CustomText
+        android:id="@+id/progressbar_hint"
+        android:layout_width="@dimen/progressbar_frame_width"
+        android:layout_height="@dimen/progressbar_item_height"
+        android:background="@color/title_blue"
+        android:gravity="center"
+        android:text="@string/transmit_str"
+        android:textColor="@color/white"
+        android:textSize="@dimen/page_base_content_size" />
+
+	<ProgressBar android:id="@+id/progressbar_down"  
+        android:layout_width="@dimen/progressbar_frame_width"
+        android:layout_height="@dimen/progressbar_item_height" 
+        style="@android:style/Widget.ProgressBar.Horizontal"
+        android:gravity="center" 
+        android:max="100"  
+        android:progress="0" />
+
+</LinearLayout>

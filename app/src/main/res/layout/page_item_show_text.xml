@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	android:gravity="center">
+    <com.joesmate.widget.CustomText
+        android:background="@drawable/timer_bg"
+        android:id="@+id/page_item_showtext_txt"
+        android:gravity="center"
+        android:layout_width="500dp"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:textSize="60dp"/>
+</LinearLayout>

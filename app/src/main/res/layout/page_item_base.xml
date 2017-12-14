@@ -1,0 +1,198 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+
+    <RelativeLayout
+        android:layout_width="@dimen/page_base_width"
+        android:layout_height="@dimen/page_base_height"
+        android:layout_centerInParent="true"
+        android:background="@color/content_blue" >
+
+        <com.joesmate.widget.CustomText
+            android:id="@+id/page_base_title"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/page_base_title_height"
+            android:background="@color/title_blue"
+            android:gravity="center"
+            android:text="请确认信息"
+            android:textColor="@color/white"
+            android:textSize="@dimen/page_base_title_size" />
+
+        <ImageView
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@id/page_base_title"
+            android:layout_marginLeft="@dimen/page_base_widget_margin"
+            android:layout_marginTop="@dimen/ccb_margin_top"
+            android:background="@drawable/ccb_logo" />
+
+        <com.joesmate.widget.TimerView
+            android:id="@+id/page_base_timer"
+            android:layout_width="@dimen/page_base_timer_width"
+            android:layout_height="@dimen/page_base_timer_height"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/page_base_title"
+            android:layout_marginRight="@dimen/page_base_widget_margin"
+            android:layout_marginTop="@dimen/page_base_widget_margin"
+           
+            android:gravity="center"
+            android:text="倒计时:30"
+            android:textColor="@color/white"
+            android:textSize="@dimen/page_base_title_size" />
+
+        <ImageView
+            android:id="@+id/page_item_top_line"
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/line_width"
+            android:layout_below="@id/page_base_timer"
+            android:layout_marginTop="@dimen/page_base_widget_margin"
+            android:background="@color/white" />
+
+        <LinearLayout
+            android:id="@+id/page_base_content"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/page_base_timer"
+            android:layout_margin="@dimen/page_base_widget_margin"
+            android:orientation="vertical" >
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/page_item_bt_line"
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/line_width"
+            android:layout_above="@+id/page_base_btGroup"
+            android:layout_marginTop="@dimen/page_base_widget_margin"
+            android:background="@color/white" />
+
+        <LinearLayout
+            android:id="@+id/page_base_btGroupOption"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="70dp"
+            android:layout_alignParentBottom="true"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.15"
+                android:gravity="left" >
+
+                <Button
+                    android:id="@+id/page_base_bt_upOption"
+                    android:layout_width="@dimen/page_base_bt_width"
+                    android:layout_height="@dimen/page_base_bt_height"
+                    android:background="@color/bt_ok"
+                    android:text="上一题"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/page_base_title_size" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/page_base_Option_content"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.7" 
+                android:scrollbars="horizontal"
+               
+                android:orientation="horizontal"/>
+
+                <LinearLayout
+                    android:id="@+id/page_base_layout_nextOption"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.15"
+                    android:gravity="right" >
+
+                    <Button
+                        android:id="@+id/page_base_bt_nextOption"
+                        android:layout_width="@dimen/page_base_bt_width"
+                        android:layout_height="@dimen/page_base_bt_height"
+                        android:background="@color/bt_ok"
+                        android:text="确定"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/page_base_title_size" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/page_base_btGroup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:orientation="horizontal" >
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="left" >
+
+                    <Button
+                        android:id="@+id/page_base_bt_upward"
+                        android:layout_width="@dimen/page_base_bt_width"
+                        android:layout_height="@dimen/page_base_bt_height"
+                        android:background="@color/bt_ok"
+                        android:text="上页"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/page_base_title_size" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/page_base_layout_ok"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal" >
+
+                    <Button
+                        android:id="@+id/page_base_bt_cancel"
+                        android:layout_width="@dimen/page_base_bt_width"
+                        android:layout_height="@dimen/page_base_bt_height"
+                        android:background="@color/bt_cancel"
+                        android:text="取消"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/page_base_title_size" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal" >
+
+                    <Button
+                        android:id="@+id/page_base_bt_ok"
+                        android:layout_width="@dimen/page_base_bt_width"
+                        android:layout_height="@dimen/page_base_bt_height"
+                        android:background="@color/bt_ok"
+                        android:text="确定"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/page_base_title_size" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="right" >
+
+                    <Button
+                        android:id="@+id/page_base_bt_next"
+                        android:layout_width="@dimen/page_base_bt_width"
+                        android:layout_height="@dimen/page_base_bt_height"
+                        android:background="@color/bt_ok"
+                        android:text="下页"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/page_base_title_size" />
+                </LinearLayout>
+            </LinearLayout>
+    </RelativeLayout>
+
+</RelativeLayout>

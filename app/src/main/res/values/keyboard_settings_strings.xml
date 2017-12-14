@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="keyboard_settings_title">
+        <item>输入模式</item>
+        <item>发送模式</item>
+        <item>音量设置</item>
+        <item>波特率</item>
+        <item>串口电平</item>
+        <item>终端键码</item>
+    </string-array>
+    <string-array name="keyboard_settings_options1">
+        <item>输入受控</item>
+        <item>输入常开</item>
+    </string-array>
+    <string-array name="keyboard_settings_options2">
+        <item>单件发送</item>
+        <item>打包发送</item>
+    </string-array>
+    <string-array name="keyboard_settings_options3">
+        <item>小</item>
+        <item>中</item>
+        <item>大</item>
+        <item>最大</item>
+    </string-array>
+    <string-array name="keyboard_settings_options4">
+        <item>9600</item>
+        <item>1200</item>
+        <item>115200</item>
+    </string-array>
+    <string-array name="keyboard_settings_options5">
+        <item>RS232</item>
+        <item>TTL</item>
+        <item>自动识别RS232</item>
+        <item>自动识别TTL</item>
+    </string-array>
+    <string-array name="keyboard_settings_options6">
+        <item>ASCII</item>
+        <item>国光</item>
+        <item>实达</item>
+    </string-array>
+
+</resources>

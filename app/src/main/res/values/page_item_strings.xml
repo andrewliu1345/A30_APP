@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="page_item_title_jh">请确认交易信息</string>
+    <string name="page_item_title_pj">请对我们的服务给予评价</string>
+    <string name="page_item_title_pjover">谢谢评价</string>
+    <string name="page_item_title_signature">请核对凭证信息并签名</string>
+    <string name="page_item_title_input_validation">请输入验证码</string>
+    <string name="page_item_title_input_money">请输入金额</string>
+    <string name="page_item_title_input_account">请输入账号</string>
+    <string name="page_item_title_input">请输入</string>
+    <string name="page_item_title_question">调查问卷</string>
+
+    <string-array name="dev_settings_item_colors">
+        <item>黑色</item>
+        <item>红色</item>
+        <item>蓝色</item>
+    </string-array>
+    <string-array name="dev_settings_item_baud">
+        <item>1200</item>
+        <item>9600</item>
+        <item>115200</item>
+    </string-array>
+
+</resources>

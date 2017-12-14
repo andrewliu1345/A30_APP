@@ -1,0 +1,30 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="horizontal" >
+
+    <com.joesmate.widget.CustomText
+        android:id="@+id/settings_item_unturn_title"
+        android:layout_width="0dp"
+        android:layout_height="fill_parent"
+        android:layout_weight="0.7"
+        android:background="@color/gray"
+        android:gravity="left|center_vertical"
+        android:paddingLeft="@dimen/page_base_widget_margin"
+        android:text="输入模式"
+        android:textColor="@color/white"
+        android:textSize="@dimen/page_base_content_size" />
+
+    <com.joesmate.widget.CustomText
+        android:id="@+id/settings_item_unturn_option"
+        android:layout_width="0dp"
+        android:layout_height="fill_parent"
+        android:layout_weight="0.3"
+        android:background="@color/bt_ok"
+        android:gravity="center"
+        android:text="串口"
+        android:textColor="@color/white"
+        android:textSize="@dimen/page_base_content_size" />
+
+</LinearLayout>

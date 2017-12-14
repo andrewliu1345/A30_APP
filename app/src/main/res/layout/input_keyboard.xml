@@ -1,0 +1,146 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:layout_gravity="center_horizontal"
+    android:orientation="horizontal">
+
+    <TableLayout
+        android:layout_width="680dp"
+        android:layout_height="4000dp">
+
+        <TableRow>
+
+            <Button
+                android:id="@+id/input_keyboard_1"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/settings_keyboard_height"
+                android:layout_weight="1"
+                android:text="1"
+                android:textSize="@dimen/settings_fontSzie" />
+
+            <Button
+                android:id="@+id/input_keyboard_2"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/settings_keyboard_height"
+                android:layout_weight="1"
+                android:text="2"
+                android:textSize="@dimen/settings_fontSzie" />
+
+            <Button
+                android:id="@+id/input_keyboard_3"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/settings_keyboard_height"
+                android:layout_weight="1"
+                android:text="3"
+                android:textSize="@dimen/settings_fontSzie" />
+        </TableRow>
+
+        <TableRow>
+
+            <Button
+                android:id="@+id/input_keyboard_4"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/settings_keyboard_height"
+                android:layout_weight="1"
+                android:text="4"
+                android:textSize="@dimen/settings_fontSzie" />
+
+            <Button
+                android:id="@+id/input_keyboard_5"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/settings_keyboard_height"
+                android:layout_weight="1"
+                android:text="5"
+                android:textSize="@dimen/settings_fontSzie" />
+
+            <Button
+                android:id="@+id/input_keyboard_6"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/settings_keyboard_height"
+                android:layout_weight="1"
+                android:text="6"
+                android:textSize="@dimen/settings_fontSzie" />
+        </TableRow>
+
+        <TableRow>
+
+            <Button
+                android:id="@+id/input_keyboard_7"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/settings_keyboard_height"
+                android:layout_weight="1"
+                android:text="7"
+                android:textSize="@dimen/settings_fontSzie" />
+
+            <Button
+                android:id="@+id/input_keyboard_8"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/settings_keyboard_height"
+                android:layout_weight="1"
+                android:text="8"
+                android:textSize="@dimen/settings_fontSzie" />
+
+            <Button
+                android:id="@+id/input_keyboard_9"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/settings_keyboard_height"
+                android:layout_weight="1"
+                android:text="9"
+                android:textSize="@dimen/settings_fontSzie" />
+        </TableRow>
+
+        <TableRow>
+
+            <Button
+                android:id="@+id/input_keyboard_0"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/settings_keyboard_height"
+                android:layout_weight="1"
+                android:text="0"
+                android:textSize="@dimen/settings_fontSzie" />
+
+            <Button
+                android:id="@+id/input_keyboard_point"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/settings_keyboard_height"
+                android:layout_weight="1"
+                android:text="."
+                android:textSize="@dimen/settings_fontSzie" />
+        </TableRow>
+
+        <TableRow>
+
+            <Button
+                android:id="@+id/input_keyboard_modification"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/settings_keyboard_height"
+                android:layout_weight="1"
+                android:background="@color/bt_cancel"
+                android:text="取消"
+                android:textSize="@dimen/settings_fontSzie" />
+
+            <Button
+                android:id="@+id/input_keyboard_ok"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/settings_keyboard_height"
+                android:layout_weight="1"
+                android:background="@color/bt_ok"
+                android:text="确认"
+                android:textSize="@dimen/settings_fontSzie" />
+
+            <Button
+                android:id="@+id/input_keyboard_back"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/settings_keyboard_height"
+                android:layout_weight="1"
+                android:background="@color/gray"
+                android:text="返回"
+                android:textSize="@dimen/settings_fontSzie" />
+        </TableRow>
+
+
+    </TableLayout>
+
+
+</LinearLayout>

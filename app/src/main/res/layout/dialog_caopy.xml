@@ -1,0 +1,58 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/dialog_bg"
+    android:orientation="vertical" >
+
+    <TextView
+        android:layout_marginTop="20dp"
+        android:layout_width="fill_parent"
+        android:layout_height="60dp"
+        android:gravity="center"
+        android:text="资源升级"
+        android:textColor="@color/white"
+        android:textSize="@dimen/title_size" />
+    <ImageView 
+        android:background="@drawable/line"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/margin"
+        android:layout_marginRight="@dimen/margin"/>
+
+    <TextView
+        android:layout_marginLeft="@dimen/margin"
+        android:layout_width="fill_parent"
+        android:layout_height="60dp"
+        android:gravity="left"
+        android:paddingLeft="20dp"
+        android:text="请勿拔出TF卡"
+        android:textColor="@color/red"
+        android:textSize="@dimen/content_size" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal" >
+
+        <ProgressBar
+            android:id="@+id/upgrade_progress"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:progressDrawable="@drawable/progress_drawable"
+            android:layout_width="0dp"
+            android:layout_weight="0.8"
+            android:layout_height="25dp"
+            android:layout_margin="20dp" />
+
+        <TextView
+            android:id="@+id/upgrade_inf"
+            android:layout_width="0dp"
+            android:layout_weight="0.2"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:textColor="@color/white"
+            android:textSize="@dimen/content_size" />
+    </LinearLayout>
+
+</LinearLayout>

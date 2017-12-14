@@ -1,0 +1,22 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:gravity="center">
+
+    <com.joesmate.widget.CustomText
+        android:id="@+id/appraise_button_ch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white" 
+        android:textSize="@dimen/appraise_buton_text_size"/>
+     <com.joesmate.widget.CustomText
+        android:id="@+id/appraise_button_en"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white" 
+        android:textSize="@dimen/appraise_buton_text_en_size"/>
+    
+
+</LinearLayout>

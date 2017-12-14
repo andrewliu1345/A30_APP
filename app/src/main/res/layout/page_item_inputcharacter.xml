@@ -1,0 +1,45 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+
+   
+        <com.joesmate.widget.CustomText
+            android:visibility="gone"
+            android:layout_marginTop="20dp"
+            android:id="@+id/page_item_inputcharacter_msg"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:gravity="bottom"
+            android:textColor="@color/black"
+            android:textSize="@dimen/page_base_content_size" />
+
+       
+
+        <com.joesmate.widget.CustomText
+            android:layout_centerHorizontal="true"
+             android:layout_marginTop="20dp"
+            android:id="@+id/page_item_inputcharacter_chara"
+            android:layout_width="680dp"
+            
+            android:layout_height="@dimen/input_character_msg_height"
+           
+            android:background="@drawable/input_txt_bg"
+            android:gravity="center"
+            android:singleLine="false"
+            android:scrollbars="vertical"
+            android:textColor="@color/black"
+            android:textSize="@dimen/page_base_content_size" />
+   
+  
+
+    <com.joesmate.widget.InputKeyBoard
+        android:id="@+id/page_item_inputcharacter_keyboard"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/page_item_inputcharacter_chara"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"/>
+
+</RelativeLayout>

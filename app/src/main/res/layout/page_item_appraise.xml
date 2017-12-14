@@ -1,0 +1,64 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:layout_marginBottom="20dp"
+   >
+
+
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center">
+<ImageView
+    android:id="@+id/photo"
+    android:layout_width="200dp"
+    android:scaleType="fitXY"
+    android:layout_height="300dp"
+    android:src="@drawable/number209023"/>
+
+    <TextView
+        android:id="@+id/person"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/photo"
+        android:layout_marginTop="10dp"
+        android:textSize="30dp"
+        android:textColor="@color/black"
+        android:text="@string/personname"/>
+    <TextView
+        android:id="@+id/personName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/photo"
+        android:layout_marginTop="10dp"
+        android:textColor="@color/black"
+        android:textSize="30dp"
+        android:layout_toRightOf="@id/person"
+        android:text="XXX"/>
+
+
+    <TextView
+        android:id="@+id/number"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/person"
+        android:textColor="@color/black"
+        android:layout_marginTop="10dp"
+        android:textSize="30dp"
+        android:text="@string/personnumber"/>
+    <TextView
+        android:id="@+id/personNumber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/person"
+        android:textColor="@color/black"
+        android:layout_marginTop="10dp"
+        android:textSize="30dp"
+        android:layout_toRightOf="@id/number"
+        android:text="20160704"/>
+
+</RelativeLayout>
+
+</LinearLayout>

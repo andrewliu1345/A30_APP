@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    >
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="30dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_height="50dp">
+        <TextView
+            android:id="@+id/mainTitle"
+            android:textSize="30dp"
+            android:textColor="@android:color/white"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="300dp"/>
+        <TextView
+            android:id="@+id/txtaccount"
+            android:textSize="30dp"
+            android:textColor="@android:color/white"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/cursor_rectangle_boarder_orange"
+        android:layout_gravity="center_horizontal"
+        android:layout_width="1200dp"
+        android:layout_height="850dp"
+        android:weightSum="1">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:id="@+id/table_head"
+            android:paddingTop="5dp"
+            android:layout_gravity="right"
+            android:layout_width="1150dp"
+            android:layout_height="40dp">
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="1200dp"
+            android:background="@android:color/darker_gray"
+            android:layout_height="2dp">
+        </LinearLayout>
+        <ListView
+            android:layout_width="1200dp"
+            android:layout_height="529dp"
+            android:id="@+id/listView"
+            android:dividerHeight="2dp"
+            android:divider="@android:color/darker_gray"
+            android:layout_weight="0.02" />
+    </LinearLayout>
+</LinearLayout>

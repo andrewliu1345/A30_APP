@@ -1,0 +1,13 @@
+<resources>
+
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="dev_items_widht">600dp</dimen>
+    <dimen name="keyboard_items_widht">500dp</dimen>
+     <dimen name="keyboard_items_height">60dp</dimen>
+     <dimen name="keyboard_items_margin_top">5dp</dimen>
+     <dimen name="keyboard_items_margin_left">30dp</dimen>
+     <dimen name="keyboard_frame_widht">800dp</dimen>
+     <dimen name="keyboard_frame_height">500dp</dimen>
+  
+
+</resources>
