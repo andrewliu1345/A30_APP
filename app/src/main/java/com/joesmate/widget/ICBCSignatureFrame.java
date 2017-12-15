@@ -30,131 +30,124 @@ import com.joesmate.bin.icbc.ResposeICBCSignatureData;
 import com.joesmate.pageItem.ICBCPage;
 
 
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class ICBCSignatureFrame extends LinearLayout implements OnClickListener {
 
-	public static final String TAG = "SignatureFrame";
-	boolean isFullScreen;
-	public SignaturePad signatureView;
-	LinearLayout signatureLinearLayout ;
-	Button btReturn, btReset, btConfirm;
-	OnSignatureListener onSignatureListener;
-	Bitmap cacheBitmp;
-	TextView txtSignMsg ;
-    ICBCPage  micbcPage ;
-	Context context;
-	public   List<List<float[]>> msignData=new ArrayList<List<float[]>>();
-	public   List<float[]> lineData;
+    public static final String TAG = "SignatureFrame";
+    boolean isFullScreen;
+    public SignaturePad signatureView;
+    LinearLayout signatureLinearLayout;
+    Button btReturn, btReset, btConfirm;
+    OnSignatureListener onSignatureListener;
+    Bitmap cacheBitmp;
+    TextView txtSignMsg;
+    ICBCPage micbcPage;
+    Context context;
+    public List<List<float[]>> msignData = new ArrayList<List<float[]>>();
+    public List<float[]> lineData;
 
-	public ICBCSignatureFrame(Context context, AttributeSet attrs) {
-		super(context, attrs);
-		this.context = context;
-		init(context);
-	}
+    public ICBCSignatureFrame(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        this.context = context;
+        init(context);
+    }
 
-	public ICBCSignatureFrame(Context context) {
-		super(context);
-		this.context = context;
-		init(context);
-	}
+    public ICBCSignatureFrame(Context context) {
+        super(context);
+        this.context = context;
+        init(context);
+    }
 
 
-	public void setSignatureSize(int width , int height)
-	{
+    public void setSignatureSize(int width, int height) {
         ViewGroup.LayoutParams params = signatureLinearLayout.getLayoutParams();
-		params.height = height;
-		params.width = width;
-		signatureLinearLayout.setLayoutParams(params);
-	}
+        params.height = height;
+        params.width = width;
+        signatureLinearLayout.setLayoutParams(params);
 
-	BroadcastReceiver receiver = new BroadcastReceiver() {
-		@Override
-		public void onReceive(Context context, Intent intent) {
+        ViewGroup.LayoutParams layoutParams = signatureView.getLayoutParams();
+        layoutParams.height = height;
+        layoutParams.width = width;
+        signatureView.setLayoutParams(layoutParams);
+    }
 
-			if(intent.getAction().equals(AppAction.ACTION_BROADCAST_MAKE_SIGN_DATA))
-			{
-				if(signatureView != null)
-				{
-					if(signatureView.getVisibility() == VISIBLE)
-					{
-						makeSignData();
-						Log.d("myitm", "send data");
-						App.getInstance().fitManagerCCB.getBaseFitBin().setData(Cmds.CMD_RG.getBytes(),
-								Cmds.CMD_RG.getBytes().length);
-					}
-				}
-				else
-				{
-					GetSignPDFStateData.getInstance().SendBackCode(0);
+    BroadcastReceiver receiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
 
-				}
-			}
-		}
-	};
+            if (intent.getAction().equals(AppAction.ACTION_BROADCAST_MAKE_SIGN_DATA)) {
+                if (signatureView != null) {
+                    if (signatureView.getVisibility() == VISIBLE) {
+                        makeSignData();
+                        Log.d("myitm", "send data");
+                        App.getInstance().fitManagerCCB.getBaseFitBin().setData(Cmds.CMD_RG.getBytes(),
+                                Cmds.CMD_RG.getBytes().length);
+                    }
+                } else {
+                    GetSignPDFStateData.getInstance().SendBackCode(0);
 
-	public void makeSignData()
-	{
-		cacheBitmp = Bitmap.createBitmap(signatureView.getTransparentSignatureBitmap());
-		ResposeICBCSignatureData.getInstance().setResposeBitmap(
-				getSignatureBitmap());
-		List<List<float[]>> signData = signatureView.getSignatureData();
-		String str = "";
-		str = str + ICBCSignData.getInstance().getPicWidth()+","+ICBCSignData.getInstance().getPicHeight()+",P1024";
-		for(int i = 0 ; i < signData.size(); ++ i)
-		{
-			str = str + "(";
-			for(int j=0; j < signData.get(i).size(); ++ j)
-			{
-				float k = signData.get(i).get(j)[2] * 1000;
-				int z = (int)k;
-				if (j == (signData.get(i).size()-1)) {
-					str = str  + (int) signData.get(i).get(j)[0] + "," + (int) signData.get(i).get(j)[1] + "," + z +";";
-				}
-				else
-				{
-					str = str + (int) signData.get(i).get(j)[0] + "," + (int) signData.get(i).get(j)[1] + "," + z + ";";
-				}
-			}
-			str = str + ")" ;
+                }
+            }
+        }
+    };
 
-		}
-		byte[] data = str.getBytes();
-		Log.d("myitm","-----"+str);
-		Log.d("myitm","-----"+data.length);
-		ResposeICBCSignatureData.getInstance().setSignData(str);
-		ResposeICBCSignatureData.getInstance().MakeResposeData();
-	}
-	public void init(Context context) {
-		inflate(context, R.layout.icbc_signature_frame, this);
-		Log.d("bill", "slop:"+ViewConfiguration.get(context).getScaledTouchSlop());
-		IntentFilter filter = new IntentFilter();
-		filter.addAction(AppAction.ACTION_BROADCAST_MAKE_SIGN_DATA);
-		context.registerReceiver(receiver, filter);
+    public void makeSignData() {
+        cacheBitmp = Bitmap.createBitmap(signatureView.getTransparentSignatureBitmap());
+        ResposeICBCSignatureData.getInstance().setResposeBitmap(
+                getSignatureBitmap());
+        List<List<float[]>> signData = signatureView.getSignatureData();
+        String str = "";
+        str = str + ICBCSignData.getInstance().getPicWidth() + "," + ICBCSignData.getInstance().getPicHeight() + ",P1024";
+        for (int i = 0; i < signData.size(); ++i) {
+            str = str + "(";
+            for (int j = 0; j < signData.get(i).size(); ++j) {
+                float k = signData.get(i).get(j)[2] * 1000;
+                int z = (int) k;
+                if (j == (signData.get(i).size() - 1)) {
+                    str = str + (int) signData.get(i).get(j)[0] + "," + (int) signData.get(i).get(j)[1] + "," + z + ";";
+                } else {
+                    str = str + (int) signData.get(i).get(j)[0] + "," + (int) signData.get(i).get(j)[1] + "," + z + ";";
+                }
+            }
+            str = str + ")";
 
-		signatureView = (SignaturePad) findViewById(id.signature_frame_view);
-		signatureView.setOnSignedListener(onSignedListener);
+        }
+        byte[] data = str.getBytes();
+        Log.d("myitm", "-----" + str);
+        Log.d("myitm", "-----" + data.length);
+        ResposeICBCSignatureData.getInstance().setSignData(str);
+        ResposeICBCSignatureData.getInstance().MakeResposeData();
+    }
+
+    public void init(Context context) {
+        inflate(context, R.layout.icbc_signature_frame, this);
+        Log.d("bill", "slop:" + ViewConfiguration.get(context).getScaledTouchSlop());
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(AppAction.ACTION_BROADCAST_MAKE_SIGN_DATA);
+        context.registerReceiver(receiver, filter);
+
+        signatureView = (SignaturePad) findViewById(R.id.signature_frame_view);
+        signatureView.setOnSignedListener(onSignedListener);
 
 
-		msignData = new ArrayList<List<float[]>>();
+        msignData = new ArrayList<List<float[]>>();
 
 
-
-		signatureView.setOnTouchListener(new OnTouchListener() {
-			@Override
-			public boolean onTouch(View view, MotionEvent motionEvent) {
-				//Log.d("bill","event:"+ motionEvent.getDevice().getName());
-				if("Hanvon electromagnetic pen".equals(motionEvent.getDevice().getName())) {
-					ResposeICBCSignatureData.getInstance().setSignState(1);
-					if (motionEvent.getAction() == KeyEvent.ACTION_DOWN) {
-						//Log.v(TAG, "--------------------touch down------------");
-						txtSignMsg.setVisibility(GONE);
-					}
+        signatureView.setOnTouchListener(new OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                //Log.d("bill","event:"+ motionEvent.getDevice().getName());
+                if ("Hanvon electromagnetic pen".equals(motionEvent.getDevice().getName())) {
+                    ResposeICBCSignatureData.getInstance().setSignState(1);
+                    if (motionEvent.getAction() == KeyEvent.ACTION_DOWN) {
+                        //Log.v(TAG, "--------------------touch down------------");
+                        txtSignMsg.setVisibility(GONE);
+                    }
 
 				/*int action =  motionEvent.getAction() ;
-				float x = motionEvent.getX();
+                float x = motionEvent.getX();
 				float y = motionEvent.getY();
 				float z = motionEvent.getPressure();
 				switch (action)
@@ -171,48 +164,46 @@ public class ICBCSignatureFrame extends LinearLayout implements OnClickListener 
 						msignData.add(lineData);
 						  break;
 				}*/
-					return false;
-				}else
-				{
-					return  true ;
-				}
-			}
-		});
+                    return false;
+                } else {
+                    return true;
+                }
+            }
+        });
 
 
-		//btFullScreen = (Button) findViewById(id.signature_frame_bt_fullscreen);
+        //btFullScreen = (Button) findViewById(id.signature_frame_bt_fullscreen);
 //		btReturn = (Button) findViewById(id.signature_frame_bt_return);
-		btReset = (Button) findViewById(id.signature_frame_bt_reset);
-		btConfirm = (Button) findViewById(id.signature_frame_bt_confirm);
+        btReset = (Button) findViewById(id.signature_frame_bt_reset);
+        btConfirm = (Button) findViewById(id.signature_frame_bt_confirm);
 
-		txtSignMsg = (TextView) findViewById(id.sign_msg);
-		signatureLinearLayout = (LinearLayout) findViewById(id.signature_grp);
-		setButtonEnabled(false);
+        txtSignMsg = (TextView) findViewById(id.sign_msg);
+        signatureLinearLayout = (LinearLayout) findViewById(id.signature_grp);
+        setButtonEnabled(false);
 
-		//btFullScreen.setOnClickListener(this);
+        //btFullScreen.setOnClickListener(this);
 //		btReturn.setOnClickListener(this);
-		btReset.setOnClickListener(this);
-		btConfirm.setOnClickListener(this);
-		//setLayoutParams(getPartScreenParams());
-	}
-
-
-
-	@Override
-	protected void onDetachedFromWindow() {
-		super.onDetachedFromWindow();
-		if(receiver != null ) {
-			context.unregisterReceiver(receiver);
-		}
-
-	}
-
-    public  void  setIcbcPage(ICBCPage icbcPage)
-    {
-        micbcPage = icbcPage ;
+        btReset.setOnClickListener(this);
+        btConfirm.setOnClickListener(this);
+        //setLayoutParams(getPartScreenParams());
     }
-	@Override
-	public void onClick(View v) {
+
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        if (receiver != null) {
+            context.unregisterReceiver(receiver);
+        }
+
+    }
+
+    public void setIcbcPage(ICBCPage icbcPage) {
+        micbcPage = icbcPage;
+    }
+
+    @Override
+    public void onClick(View v) {
 //		if (v == btReturn) {
 //			setVisibility(View.GONE);
 //			ResposeICBCSignatureData.getInstance().setSignState(4);
@@ -221,76 +212,81 @@ public class ICBCSignatureFrame extends LinearLayout implements OnClickListener 
 //			}
 //		} else
 
-		if (v == btReset) {
-			ResposeICBCSignatureData.getInstance().setSignState(0);
-			txtSignMsg.setVisibility(VISIBLE);
-			msignData.clear();
-			signatureView.clear();
-		} else if (v == btConfirm) {
+        if (v == btReset) {
+            ResposeICBCSignatureData.getInstance().setSignState(0);
+            txtSignMsg.setVisibility(VISIBLE);
+            msignData.clear();
+            signatureView.clear();
+        } else if (v == btConfirm) {
 
-			ResposeICBCSignatureData.getInstance().setSignState(2);
-			setVisibility(View.GONE);
-			// 缓存签名图片数据
-			cacheBitmp = Bitmap.createBitmap(signatureView.getTransparentSignatureBitmap());
-			if(onSignatureListener != null){
-                msignData=signatureView.getSignatureData();
-				onSignatureListener.confirm();
+            ResposeICBCSignatureData.getInstance().setSignState(2);
+            setVisibility(View.GONE);
+            // 缓存签名图片数据
+            cacheBitmp = Bitmap.createBitmap(signatureView.getTransparentSignatureBitmap());
+            if (onSignatureListener != null) {
+                msignData = signatureView.getSignatureData();
+                onSignatureListener.confirm();
                 signatureView.clear();
-			}
-		}
+            }
+        }
 
-	}
-	public Bitmap getSignatureBitmap(){
-		return cacheBitmp;
-		//return signatureView.getTransparentSignatureBitmap();
-	}
-	public List<List<float[]>> getSignatureData() {
-		return msignData;
-	}
-	private void setButtonEnabled(boolean isEnabled){
+    }
+
+    public Bitmap getSignatureBitmap() {
+        return cacheBitmp;
+        //return signatureView.getTransparentSignatureBitmap();
+    }
+
+    public List<List<float[]>> getSignatureData() {
+        return msignData;
+    }
+
+    private void setButtonEnabled(boolean isEnabled) {
 //		btReturn.setEnabled(!isEnabled);
-		btReset.setEnabled(isEnabled);
-		btConfirm.setEnabled(isEnabled);
-	}
-	final SignaturePad.OnSignedListener onSignedListener = new SignaturePad.OnSignedListener(){
-	public 	void onStartSigning(){
+        btReset.setEnabled(isEnabled);
+        btConfirm.setEnabled(isEnabled);
+    }
 
-		}
-		@Override
-		public void onSigned() {
-			// TODO Auto-generated method stub
-			setButtonEnabled(true);
-		}
+    final SignaturePad.OnSignedListener onSignedListener = new SignaturePad.OnSignedListener() {
+        public void onStartSigning() {
 
-		@Override
-		public void onClear() {
-			// TODO Auto-generated method stub
-			setButtonEnabled(false);
-		}
-		
-	};
-	
-	RelativeLayout.LayoutParams getFullScreenParams(){
-		//return new RelativeLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
-		//int w = (int) getResources().getDimension(R.dimen.signature_frame_w);
-		//int h = (int) getResources().getDimension(R.dimen.signature_frame_h);
-		RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(832,520);
-		params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-		params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-		return params;
-	}
-	RelativeLayout.LayoutParams getPartScreenParams(){
-		int w = (int) getResources().getDimension(R.dimen.signature_frame_w);
-		int h = (int) getResources().getDimension(R.dimen.signature_frame_h);
-		RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(w,h);
-		params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-		params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-		return params;
-	}
+        }
+
+        @Override
+        public void onSigned() {
+            // TODO Auto-generated method stub
+            setButtonEnabled(true);
+        }
+
+        @Override
+        public void onClear() {
+            // TODO Auto-generated method stub
+            setButtonEnabled(false);
+        }
+
+    };
+
+    RelativeLayout.LayoutParams getFullScreenParams() {
+        //return new RelativeLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
+        //int w = (int) getResources().getDimension(R.dimen.signature_frame_w);
+        //int h = (int) getResources().getDimension(R.dimen.signature_frame_h);
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(832, 520);
+        params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+        params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+        return params;
+    }
+
+    RelativeLayout.LayoutParams getPartScreenParams() {
+        int w = (int) getResources().getDimension(R.dimen.signature_frame_w);
+        int h = (int) getResources().getDimension(R.dimen.signature_frame_h);
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(w, h);
+        params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+        params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+        return params;
+    }
 
 
-    public void ZoomLayout (float scale)
-    {
+    public void ZoomLayout(float scale) {
 		/*
         float w = (int) getResources().getDimension(R.dimen.signature_frame_w)*scale*0.5f;
         float h = (int) getResources().getDimension(R.dimen.signature_frame_h)*scale*0.5f;
@@ -330,18 +326,19 @@ public class ICBCSignatureFrame extends LinearLayout implements OnClickListener 
         txtSignMsg.setScaleY(textScale);
         setLayoutParams(params);
         */
-		setScaleX(scale);
-		setScaleY(scale);
+        setScaleX(scale);
+        setScaleY(scale);
     }
 
-	
-	public void setOnSignatureListener(OnSignatureListener onSignatureListener){
-		this.onSignatureListener = onSignatureListener;
-	}
-	
-	public static interface OnSignatureListener{
-		public void hide();
-		public void confirm();
-	}
+
+    public void setOnSignatureListener(OnSignatureListener onSignatureListener) {
+        this.onSignatureListener = onSignatureListener;
+    }
+
+    public static interface OnSignatureListener {
+        public void hide();
+
+        public void confirm();
+    }
 
 }

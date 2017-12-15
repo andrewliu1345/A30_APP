@@ -200,8 +200,8 @@ public class SignaturePad extends View {
         if (!isEnabled())
             return false;
         // int eventA = (int) (255 * Math.max(0.01f, event.getPressure()));
-        float eventX = event.getX() + 8;
-        float eventY = event.getY() - 2;
+        float eventX = event.getX();
+        float eventY = event.getY();
 //        if (event.getPressure() < 0.0009)
 //            return false;
         float eventW = mMaxWidth * event.getPressure();

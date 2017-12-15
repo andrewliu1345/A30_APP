@@ -64,6 +64,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
 
+import repack.org.bouncycastle.asn1.cms.SignedData;
+
 /**
  * Created by bill on 2016/1/11.
  */
@@ -726,8 +728,8 @@ public class ICBCPage extends LinearLayout implements OnTimerListener, OnJsListe
                         PdfReader reader = new PdfReader(ICBCSignData.getInstance().getPDFPath());//选择需要印章的pdf;
                         float scale1 = (float) ICBCSignData.getInstance().getSignWidth() / (float) ICBCSignData.getInstance().getSignHeight();
                         Log.e("bill", " getSignWidth:" + ICBCSignData.getInstance().getSignWidth() + "  getSignHeight: " + ICBCSignData.getInstance().getSignHeight());
-                        int width = (int) (600 * scale1);
-                        int height = 350;
+                        int width = ICBCSignData.getInstance().getSignWidth();
+                        int height = ICBCSignData.getInstance().getSignHeight();
                         ICBCSignData.getInstance().setPicHeight(height);
                         ICBCSignData.getInstance().setPicWidth(width);
                         Log.e("bill", "scale:" + scale1 + " width:" + width + "  height: " + height);
@@ -1016,7 +1018,7 @@ public class ICBCPage extends LinearLayout implements OnTimerListener, OnJsListe
                     strokes) {
                 float k = point[2] * 100;
                 int z = (int) k;
-                str += String.format("%d,%d,%d,%d;", (int)point[0], (int)point[1], z, (int)point[3]);
+                str += String.format("%d,%d,%d,%d;", (int) point[0], (int) point[1], z, (int) point[3]);
             }
             str += ")";
         }
@@ -1140,7 +1142,9 @@ public class ICBCPage extends LinearLayout implements OnTimerListener, OnJsListe
 
     void signaturePdf() {
         //creat signature bitmap
-        Bitmap bitmap = signatureFrame.getSignatureBitmap();
+        int width = ICBCSignData.getInstance().getSignHeight(), height = ICBCSignData.getInstance().getSignHeight();
+        Bitmap bm = signatureFrame.getSignatureBitmap();
+        Bitmap bitmap = Bitmap.createBitmap(bm, 0, 0, width, height);
         File dir = new File(FileInf.PDF);
         if (!dir.exists()) {
             dir.mkdirs();
@@ -1168,8 +1172,8 @@ public class ICBCPage extends LinearLayout implements OnTimerListener, OnJsListe
         HandWriteToPDF handWriteToPDF = new HandWriteToPDF(InPdfFilePath, OutPdfFilePath, InPicFilePath);
         Log.e("bill", "signPageHeight:" + signPageHeight);
         Log.e("bill", "signPageWidth:" + signPageWidth);
-        handWriteToPDF.addText(ICBCSignData.getInstance().getPdfPageNumber(), ICBCSignData.getInstance().getSignWidth(),
-                ICBCSignData.getInstance().getSignHeight(),
+        handWriteToPDF.addText(ICBCSignData.getInstance().getPdfPageNumber(), width,
+                height,
                 ICBCSignData.getInstance().getSignX(), ICBCSignData.getInstance().getSignY());
 
     }

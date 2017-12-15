@@ -135,7 +135,40 @@ public class SerialRequestFrame extends BaseSerialFrames {
 
         return writeByte;
     }
+    public byte[] make_kb_Package(byte[] data) {
+        final int SPLIT = 0x30;
+        //           头2个字节  + 总数据长度2个字节*2 +数据长度*2 + CRC一个字节*2 + 尾2个字节
+        int length = CMD.KB_CMD_HEAD.length  +4+ data.length*2 + 2 + CMD.SD_CMD_TAIL.length ;
+        int copylen = 0;
+        byte[] writeByte = new byte[length];
 
+        //head
+        System.arraycopy(CMD.KB_CMD_HEAD,0,writeByte,0,CMD.KB_CMD_HEAD.length);
+        copylen += CMD.KB_CMD_HEAD.length;
+
+
+        //total length
+        int totalLength = data.length;
+        byte[] totalLengthArray =AssitTool.splitBuffer(AssitTool.integerToArray(totalLength),SPLIT);
+        System.arraycopy(totalLengthArray,0,writeByte,copylen,4);
+        copylen += 4 ;
+
+        //data
+        byte[] splitData = AssitTool.splitBuffer(data, SPLIT);
+        System.arraycopy(splitData,0,writeByte,copylen,splitData.length);
+        copylen += splitData.length;
+
+
+        //crc
+        byte[] crcArray = AssitTool.splitBuffer(new byte[] {AssitTool.getBytesCrc(data)},SPLIT);
+        System.arraycopy(crcArray,0,writeByte,copylen,2);
+        copylen += 2 ;
+
+        //tail
+        System.arraycopy(CMD.SD_CMD_TAIL,0,writeByte,copylen,CMD.SD_CMD_TAIL.length);
+
+        return writeByte;
+    }
     public byte[] sendSerialCmd(byte[] serialCmd, byte[] pwData)
     {
         return makePackage(serialCmd,pwData);

@@ -1,5 +1,4 @@
 apply plugin: 'com.android.application'
-
 android {
     signingConfigs {
         config {
@@ -9,12 +8,12 @@ android {
             storePassword 'inhuasoft8888'
         }
     }
-    compileSdkVersion 25
-    buildToolsVersion '26.0.2'
+    compileSdkVersion 26
+    buildToolsVersion '27.0.1'
     defaultConfig {
         applicationId 'com.joesmate.App'
         minSdkVersion 18
-        targetSdkVersion 18
+        targetSdkVersion 26
     }
     buildTypes {
         release {
@@ -32,19 +31,17 @@ android {
     productFlavors {
     }
 }
-
 repositories {
     flatDir {
         dirs 'src/main/jniLibs' //this way we can find the .aar file in libs folder
     }
 }
-
 dependencies {
-    compile 'com.android.support:support-v4:19.1.0'
+    compile 'com.android.support:support-v4:26.1.0'
     compile files('src/main/jniLibs/tts.jar')
     compile files('src/main/jniLibs/droidText.0.5.jar')
-    compile(name: 'library-release', ext: 'aar')
     compile project(':signature-pad')
+    implementation project(':crypto')
+    implementation files('src/main/jniLibs/pensoon_android_3.jar')
+    compile(name:'library-release',ext:'aar')
 }
-
-

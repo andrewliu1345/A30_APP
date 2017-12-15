@@ -92,7 +92,7 @@ public class Cmds {
     //SetVolume
     public static final String CMD_SV = "SV";
     //FindFile
-    public static final String CMD_EF="EF";
+    public static final String CMD_EF = "EF";
 
 
     // password
@@ -187,8 +187,9 @@ public class Cmds {
     //SCCBA_ReadDeviceId
     public static final String CMD_RD = "RD";
 
-
+    public static final String CMD_CY = "CY";
     public static final String CMD_ID = "ID";
 
+    public static final String CMD_ST = "ST";
 
 }

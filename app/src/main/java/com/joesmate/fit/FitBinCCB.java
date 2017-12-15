@@ -37,6 +37,8 @@ import com.joesmate.bin.icbc.ResposeICBCSignatureData;
 import com.joesmate.bin.icbc.SetPosterTypeData;
 import com.joesmate.bin.icbc.SetStatusAreaStyleData;
 import com.joesmate.bin.icbc.ShowStatusAreaData;
+import com.joesmate.bin.keyBoard.CheckKeyData;
+import com.joesmate.bin.keyBoard.SettingEncryption;
 import com.joesmate.bin.sdcs.ActiveSignQryInfoData;
 import com.joesmate.bin.sdcs.GetUserOperateRstHtmlData;
 import com.joesmate.bin.sdcs.OperateQuestionData;
@@ -118,7 +120,7 @@ public class FitBinCCB extends BaseFitBin {
         } else if (Arrays.equals(CMD.AF, cmd)) {
             baseData = AddFileData.getInstance();
         } /*else if (Arrays.equals(CMD.RR, cmd) || Arrays.equals(CMD.SR, cmd)
-				|| Arrays.equals(CMD.SF, cmd)) {
+                || Arrays.equals(CMD.SF, cmd)) {
 			baseData = ResposeSignatureData.getInstance();
 		}*/ else if (Arrays.equals(Cmds.CMD_GI.getBytes(), cmd)) {
             baseData = ICBCDeviceInfData.getInstance();
@@ -189,9 +191,12 @@ public class FitBinCCB extends BaseFitBin {
             baseData = SecretKeyData.getInstance();
         } else if (Arrays.equals(Cmds.CMD_ID.getBytes(), cmd)) {
             baseData = DeviceIdData.getInstance();
-        }else if(Arrays.equals(Cmds.CMD_EF.getBytes(),cmd))
-        {
-            baseData= ExistFileData.getInstance();
+        } else if (Arrays.equals(Cmds.CMD_EF.getBytes(), cmd)) {
+            baseData = ExistFileData.getInstance();
+        } else if (Arrays.equals(Cmds.CMD_CY.getBytes(), cmd)) {
+            baseData = CheckKeyData.getInstance();
+        } else if (Arrays.equals(Cmds.CMD_ST.getBytes(), cmd)) {
+            baseData = SettingEncryption.getInstance();
         }
         return baseData;
     }

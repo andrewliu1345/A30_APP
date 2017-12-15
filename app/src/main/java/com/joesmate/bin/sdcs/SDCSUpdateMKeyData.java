@@ -20,6 +20,10 @@ public class SDCSUpdateMKeyData extends BaseData {
 
     private static SDCSUpdateMKeyData sDCSReadPinData;
 
+    //初始密码
+    private static final String Default_16 = "8888888888888888";
+    private static final String Default_32 = Default_16 + Default_16;
+    private static final String Default_48 = Default_16 + Default_32;
 
     public int getZMKindex() {
         return ZMKindex;
@@ -29,7 +33,7 @@ public class SDCSUpdateMKeyData extends BaseData {
         this.ZMKindex = ZMKindex;
     }
 
-    private  int ZMKindex ;
+    private int ZMKindex;
 
     public int getZMKLengthType() {
         return ZMKLengthType;
@@ -39,7 +43,7 @@ public class SDCSUpdateMKeyData extends BaseData {
         this.ZMKLengthType = ZMKLengthType;
     }
 
-    private  int ZMKLengthType ;
+    private int ZMKLengthType;
 
     public int getZMKStrLength() {
         return ZMKStrLength;
@@ -49,7 +53,7 @@ public class SDCSUpdateMKeyData extends BaseData {
         this.ZMKStrLength = ZMKStrLength;
     }
 
-    private  int ZMKStrLength ;
+    private int ZMKStrLength;
 
     public String getZMKString() {
         return ZMKString;
@@ -59,7 +63,7 @@ public class SDCSUpdateMKeyData extends BaseData {
         this.ZMKString = ZMKString;
     }
 
-    private  String ZMKString ;
+    private String ZMKString;
 
     public int getPinKeyStrLength() {
         return pinKeyStrLength;
@@ -77,7 +81,7 @@ public class SDCSUpdateMKeyData extends BaseData {
         SDCSUpdateMKeyData.sDCSReadPinData = sDCSReadPinData;
     }
 
-    private int pinKeyStrLength ;
+    private int pinKeyStrLength;
 
     public String getPinKeyString() {
         return pinKeyString;
@@ -87,9 +91,9 @@ public class SDCSUpdateMKeyData extends BaseData {
         this.pinKeyString = pinKeyString;
     }
 
-    private String pinKeyString ;
+    private String pinKeyString;
 
-    private  byte[]  pinKeyStringArray;
+    private byte[] pinKeyStringArray;
 
     public static SDCSUpdateMKeyData getInstance() {
         if (sDCSReadPinData == null) {
@@ -107,43 +111,42 @@ public class SDCSUpdateMKeyData extends BaseData {
             pos = 2;
 
             //ZMKindex =  AssitTool.getArrayCount(new byte[] { buffer[pos]});
-            ZMKindex =  buffer[pos];
+            ZMKindex = buffer[pos];
             Log.d(TAG, "ZMKindex:" + ZMKindex);
-            pos = pos + 1 ;
+            pos = pos + 1;
 
             //ZMKLengthType = AssitTool.getArrayCount(new byte[] { buffer[pos]});
             ZMKLengthType = buffer[pos];
             Log.d(TAG, "ZMKLengthType:" + ZMKLengthType);
-            pos = pos + 1 ;
+            pos = pos + 1;
 
-            ZMKStrLength = AssitTool.getArrayCount(new byte[] { buffer[pos],buffer[pos+1]});
+            ZMKStrLength = AssitTool.getArrayCount(new byte[]{buffer[pos], buffer[pos + 1]});
             Log.d(TAG, "ZMKStrLength:" + ZMKStrLength);
-            pos = pos + 2 ;
+            pos = pos + 2;
 
-            byte[]  ZMKStringArray = new byte[ZMKStrLength];
-            System.arraycopy(buffer,pos,ZMKStringArray,0,ZMKStrLength);
-            ZMKString =  AssitTool.getString(ZMKStringArray, AssitTool.UTF_8);
+            byte[] ZMKStringArray = new byte[ZMKStrLength];
+            System.arraycopy(buffer, pos, ZMKStringArray, 0, ZMKStrLength);
+            ZMKString = AssitTool.getString(ZMKStringArray, AssitTool.UTF_8);
             Log.d(TAG, "ZMKString:" + ZMKString);
-            pos = pos + ZMKStrLength ;
+            pos = pos + ZMKStrLength;
 
-            pinKeyStrLength = AssitTool.getArrayCount(new byte[] { buffer[pos],buffer[pos+1]});
+            pinKeyStrLength = AssitTool.getArrayCount(new byte[]{buffer[pos], buffer[pos + 1]});
             Log.d(TAG, "pinKeyStrLength:" + pinKeyStrLength);
-            pos = pos + 2 ;
+            pos = pos + 2;
 
             pinKeyStringArray = new byte[pinKeyStrLength];
-            System.arraycopy(buffer,pos,pinKeyStringArray,0,pinKeyStrLength);
-            pinKeyString =  AssitTool.getString(pinKeyStringArray, AssitTool.UTF_8);
+            System.arraycopy(buffer, pos, pinKeyStringArray, 0, pinKeyStrLength);
+            pinKeyString = AssitTool.getString(pinKeyStringArray, AssitTool.UTF_8);
             Log.d(TAG, "pinKeyString:" + pinKeyString);
 
             OperationSerial();
-
 
 
         }
     }
 
     public void sendConfirmCode(String backCmd) {
-        Log.d(TAG, "sendConfirmCode:"+backCmd);
+        Log.d(TAG, "sendConfirmCode:" + backCmd);
         String backCode = Cmds.CMD_UM + backCmd;
         backData(backCode.getBytes());
     }
@@ -152,26 +155,26 @@ public class SDCSUpdateMKeyData extends BaseData {
 
         byte[] data = AssitTool.StringToBytes(ZMKString);
 
-        int pos = 0 ;
-        byte[] writeData = new byte[2+1+1+data.length];
-        System.arraycopy(CMD.SD_CMD_UPDATE_MAIN_KEY,0,writeData,pos,2);
-        pos = pos + 2 ;
+        int pos = 0;
+        byte[] writeData = new byte[2 + 1 + 1 + data.length];
+        System.arraycopy(CMD.SD_CMD_UPDATE_MAIN_KEY, 0, writeData, pos, 2);
+        pos = pos + 2;
 
-        System.arraycopy(new byte[]{(byte)ZMKindex},0,writeData,pos,1);
-        pos = pos + 1 ;
+        System.arraycopy(new byte[]{(byte) ZMKindex}, 0, writeData, pos, 1);
+        pos = pos + 1;
 
-        System.arraycopy(new byte[]{(byte)data.length},0,writeData,pos,1);
-        pos = pos + 1 ;
+        System.arraycopy(new byte[]{(byte) data.length}, 0, writeData, pos, 1);
+        pos = pos + 1;
 
-        System.arraycopy(data,0,writeData,pos,data.length);
+        System.arraycopy(data, 0, writeData, pos, data.length);
 
-        final byte [] wbyte = new SerialRequestFrame().make_SD_Package(writeData);
+        final byte[] wbyte = new SerialRequestFrame().make_SD_Package(writeData);
         final SerialResponseFrame serialResponse = new SerialResponseFrame();
 
         SerialUtil.getInstance().getSerialPort().write(wbyte, wbyte.length);
 
         new Thread(
-                new Runnable(){
+                new Runnable() {
                     @Override
                     public void run() {
                         SerialUtil.getInstance().setStop(false);
@@ -180,23 +183,19 @@ public class SDCSUpdateMKeyData extends BaseData {
                         byte[] rbyte = serialResponse.get_SD_Rbyte();
                         SerialUtil.getInstance().setStop(true);
                         SerialResponseFrame.lock.unlock();
-                        if(rbyte.length == 22 ) {
-                            if (Arrays.equals(new byte[]{rbyte[0],rbyte[1],rbyte[2],rbyte[3],rbyte[4],rbyte[5]}, new byte[]{0x00, 0x14, (byte)0xb0, 0x07, 0x00, 0x00})) {
-                                byte[] data = new byte[16] ;
-                                System.arraycopy(rbyte,6,data,0,16);
-                                if(Arrays.equals(data,pinKeyStringArray))
-                                {
+                        if (rbyte.length == 22) {
+                            if (Arrays.equals(new byte[]{rbyte[0], rbyte[1], rbyte[2], rbyte[3], rbyte[4], rbyte[5]}, new byte[]{0x00, 0x14, (byte) 0xb0, 0x07, 0x00, 0x00})) {
+                                byte[] data = new byte[16];
+                                System.arraycopy(rbyte, 6, data, 0, 16);
+                                if (Arrays.equals(data, pinKeyStringArray)) {
                                     sendConfirmCode(BackCode.CODE_00);
-                                }
-                                else {
+                                } else {
                                     sendConfirmCode(BackCode.CODE_01);
                                 }
                             } else {
                                 sendConfirmCode(BackCode.CODE_01);
                             }
-                        }
-                        else
-                        {
+                        } else {
                             sendConfirmCode(BackCode.CODE_02);
                         }
 

@@ -104,4 +104,8 @@ public class CMD {
     public static final byte[] SD_CMD_ACTIVATE_WORK_KEY = {(byte) 0xa0, 0x09};
     public static final byte[] SD_CMD_READ_PIN = {(byte) 0xb0, 0x0a};
 
+    public static final byte[] SD_CMD_CHECK_MK = {(byte) 0x48};
+    public static final byte[] SD_CMD_CHECK_WK = {(byte) 0x4c};
+
+    public static final byte[] KB_CMD_HEAD = {0x1b};
 }

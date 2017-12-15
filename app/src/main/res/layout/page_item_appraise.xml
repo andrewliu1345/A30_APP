@@ -58,6 +58,49 @@
         android:textSize="30dp"
         android:layout_toRightOf="@id/number"
         android:text="20160704"/>
+    <TextView
+        android:id="@+id/rate"
+        android:layout_below="@id/number"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:textColor="@color/black"
+        android:textSize="30dp"
+        android:text="@string/ratestar"/>
+
+    <LinearLayout
+        android:id="@+id/starlist"
+        android:layout_below="@id/personNumber"
+        android:layout_toRightOf="@id/rate"
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:paddingTop="10dp"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:src="@drawable/star"
+            android:layout_width="40dp"
+            android:layout_height="40dp" />
+        <ImageView
+            android:src="@drawable/star"
+            android:layout_width="40dp"
+            android:layout_height="40dp" />
+        <ImageView
+            android:src="@drawable/star"
+            android:layout_width="40dp"
+            android:layout_height="40dp" />
+        <ImageView
+            android:src="@drawable/star"
+            android:layout_width="40dp"
+            android:layout_height="40dp" />
+        <ImageView
+            android:src="@drawable/star"
+            android:layout_width="40dp"
+            android:layout_height="40dp" />
+        <ImageView
+            android:src="@drawable/star"
+            android:layout_width="40dp"
+            android:layout_height="40dp" />
+    </LinearLayout>
 
 </RelativeLayout>
 
