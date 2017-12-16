@@ -1,7 +1,9 @@
 package com.joesmate.bin.sdcs;
 
+import android.content.SharedPreferences;
 import android.util.Log;
 
+import com.joesmate.App;
 import com.joesmate.BackCode;
 import com.joesmate.Cmds;
 import com.joesmate.bin.BaseData;
@@ -32,6 +34,9 @@ public class SDCSResetPinData extends BaseData {
         int pos = 0;
         if (Arrays.equals(Cmds.CMD_IP.getBytes(), cmd)) {
             ResetPinPad();
+            SharedPreferences.Editor editor = App.getInstance().preferences.edit();
+            editor.remove(Cmds.LOAD_MASTER_KEY);
+            editor.commit();
             //sendConfirmCode(BackCode.CODE_00);
             //legalData();
 
@@ -39,21 +44,21 @@ public class SDCSResetPinData extends BaseData {
     }
 
     public void sendConfirmCode(String backCmd) {
-        Log.d(TAG, "sendConfirmCode:"+backCmd);
+        Log.d(TAG, "sendConfirmCode:" + backCmd);
         String backCode = Cmds.CMD_RP + backCmd;
         backData(backCode.getBytes());
     }
 
     public void ResetPinPad() {
 
-        byte[] data = {(byte)0xa0,0x10};
-        final byte [] wbyte = new SerialRequestFrame().make_SD_Package(data);
+        byte[] data = {(byte) 0xa0, 0x10};
+        final byte[] wbyte = new SerialRequestFrame().make_SD_Package(data);
         final SerialResponseFrame serialResponse = new SerialResponseFrame();
 
         SerialUtil.getInstance().getSerialPort().write(wbyte, wbyte.length);
 
         new Thread(
-                new Runnable(){
+                new Runnable() {
                     @Override
                     public void run() {
                         SerialUtil.getInstance().setStop(false);
@@ -62,15 +67,13 @@ public class SDCSResetPinData extends BaseData {
                         byte[] rbyte = serialResponse.get_SD_Rbyte();
                         SerialUtil.getInstance().setStop(true);
                         SerialResponseFrame.lock.unlock();
-                        if(rbyte.length == 6 ) {
+                        if (rbyte.length == 6) {
                             if (Arrays.equals(rbyte, new byte[]{0x00, 0x04, (byte) 0xa0, 0x10, 0x00, 0x00})) {
                                 sendConfirmCode(BackCode.CODE_00);
                             } else {
                                 sendConfirmCode(BackCode.CODE_01);
                             }
-                        }
-                        else
-                        {
+                        } else {
                             sendConfirmCode(BackCode.CODE_02);
                         }
 

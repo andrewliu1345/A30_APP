@@ -192,4 +192,11 @@ public class Cmds {
 
     public static final String CMD_ST = "ST";
 
+    public static final String LOAD_MASTER_KEY="LOAD_MASTER_KEY";
+
+    public static final String MASTER_KEY="MASTER_KEY";
+
+    public static final String WORK_KEY="WORK_KEY";
+
+
 }

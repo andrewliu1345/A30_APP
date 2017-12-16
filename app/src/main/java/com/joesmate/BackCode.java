@@ -3,6 +3,7 @@ package com.joesmate;
 public class BackCode {
 
 
+    public static final String CODE_15 = "-15";
     public static final String CODE_00 = "00";
     public static final String CODE_01 = "01";
     public static final String CODE_02 = "02";

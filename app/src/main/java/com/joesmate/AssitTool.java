@@ -1114,7 +1114,7 @@ public class AssitTool {
         }
     }
 
-    public static byte[] StringToBytes(String str) {
+    public static byte[] HexStringToBytes(String str) {
         byte[] data = new byte[str.length() / 2];
         for (int i = 0; i < str.length() / 2; ++i) {
             String str1 = str.substring(2 * i, 2 * i + 2);
@@ -1123,4 +1123,19 @@ public class AssitTool {
         return data;
     }
 
+    public static String BytesToHexString(byte[] src) {
+        StringBuilder stringBuilder = new StringBuilder("");
+        if (src == null || src.length <= 0) {
+            return null;
+        }
+        for (int i = 0; i < src.length; i++) {
+            int v = src[i] & 0xFF;
+            String hv = Integer.toHexString(v);
+            if (hv.length() < 2) {
+                stringBuilder.append(0);
+            }
+            stringBuilder.append(hv);
+        }
+        return stringBuilder.toString();
+    }
 }

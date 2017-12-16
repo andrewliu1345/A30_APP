@@ -39,7 +39,7 @@ public class SettingEncryption extends BaseData {
     public void setData(byte[] buffer, byte[] cmd) {
         if (Arrays.equals(Cmds.CMD_ST.getBytes(), cmd)) {
             int pos = 2;
-            iEncryType = AssitTool.getArrayCount(new byte[]{buffer[pos++]});
+            iEncryType = buffer[pos++];
             Log.d(TAG, "iEncryType:" + iEncryType);
             OperationSerial();
         }

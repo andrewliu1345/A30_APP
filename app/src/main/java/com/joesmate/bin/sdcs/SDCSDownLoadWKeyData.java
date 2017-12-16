@@ -1,17 +1,23 @@
 package com.joesmate.bin.sdcs;
 
+import android.content.SharedPreferences;
 import android.util.Log;
 
+import com.joesmate.App;
 import com.joesmate.AssitTool;
 import com.joesmate.BackCode;
 import com.joesmate.CMD;
 import com.joesmate.Cmds;
+import com.joesmate.KeyBordProtocol;
 import com.joesmate.bin.BaseData;
 import com.joesmate.bin.keyBoard.SerialRequestFrame;
 import com.joesmate.bin.keyBoard.SerialResponseFrame;
 import com.joesmate.bin.keyBoard.SerialUtil;
+import com.joesmate.util.LogMg;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by bill on 2016/5/18.
@@ -19,7 +25,18 @@ import java.util.Arrays;
 public class SDCSDownLoadWKeyData extends BaseData {
 
     private static SDCSDownLoadWKeyData sDCSReadPinData;
+    //初始密码
+    private static final String Default_8 = "3838383838383838";
+    private static final String Default_16 = Default_8 + Default_8;
+    private static final String Default_24 = Default_16 + Default_16;
 
+    private static final Map<Integer, String> DefaultKey = new HashMap<Integer, String>() {
+        {
+            put(Default_8.length(), Default_8);
+            put(Default_16.length(), Default_16);
+            put(Default_24.length(), Default_24);
+        }
+    };
 
     public int getZMKindex() {
         return ZMKindex;
@@ -29,7 +46,7 @@ public class SDCSDownLoadWKeyData extends BaseData {
         this.ZMKindex = ZMKindex;
     }
 
-    private  int ZMKindex ;
+    private int ZMKindex;
 
 
     public int getWpinIndex() {
@@ -40,7 +57,7 @@ public class SDCSDownLoadWKeyData extends BaseData {
         this.wpinIndex = wpinIndex;
     }
 
-    private  int wpinIndex ;
+    private int wpinIndex;
 
 
     public int getwPinLengthType() {
@@ -51,7 +68,7 @@ public class SDCSDownLoadWKeyData extends BaseData {
         this.wPinLengthType = wPinLengthType;
     }
 
-    private  int wPinLengthType ;
+    private int wPinLengthType;
 
 
     public int getwPinStrLength() {
@@ -62,7 +79,7 @@ public class SDCSDownLoadWKeyData extends BaseData {
         this.wPinStrLength = wPinStrLength;
     }
 
-    private  int wPinStrLength ;
+    private int wPinStrLength;
 
 
     public String getwPinString() {
@@ -73,7 +90,7 @@ public class SDCSDownLoadWKeyData extends BaseData {
         this.wPinString = wPinString;
     }
 
-    private  String wPinString ;
+    private String wPinString;
 
     public int getPinKeyStrLength() {
         return pinKeyStrLength;
@@ -91,7 +108,7 @@ public class SDCSDownLoadWKeyData extends BaseData {
         SDCSDownLoadWKeyData.sDCSReadPinData = sDCSReadPinData;
     }
 
-    private int pinKeyStrLength ;
+    private int pinKeyStrLength;
 
     public String getPinKeyString() {
         return pinKeyString;
@@ -101,9 +118,13 @@ public class SDCSDownLoadWKeyData extends BaseData {
         this.pinKeyString = pinKeyString;
     }
 
-    private String pinKeyString ;
+    private String pinKeyString;
 
-    private  byte[]  pinKeyStringArray;
+    private byte[] pinKeyStringArray;
+
+
+    byte[] CheckValue1;
+    byte[] CheckValue2;
 
     public static SDCSDownLoadWKeyData getInstance() {
         if (sDCSReadPinData == null) {
@@ -120,80 +141,89 @@ public class SDCSDownLoadWKeyData extends BaseData {
         if (Arrays.equals(Cmds.CMD_UW.getBytes(), cmd)) {
             pos = 2;
 
-            ZMKindex =  buffer[pos];
+            ZMKindex = buffer[pos];
             Log.d(TAG, "ZMKindex:" + ZMKindex);
-            pos = pos + 1 ;
+            pos = pos + 1;
 
 
             wpinIndex = buffer[pos];
             Log.d(TAG, "wpinIndex:" + wpinIndex);
-            pos = pos + 1 ;
+            pos = pos + 1;
 
 
             wPinLengthType = buffer[pos];
             Log.d(TAG, "wPinLengthType:" + wPinLengthType);
-            pos = pos + 1 ;
+            pos = pos + 1;
 
 
-            wPinStrLength = AssitTool.getArrayCount(new byte[] { buffer[pos],buffer[pos+1]});
+            wPinStrLength = AssitTool.getArrayCount(new byte[]{buffer[pos], buffer[pos + 1]});
             Log.d(TAG, "wPinStrLength:" + wPinStrLength);
-            pos = pos + 2 ;
+            pos = pos + 2;
 
-            byte[]  wPinStringArray = new byte[wPinStrLength];
-            System.arraycopy(buffer,pos,wPinStringArray,0,wPinStrLength);
-            wPinString =  AssitTool.getString(wPinStringArray, AssitTool.UTF_8);
+            byte[] wPinStringArray = new byte[wPinStrLength];
+            System.arraycopy(buffer, pos, wPinStringArray, 0, wPinStrLength);
+            wPinString = AssitTool.getString(wPinStringArray, AssitTool.UTF_8);
             Log.d(TAG, "wPinString:" + wPinString);
-            pos = pos + wPinStrLength ;
+            pos = pos + wPinStrLength;
 
-            pinKeyStrLength = AssitTool.getArrayCount(new byte[] { buffer[pos],buffer[pos+1]});
+            pinKeyStrLength = AssitTool.getArrayCount(new byte[]{buffer[pos], buffer[pos + 1]});
             Log.d(TAG, "pinKeyStrLength:" + pinKeyStrLength);
-            pos = pos + 2 ;
+            pos = pos + 2;
 
+            ////CheckValue
             pinKeyStringArray = new byte[pinKeyStrLength];
-            System.arraycopy(buffer,pos,pinKeyStringArray,0,pinKeyStrLength);
-            pinKeyString =  AssitTool.getString(pinKeyStringArray, AssitTool.UTF_8);
+            System.arraycopy(buffer, pos, pinKeyStringArray, 0, pinKeyStrLength);
+            pinKeyString = AssitTool.getString(pinKeyStringArray, AssitTool.UTF_8);
             Log.d(TAG, "pinKeyString:" + pinKeyString);
 
             OperationSerial();
-
 
 
         }
     }
 
     public void sendConfirmCode(String backCmd) {
-        Log.d(TAG, "sendConfirmCode:"+backCmd);
+        Log.d(TAG, "sendConfirmCode:" + backCmd);
         String backCode = Cmds.CMD_UW + backCmd;
         backData(backCode.getBytes());
     }
 
     public void OperationSerial() {
+//        final SharedPreferences preferences = App.getInstance().preferences;
+//        String DefKey = DefaultKey.get(wPinLengthType * 2);//最初默认密钥
+//        String LoadMasterKey;
+        final byte WorkKey[] = AssitTool.HexStringToBytes(wPinString);
+        CheckValue1 = AssitTool.HexStringToBytes(pinKeyString);
+//        LoadMasterKey = preferences.getString(Cmds.LOAD_MASTER_KEY, DefKey);//明文密钥
+//        byte[] loadMasterKey = AssitTool.HexStringToBytes(LoadMasterKey);
+//        byte[] tmp = KeyBordProtocol.getInstance().SM4Dcrypt(WorkKey, loadMasterKey);
+//        CheckValue2 = KeyBordProtocol.getInstance().getCheckValues(tmp);
+//        if (Arrays.equals(CheckValue1, CheckValue2))
+//            sendConfirmCode(BackCode.CODE_01);
+        final byte[] checkvaluel = CheckValue1;
+        int pos = 0;
+        byte[] writeData = new byte[2 + 1 + 1 + 1 + WorkKey.length];
+        System.arraycopy(CMD.SD_CMD_UPDATE_WORK_KEY, 0, writeData, pos, 2);
+        pos = pos + 2;
 
-        byte[] data = AssitTool.StringToBytes(wPinString);
+        System.arraycopy(new byte[]{(byte) 1}, 0, writeData, pos, 1);
+        pos = pos + 1;
 
-        int pos = 0 ;
-        byte[] writeData = new byte[2+1+1+1+data.length];
-        System.arraycopy(CMD.SD_CMD_UPDATE_WORK_KEY,0,writeData,pos,2);
-        pos = pos + 2 ;
+        System.arraycopy(new byte[]{(byte) wpinIndex}, 0, writeData, pos, 1);
+        pos = pos + 1;
 
-        System.arraycopy(new byte[]{(byte)ZMKindex},0,writeData,pos,1);
-        pos = pos + 1 ;
+        System.arraycopy(new byte[]{(byte) WorkKey.length}, 0, writeData, pos, 1);
+        pos = pos + 1;
 
-        System.arraycopy(new byte[]{(byte)wpinIndex},0,writeData,pos,1);
-        pos = pos + 1 ;
+        System.arraycopy(WorkKey, 0, writeData, pos, WorkKey.length);
 
-        System.arraycopy(new byte[]{(byte)data.length},0,writeData,pos,1);
-        pos = pos + 1 ;
-
-        System.arraycopy(data,0,writeData,pos,data.length);
-
-        final byte [] wbyte = new SerialRequestFrame().make_SD_Package(writeData);
+        final byte[] wbyte = new SerialRequestFrame().make_SD_Package(writeData);
         final SerialResponseFrame serialResponse = new SerialResponseFrame();
 
         SerialUtil.getInstance().getSerialPort().write(wbyte, wbyte.length);
 
         new Thread(
-                new Runnable(){
+                new Runnable() {
                     @Override
                     public void run() {
                         SerialUtil.getInstance().setStop(false);
@@ -202,23 +232,35 @@ public class SDCSDownLoadWKeyData extends BaseData {
                         byte[] rbyte = serialResponse.get_SD_Rbyte();
                         SerialUtil.getInstance().setStop(true);
                         SerialResponseFrame.lock.unlock();
-                        if(rbyte.length == 22 ) {
-                            if (Arrays.equals(new byte[]{rbyte[0],rbyte[1],rbyte[2],rbyte[3],rbyte[4],rbyte[5]}, new byte[]{0x00, 0x14, (byte)0xa0, 0x08, 0x00, 0x00})) {
-                                byte[] data = new byte[16] ;
-                                System.arraycopy(rbyte,6,data,0,16);
-                                if(Arrays.equals(data,pinKeyStringArray))
-                                {
-                                    sendConfirmCode(BackCode.CODE_00);
-                                }
-                                else {
-                                    sendConfirmCode(BackCode.CODE_01);
+                        if (rbyte.length == 22) {
+                            if (Arrays.equals(new byte[]{rbyte[0], rbyte[1], rbyte[2], rbyte[3], rbyte[4], rbyte[5]}, new byte[]{0x00, 0x14, (byte) 0xa0, 0x08, 0x00, 0x00})) {
+                                int iIndex = 0;
+                                byte[] data = new byte[8];
+                                LogMg.d(TAG, "CheckValue2=%s\n", AssitTool.BytesToHexString(data));
+                                System.arraycopy(rbyte, 6, data, 0, 8);
+                                if (Arrays.equals(checkvaluel, data)) {
+                                    byte[] send = new byte[2 + BackCode.CODE_00.length() + 1 + 8];
+                                    send[iIndex++] = 'U';
+                                    send[iIndex++] = 'W';
+                                    System.arraycopy(BackCode.CODE_00.getBytes(), 0, send, iIndex, 2);
+                                    iIndex += 2;
+                                    send[iIndex++] = 8;
+                                    System.arraycopy(data, 0, send, iIndex, 8);
+                                    backData(send);
+                                } else {
+                                    byte[] send = new byte[2 + BackCode.CODE_15.length() + 1 + 8];
+                                    send[iIndex++] = 'U';
+                                    send[iIndex++] = 'W';
+                                    System.arraycopy(BackCode.CODE_15.getBytes(), 0, send, iIndex, 3);
+                                    iIndex += 3;
+                                    send[iIndex++] = 8;
+                                    System.arraycopy(data, 0, send, iIndex, 8);
+                                    backData(send);
                                 }
                             } else {
                                 sendConfirmCode(BackCode.CODE_01);
                             }
-                        }
-                        else
-                        {
+                        } else {
                             sendConfirmCode(BackCode.CODE_02);
                         }
 
