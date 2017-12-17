@@ -19,7 +19,7 @@ import com.joesmate.page.PlayActivity;
 /**
  * Created by bill on 2016/1/13.
  */
-public class SetPassWord extends LinearLayout implements TimerView.OnTimerListener ,SerialUtil.OnKeyReceiveListener {
+public class SetPassWord extends LinearLayout implements TimerView.OnTimerListener, SerialUtil.OnKeyReceiveListener {
 
 //    private Context mcontext;
 //    // GifView  gifView ;
@@ -440,160 +440,161 @@ public class SetPassWord extends LinearLayout implements TimerView.OnTimerListen
 //    }
 
 
+    private Context mcontext;
+    // GifView  gifView ;
+    // MediaVideoGif mediaVideoGif ;
+    LinearLayout inputPasswordContent;
+    //LinearLayout inputPasswordContentAgain;
+
+    LinearLayout passwordGrp, pass1, pass2, pass3, pass4, pass5, pass6, pass7, pass8, pass9, pass10, pass11, pass12;
+
+    // ImageView pass1;
 
 
-        private Context mcontext;
-        // GifView  gifView ;
-        // MediaVideoGif mediaVideoGif ;
-        LinearLayout inputPasswordContent;
-        //LinearLayout inputPasswordContentAgain;
+    //LinearLayout passwordAgainGrp;
+    HtmlView htmlContent;
+    //TextView maincontent;
+    TextView txtMsg;
+    //TextView txtMsgAgain;
+    //密码长度
 
-        LinearLayout passwordGrp,pass1,pass2,pass3,pass4,pass5,pass6,pass7,pass8,pass9,pass10,pass11,pass12;
+    int passwordLength = SDCSReadPinData.getInstance().getiInputPassworfLength();
+    int passwordNumber = 1;
+    int endType = 0;
+    public static final String TAG = "SetPassWord";
+    //ArrayList<ImageView> passwords;
+    //ArrayList<ImageView> passwordsAgain;
 
-        // ImageView pass1;
+    public final static int MSG_ENTER = 1;
+    public final static int MSG_CANCEL = 2;
+    public final static int MSG_NUMBER = 3;
 
-
-
-        //LinearLayout passwordAgainGrp;
-        HtmlView htmlContent;
-        //TextView maincontent;
-        TextView txtMsg;
-        //TextView txtMsgAgain;
-        //密码长度
-
-        int passwordLength = SDCSReadPinData.getInstance().getiInputPassworfLength();
-        int passwordNumber = 1;
-        int endType = 0;
-        public static final String TAG = "SetPassWord";
-        //ArrayList<ImageView> passwords;
-        //ArrayList<ImageView> passwordsAgain;
-
-        public final static int MSG_ENTER = 1;
-        public final static int MSG_CANCEL = 2;
-        public final static int MSG_NUMBER = 3;
-
-        int[] passwordValue;
-        //int[] passwordAgainValue;
+    int[] passwordValue;
+    //int[] passwordAgainValue;
 
 
-        //boolean secondInput = false;
+    //boolean secondInput = false;
 
-        int currentIndex = 0;
+    int currentIndex = 0;
 
-        public SetPassWord(Context context) {
-            super(context);
-            mcontext = context;
-            onFinishInflate();
-            passlength();
+    public SetPassWord(Context context) {
+        super(context);
+        mcontext = context;
+        onFinishInflate();
+        passlength();
 
 
+    }
+
+    public SetPassWord(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        mcontext = context;
+        onFinishInflate();
+        passlength();
+
+
+    }
+
+    public void passlength() {
+        init();
+        switch (passwordLength) {
+            case 1:
+                pass1.setVisibility(VISIBLE);
+                break;
+            case 2:
+                pass2.setVisibility(VISIBLE);
+                break;
+            case 4:
+                pass4.setVisibility(VISIBLE);
+                break;
+            case 5:
+                pass5.setVisibility(VISIBLE);
+                break;
+            case 6:
+                pass6.setVisibility(VISIBLE);
+                break;
+            case 7:
+                pass7.setVisibility(VISIBLE);
+                break;
+            case 8:
+                pass8.setVisibility(VISIBLE);
+                break;
+            case 3:
+                pass3.setVisibility(VISIBLE);
+                break;
+            case 9:
+                pass9.setVisibility(VISIBLE);
+                break;
+            case 10:
+                pass10.setVisibility(VISIBLE);
+                break;
+            case 11:
+                pass11.setVisibility(VISIBLE);
+                break;
+            case 12:
+                pass12.setVisibility(VISIBLE);
+                break;
         }
+    }
 
-        public SetPassWord(Context context, AttributeSet attrs) {
-            super(context, attrs);
-            mcontext = context;
-            onFinishInflate();
-            passlength();
+    Handler myHandler = new Handler() {
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case MSG_ENTER:
+                    //txtMsgAgain.setVisibility(INVISIBLE);
+                    txtMsg.setVisibility(INVISIBLE);
+                    Log.d(TAG, "----- ACTION_BROADCAST_INPUT_PW_ENTER ");
+
+                    if (SDCSReadPinData.getInstance().getiEncryType() == 1) {
+                        if (currentIndex < passwordLength) {
+                            txtMsg.setVisibility(VISIBLE);
+                            txtMsg.setText("密码必须输入" + passwordLength + "位");
+                            Log.e("密码必须输入", "" + 1);
+                            count();
+                            SerialUtil.getInstance().setStop(true);
+                            SDCSReadPinData.getInstance().inputChar();
+
+                            cleanPass();
+                        } else {
+                            Log.e("密码必须输入", "" + 2);
+                            SDCSReadPinData.getInstance().sendConfirmResult(getResult());
+                            SerialUtil.getInstance().setStop(true);
+                            Intent intent1 = new Intent(AppAction.ACTION_BROADCAST_CMD);
+                            intent1.putExtra(AppAction.KEY_BROADCAST_CMD, PlayActivity.PAGE_PLAY);
+                            getContext().sendBroadcast(intent1);
+                        }
 
 
+                    }
 
-        }
-        public void passlength(){
-            init();
-            switch (passwordLength){
-                case 1:
-                    pass1.setVisibility(VISIBLE);
+                    if (SDCSReadPinData.getInstance().getiEncryType() == 5) {
+                        if (currentIndex < passwordLength) {
+                            txtMsg.setVisibility(VISIBLE);
+                            txtMsg.setText("密码必须输入" + passwordLength + "位");
+                            Log.e("密码必须输入", "" + 3);
+                            count();
+                        }
+                    }
                     break;
-                case 2:
-                    pass2.setVisibility(VISIBLE);
-                    break;
-                case 4:
-                    pass4.setVisibility(VISIBLE);
-                    break;
-                case 5:
-                    pass5.setVisibility(VISIBLE);
-                    break;
-                case 6:
-                    pass6.setVisibility(VISIBLE);
-                    break;
-                case 7:
-                    pass7.setVisibility(VISIBLE);
-                    break;
-                case 8:
-                    pass8.setVisibility(VISIBLE);
-                    break;
-                case 3:
-                    pass3.setVisibility(VISIBLE);
-                    break;
-                case 9:
-                    pass9.setVisibility(VISIBLE);
-                    break;
-                case 10:
-                    pass10.setVisibility(VISIBLE);
-                    break;
-                case 11:
-                    pass11.setVisibility(VISIBLE);
-                    break;
-                case 12:
-                    pass12.setVisibility(VISIBLE);
-                    break;
-            }
-        }
+                case MSG_NUMBER:
 
-        Handler myHandler = new Handler() {
-            public void handleMessage(Message msg) {
-                switch (msg.what) {
-                    case MSG_ENTER:
+
+                    if (SDCSReadPinData.getInstance().getiEncryType() == 1) {
+                        // char str = (char) intent.getByteExtra("inputChar", (byte) 0);
+                        //int str1 = str - 48;
+                        int str1 = msg.arg1 - 48;
+                        Log.d(TAG, "----- ACTION_BROADCAST_INPUT_PW_ONECHAR :" + str1);
                         //txtMsgAgain.setVisibility(INVISIBLE);
                         txtMsg.setVisibility(INVISIBLE);
-                        Log.d(TAG, "----- ACTION_BROADCAST_INPUT_PW_ENTER ");
+                        if (currentIndex < passwordLength) {
+                            Log.e("密码必须输入", "" + 4);
 
-                        if (SDCSReadPinData.getInstance().getiEncryType() == 1) {
-                            if (currentIndex < passwordLength) {
-                                txtMsg.setVisibility(VISIBLE);
-                                txtMsg.setText("密码必须输入" + passwordLength + "位");
-                                Log.e("密码必须输入",""+1);
-                                count();
-                            }else {
-                                Log.e("密码必须输入",""+2);
-                                SDCSReadPinData.getInstance().sendConfirmResult(getResult());
-                                SerialUtil.getInstance().setStop(true);
-                                Intent intent1 = new Intent(AppAction.ACTION_BROADCAST_CMD);
-                                intent1.putExtra(AppAction.KEY_BROADCAST_CMD, PlayActivity.PAGE_PLAY);
-                                getContext().sendBroadcast(intent1);
-                            }
-
-
-                        }
-
-                        if (SDCSReadPinData.getInstance().getiEncryType() == 5) {
-                            if (currentIndex < passwordLength) {
-                                txtMsg.setVisibility(VISIBLE);
-                                txtMsg.setText("密码必须输入" + passwordLength + "位");
-                                Log.e("密码必须输入",""+3);
-                                count();
-                            }
-                        }
-                        break;
-                    case MSG_NUMBER:
-
-
-                        if (SDCSReadPinData.getInstance().getiEncryType() == 1) {
-                            // char str = (char) intent.getByteExtra("inputChar", (byte) 0);
-                            //int str1 = str - 48;
-                            int str1 = msg.arg1 - 48;
-                            Log.d(TAG, "----- ACTION_BROADCAST_INPUT_PW_ONECHAR :" + str1);
-                            //txtMsgAgain.setVisibility(INVISIBLE);
-                            txtMsg.setVisibility(INVISIBLE);
-                            if (currentIndex < passwordLength) {
-                                Log.e("密码必须输入",""+4);
-                                currentIndex = currentIndex + 1;
-                                Log.d(TAG, "密码位数:" + currentIndex);
-                                count();
-                                passwordValue[currentIndex - 1] = str1;
-                                Log.d(TAG, "密码位数:" + str1);
-                            } else if (currentIndex == passwordLength) {
-                                Log.e("密码必须输入",""+5);
+                            Log.d(TAG, "密码位数:" + currentIndex);
+                            count();
+                            passwordValue[ currentIndex++] = str1;
+                            Log.d(TAG, "密码位数:" + str1);
+                            if (currentIndex == passwordLength && endType == 1) {
+                                Log.e("密码必须输入", "" + 5);
                                 SDCSReadPinData.getInstance().sendConfirmResult(getResult());
                                 Intent intent1 = new Intent(AppAction.ACTION_BROADCAST_CMD);
                                 intent1.putExtra(AppAction.KEY_BROADCAST_CMD, PlayActivity.PAGE_PLAY);
@@ -602,99 +603,97 @@ public class SetPassWord extends LinearLayout implements TimerView.OnTimerListen
 
 
                             }
+                           ;
                         }
+                    }
 
-                        if (SDCSReadPinData.getInstance().getiEncryType() == 5) {
+                    if (SDCSReadPinData.getInstance().getiEncryType() == 5) {
 
-                            Log.d(TAG, "----- ACTION_BROADCAST_INPUT_PW_ONECHAR ");
-                            //txtMsgAgain.setVisibility(INVISIBLE);
-                            txtMsg.setVisibility(INVISIBLE);
-                            if (currentIndex < passwordLength) {
-                                currentIndex = currentIndex + 1;
-                                Log.e("密码必须输入",""+6);
-                                count();
-                                Log.d(TAG, "----- currentIndex:" + currentIndex);
-                                ;
-                            }
-                        }
-
-                        break;
-                    case MSG_CANCEL:
-                        Log.d(TAG, "----- ACTION_BROADCAST_INPUT_PW_BACK ");
-                        if (SDCSReadPinData.getInstance().getiEncryType() == 1) {
-                            //txtMsgAgain.setVisibility(INVISIBLE);
-                            txtMsg.setVisibility(INVISIBLE);
-                            currentIndex = 0;
-                            Log.e("密码必须输入",""+7);
-                            resetPassword();
+                        Log.d(TAG, "----- ACTION_BROADCAST_INPUT_PW_ONECHAR ");
+                        //txtMsgAgain.setVisibility(INVISIBLE);
+                        txtMsg.setVisibility(INVISIBLE);
+                        if (currentIndex < passwordLength) {
+                            currentIndex++;
+                            Log.e("密码必须输入", "" + 6);
+                            count();
                             Log.d(TAG, "----- currentIndex:" + currentIndex);
-                            cleanPass();
-                        }
 
-                        if (SDCSReadPinData.getInstance().getiEncryType() == 5) {
-                            //txtMsgAgain.setVisibility(INVISIBLE);
-                            txtMsg.setVisibility(INVISIBLE);
-                            currentIndex = 0;
-                            Log.e("密码必须输入",""+8);
-                            Log.d(TAG, "----- currentIndex:" + currentIndex);
-                            cleanPass();
                         }
-                        break;
-                }
-                super.handleMessage(msg);
+                    }
+
+                    break;
+                case MSG_CANCEL:
+                    Log.d(TAG, "----- ACTION_BROADCAST_INPUT_PW_BACK ");
+                    if (SDCSReadPinData.getInstance().getiEncryType() == 1) {
+                        //txtMsgAgain.setVisibility(INVISIBLE);
+                        txtMsg.setVisibility(INVISIBLE);
+                        currentIndex = 0;
+                        Log.e("密码必须输入", "" + 7);
+                        resetPassword();
+                        Log.d(TAG, "----- currentIndex:" + currentIndex);
+                        cleanPass();
+                    }
+
+                    if (SDCSReadPinData.getInstance().getiEncryType() == 5) {
+                        //txtMsgAgain.setVisibility(INVISIBLE);
+                        txtMsg.setVisibility(INVISIBLE);
+                        currentIndex = 0;
+                        Log.e("密码必须输入", "" + 8);
+                        Log.d(TAG, "----- currentIndex:" + currentIndex);
+                        cleanPass();
+                    }
+                    break;
             }
-        };
-        public void init(){
-            pass1=(LinearLayout)findViewById(R.id.pass1);
-            pass2=(LinearLayout)findViewById(R.id.pass2);
-            pass3=(LinearLayout)findViewById(R.id.pass3);
-            pass4=(LinearLayout)findViewById(R.id.pass4);
-            pass5=(LinearLayout)findViewById(R.id.pass5);
-            pass6=(LinearLayout)findViewById(R.id.pass6);
-            pass7=(LinearLayout)findViewById(R.id.pass7);
-            pass8=(LinearLayout)findViewById(R.id.pass8);
-            pass9=(LinearLayout)findViewById(R.id.pass9);
-            pass10=(LinearLayout)findViewById(R.id.pass10);
-            pass11=(LinearLayout)findViewById(R.id.pass11);
-            pass12=(LinearLayout)findViewById(R.id.pass12);
+            super.handleMessage(msg);
         }
-        @Override
-        protected void onFinishInflate() {
-            super.onFinishInflate();
+    };
 
-            passwordNumber = SDCSReadPinData.getInstance().getiInputPasswordNumber();
-            endType = SDCSReadPinData.getInstance().getPasswordEndType();
-            //passwordNum = 6 ;
-            inflate(mcontext, R.layout.set_password_layout, this);
-            passlength();
-            LinearLayout li=(LinearLayout)findViewById(R.id.rightinfo);
+    public void init() {
+        pass1 = (LinearLayout) findViewById(R.id.pass1);
+        pass2 = (LinearLayout) findViewById(R.id.pass2);
+        pass3 = (LinearLayout) findViewById(R.id.pass3);
+        pass4 = (LinearLayout) findViewById(R.id.pass4);
+        pass5 = (LinearLayout) findViewById(R.id.pass5);
+        pass6 = (LinearLayout) findViewById(R.id.pass6);
+        pass7 = (LinearLayout) findViewById(R.id.pass7);
+        pass8 = (LinearLayout) findViewById(R.id.pass8);
+        pass9 = (LinearLayout) findViewById(R.id.pass9);
+        pass10 = (LinearLayout) findViewById(R.id.pass10);
+        pass11 = (LinearLayout) findViewById(R.id.pass11);
+        pass12 = (LinearLayout) findViewById(R.id.pass12);
+    }
+
+    @Override
+    protected void onFinishInflate() {
+        super.onFinishInflate();
+
+        passwordNumber = SDCSReadPinData.getInstance().getiInputPasswordNumber();
+        endType = SDCSReadPinData.getInstance().getPasswordEndType();
+        //passwordNum = 6 ;
+        inflate(mcontext, R.layout.set_password_layout, this);
+        passlength();
+        LinearLayout li = (LinearLayout) findViewById(R.id.rightinfo);
 
 
-            //密码
-            inputPasswordContent = (LinearLayout) findViewById(R.id.passwordImg);
+        //密码
+        inputPasswordContent = (LinearLayout) findViewById(R.id.passwordImg);
 
-            inputPasswordContent.setVisibility(VISIBLE);
-            //inputPasswordContentAgain = (LinearLayout) findViewById(R.id.passwordImgagain);
-
-
+        inputPasswordContent.setVisibility(VISIBLE);
+        //inputPasswordContentAgain = (LinearLayout) findViewById(R.id.passwordImgagain);
 
 
+        passwordGrp = (LinearLayout) findViewById(R.id.passowdGrp);
+        passwordGrp.setVisibility(VISIBLE);
+        //passwordAgainGrp = (LinearLayout) findViewById(R.id.passowdAgainGrp);
 
 
+        txtMsg = (TextView) findViewById(R.id.txtmsg);
+        //txtMsgAgain = (TextView) findViewById(R.id.txtmsgagain);
+        txtMsg.setVisibility(INVISIBLE);
+        //txtMsgAgain.setVisibility(INVISIBLE);
 
-
-            passwordGrp = (LinearLayout) findViewById(R.id.passowdGrp);
-            passwordGrp.setVisibility(VISIBLE);
-            //passwordAgainGrp = (LinearLayout) findViewById(R.id.passowdAgainGrp);
-
-
-            txtMsg = (TextView) findViewById(R.id.txtmsg);
-            //txtMsgAgain = (TextView) findViewById(R.id.txtmsgagain);
-            txtMsg.setVisibility(INVISIBLE);
-            //txtMsgAgain.setVisibility(INVISIBLE);
-
-            htmlContent = (HtmlView) findViewById(R.id.htmlContent);
-            htmlContent.loadChar(SDCSReadPinData.getInstance().getDisplayContent());
+        htmlContent = (HtmlView) findViewById(R.id.htmlContent);
+        htmlContent.loadChar(SDCSReadPinData.getInstance().getDisplayContent());
        /* if (passwordNumber == 1) {
             passwordAgainGrp.setVisibility(GONE);
 
@@ -706,9 +705,9 @@ public class SetPassWord extends LinearLayout implements TimerView.OnTimerListen
         filter.addAction(AppAction.ACTION_BROADCAST_INPUT_PW_ENTER);
         filter.addAction(AppAction.ACTION_BROADCAST_INPUT_PW_ONECHAR);
         filter.addAction(AppAction.ACTION_BROADCAST_INPUT_PW_BACK);*/
-            //mcontext.registerReceiver(receiver, filter);
-            //passwords = new ArrayList<ImageView>(passwordLength);
-            //passwordsAgain = new ArrayList<ImageView>(passwordLength);
+        //mcontext.registerReceiver(receiver, filter);
+        //passwords = new ArrayList<ImageView>(passwordLength);
+        //passwordsAgain = new ArrayList<ImageView>(passwordLength);
        /* for (int i = 0; i < passwordLength; ++i) {
             ImageView imageView = new ImageView(mcontext);
             LayoutParams params = new LayoutParams(30, 30);
@@ -732,13 +731,13 @@ public class SetPassWord extends LinearLayout implements TimerView.OnTimerListen
 
         }
 */
-            passwordValue = new int[passwordLength];
-            //passwordAgainValue = new int[passwordLength];
-            cleanPass();
+        passwordValue = new int[passwordLength];
+        //passwordAgainValue = new int[passwordLength];
+        cleanPass();
 
-            SerialUtil.getInstance().setOnKeyReceiveListener(this);
+        SerialUtil.getInstance().setOnKeyReceiveListener(this);
 
-        }
+    }
 
  /*   void displayPassWordView() {
 
@@ -751,148 +750,156 @@ public class SetPassWord extends LinearLayout implements TimerView.OnTimerListen
         }
     }*/
 
-        void AddPassword6() {
+    void AddPassword6() {
 
-            ImageView img = new ImageView(mcontext);
-            img.setImageDrawable(getResources().getDrawable(R.drawable.blankdot));
-            LayoutParams params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-            params.setMargins((int)18.7f, (int)18.7f, (int)18.7f, (int)18.7f);
-            img.setLayoutParams(params);
+        ImageView img = new ImageView(mcontext);
+        img.setImageDrawable(getResources().getDrawable(R.drawable.blankdot));
+        LayoutParams params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        params.setMargins((int) 18.7f, (int) 18.7f, (int) 18.7f, (int) 18.7f);
+        img.setLayoutParams(params);
 
-            pass6.addView(img);
+        pass6.addView(img);
+    }
+
+    void AddPassword7() {
+        //添加密码
+        Log.e("添加密码", "秒123");
+        ImageView img = new ImageView(mcontext);
+        img.setImageDrawable(getResources().getDrawable(R.drawable.blankdot));
+        LayoutParams params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        params.setMargins((int) 18.9f, (int) 18.9f, (int) 18.9f, (int) 18.9f);
+        img.setLayoutParams(params);
+
+        pass7.addView(img);
+    }
+
+    void AddPassword8() {
+        //添加密码
+        Log.e("添加密码", "秒123");
+        ImageView img = new ImageView(mcontext);
+        img.setImageDrawable(getResources().getDrawable(R.drawable.blankdot));
+        LayoutParams params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        params.setMargins((int) 19f, (int) 19f, (int) 19f, (int) 19f);
+        img.setLayoutParams(params);
+
+        pass8.addView(img);
+    }
+
+    void AddPassword9() {
+        //添加密码
+        Log.e("添加密码", "秒123");
+        ImageView img = new ImageView(mcontext);
+        img.setImageDrawable(getResources().getDrawable(R.drawable.blankdot));
+        LayoutParams params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        params.setMargins((int) 19f, (int) 19f, (int) 19f, (int) 19f);
+        img.setLayoutParams(params);
+
+        pass9.addView(img);
+    }
+
+    void AddPassword10() {
+        //添加密码
+        Log.e("添加密码", "秒123");
+        ImageView img = new ImageView(mcontext);
+        img.setImageDrawable(getResources().getDrawable(R.drawable.blankdot));
+        LayoutParams params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        params.setMargins((int) 19.5f, (int) 19.5f, (int) 19.5f, (int) 19.5f);
+        img.setLayoutParams(params);
+
+        pass10.addView(img);
+    }
+
+    void AddPassword11() {
+        //添加密码
+        Log.e("添加密码", "秒123");
+        ImageView img = new ImageView(mcontext);
+        img.setImageDrawable(getResources().getDrawable(R.drawable.blankdot));
+        LayoutParams params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        params.setMargins(20, (int) 20, (int) 20, (int) 20);
+        img.setLayoutParams(params);
+
+        pass11.addView(img);
+    }
+
+    void AddPassword12() {
+        //添加密码
+        Log.e("添加密码", "秒123");
+        ImageView img = new ImageView(mcontext);
+        img.setImageDrawable(getResources().getDrawable(R.drawable.blankdot));
+        LayoutParams params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        params.setMargins((int) 19.9f, 20, 20, 20);
+        img.setLayoutParams(params);
+
+        pass12.addView(img);
+    }
+
+    void AddPassword1() {
+        //添加密码
+        Log.e("添加密码", "秒123");
+        ImageView img = new ImageView(mcontext);
+        img.setImageDrawable(getResources().getDrawable(R.drawable.blankdot));
+        LayoutParams params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        params.setMargins(14, 14, 14, 14);
+        img.setLayoutParams(params);
+
+        pass1.addView(img);
+    }
+
+    void AddPassword2() {
+        //添加密码
+        Log.e("添加密码", "秒123");
+        ImageView img = new ImageView(mcontext);
+        img.setImageDrawable(getResources().getDrawable(R.drawable.blankdot));
+        LayoutParams params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        params.setMargins((int) 15.5f, (int) 15.5f, (int) 15.5f, (int) 15.5f);
+        img.setLayoutParams(params);
+
+        pass2.addView(img);
+    }
+
+    void AddPassword3() {
+        //添加密码
+        Log.e("添加密码", "秒123");
+        ImageView img = new ImageView(mcontext);
+        img.setImageDrawable(getResources().getDrawable(R.drawable.blankdot));
+        LayoutParams params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        params.setMargins((int) 16.2f, (int) 16.2f, (int) 16.2f, (int) 16.2f);
+        img.setLayoutParams(params);
+
+        pass3.addView(img);
+    }
+
+    void AddPassword4() {
+        //添加密码
+        Log.e("添加密码", "秒123");
+        ImageView img = new ImageView(mcontext);
+        img.setImageDrawable(getResources().getDrawable(R.drawable.blankdot));
+        LayoutParams params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        params.setMargins((int) 16.5f, (int) 16.5f, (int) 16.5f, (int) 16.5f);
+        img.setLayoutParams(params);
+
+        pass4.addView(img);
+    }
+
+    void AddPassword5() {
+        //添加密码
+        Log.e("添加密码", "秒123");
+        ImageView img = new ImageView(mcontext);
+        img.setImageDrawable(getResources().getDrawable(R.drawable.blankdot));
+        LayoutParams params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        params.setMargins((int) 19.5f, (int) 19.5f, (int) 19.5f, (int) 19.5f);
+        img.setLayoutParams(params);
+
+        pass5.addView(img);
+    }
+
+
+    void resetPassword() {
+        Log.e("重置密码", "秒123");
+        for (int i = 0; i < passwordLength; ++i) {
+            passwordValue[i] = 10;
         }
-        void AddPassword7() {
-            //添加密码
-            Log.e("添加密码","秒123");
-            ImageView img = new ImageView(mcontext);
-            img.setImageDrawable(getResources().getDrawable(R.drawable.blankdot));
-            LayoutParams params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-            params.setMargins((int) 18.9f, (int) 18.9f, (int) 18.9f, (int) 18.9f);
-            img.setLayoutParams(params);
-
-            pass7.addView(img);
-        }
-        void AddPassword8() {
-            //添加密码
-            Log.e("添加密码","秒123");
-            ImageView img = new ImageView(mcontext);
-            img.setImageDrawable(getResources().getDrawable(R.drawable.blankdot));
-            LayoutParams params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-            params.setMargins((int) 19f, (int) 19f, (int) 19f, (int) 19f);
-            img.setLayoutParams(params);
-
-            pass8.addView(img);
-        } void AddPassword9() {
-            //添加密码
-            Log.e("添加密码","秒123");
-            ImageView img = new ImageView(mcontext);
-            img.setImageDrawable(getResources().getDrawable(R.drawable.blankdot));
-            LayoutParams params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-            params.setMargins((int) 19f, (int) 19f, (int) 19f, (int) 19f);
-            img.setLayoutParams(params);
-
-            pass9.addView(img);
-        } void AddPassword10() {
-            //添加密码
-            Log.e("添加密码","秒123");
-            ImageView img = new ImageView(mcontext);
-            img.setImageDrawable(getResources().getDrawable(R.drawable.blankdot));
-            LayoutParams params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-            params.setMargins((int) 19.5f, (int) 19.5f, (int) 19.5f, (int) 19.5f);
-            img.setLayoutParams(params);
-
-            pass10.addView(img);
-        }
-        void AddPassword11() {
-            //添加密码
-            Log.e("添加密码","秒123");
-            ImageView img = new ImageView(mcontext);
-            img.setImageDrawable(getResources().getDrawable(R.drawable.blankdot));
-            LayoutParams params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-            params.setMargins(20, (int) 20, (int) 20, (int) 20);
-            img.setLayoutParams(params);
-
-            pass11.addView(img);
-        } void AddPassword12() {
-            //添加密码
-            Log.e("添加密码","秒123");
-            ImageView img = new ImageView(mcontext);
-            img.setImageDrawable(getResources().getDrawable(R.drawable.blankdot));
-            LayoutParams params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-            params.setMargins((int) 19.9f, 20, 20, 20);
-            img.setLayoutParams(params);
-
-            pass12.addView(img);
-        }
-        void AddPassword1() {
-            //添加密码
-            Log.e("添加密码","秒123");
-            ImageView img = new ImageView(mcontext);
-            img.setImageDrawable(getResources().getDrawable(R.drawable.blankdot));
-            LayoutParams params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-            params.setMargins(14, 14, 14, 14);
-            img.setLayoutParams(params);
-
-            pass1.addView(img);
-        }
-        void AddPassword2() {
-            //添加密码
-            Log.e("添加密码","秒123");
-            ImageView img = new ImageView(mcontext);
-            img.setImageDrawable(getResources().getDrawable(R.drawable.blankdot));
-            LayoutParams params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-            params.setMargins((int)15.5f, (int)15.5f, (int)15.5f, (int)15.5f);
-            img.setLayoutParams(params);
-
-            pass2.addView(img);
-        }
-        void AddPassword3() {
-            //添加密码
-            Log.e("添加密码","秒123");
-            ImageView img = new ImageView(mcontext);
-            img.setImageDrawable(getResources().getDrawable(R.drawable.blankdot));
-            LayoutParams params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-            params.setMargins((int)16.2f, (int)16.2f, (int)16.2f, (int)16.2f);
-            img.setLayoutParams(params);
-
-            pass3.addView(img);
-        }
-        void AddPassword4() {
-            //添加密码
-            Log.e("添加密码","秒123");
-            ImageView img = new ImageView(mcontext);
-            img.setImageDrawable(getResources().getDrawable(R.drawable.blankdot));
-            LayoutParams params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-            params.setMargins((int)16.5f, (int)16.5f, (int)16.5f, (int)16.5f);
-            img.setLayoutParams(params);
-
-            pass4.addView(img);
-        }
-        void AddPassword5() {
-            //添加密码
-            Log.e("添加密码","秒123");
-            ImageView img = new ImageView(mcontext);
-            img.setImageDrawable(getResources().getDrawable(R.drawable.blankdot));
-            LayoutParams params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-            params.setMargins((int)19.5f, (int)19.5f, (int)19.5f, (int)19.5f);
-            img.setLayoutParams(params);
-
-            pass5.addView(img);
-        }
-
-
-
-
-
-
-
-
-        void resetPassword() {
-            Log.e("重置密码","秒123");
-            for (int i = 0; i < passwordLength; ++i) {
-                passwordValue[i] = 10;
-            }
-        }
+    }
 
  /*   void resetPasswordAgain() {
         for (int i = 0; i < passwordLength; ++i) {
@@ -901,26 +908,26 @@ public class SetPassWord extends LinearLayout implements TimerView.OnTimerListen
     }*/
 
 
-        String getResult() {
-            String str = "00";
-            if (passwordNumber == 1) {
-                for (int i = 0; i < passwordLength; ++i) {
-                    if (passwordValue[i] != 10) {
-                        str = str + passwordValue[i];
-                    }
+    String getResult() {
+        String str = "00";
+        if (passwordNumber == 1) {
+            for (int i = 0; i < passwordLength; ++i) {
+                if (passwordValue[i] != 10) {
+                    str = str + passwordValue[i];
                 }
             }
-
-            Log.d("bill", "result:" + str);
-            return str;
         }
 
-        @Override
-        protected void onDetachedFromWindow() {
-            super.onDetachedFromWindow();
-            Log.d(TAG, "----- onDetachedFromWindow 2222");
-            //mcontext.unregisterReceiver(receiver);
-        }
+        Log.d("bill", "result:" + str);
+        return str;
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        Log.d(TAG, "----- onDetachedFromWindow 2222");
+        //mcontext.unregisterReceiver(receiver);
+    }
 
 
  /*   BroadcastReceiver receiver = new BroadcastReceiver() {
@@ -1026,295 +1033,298 @@ public class SetPassWord extends LinearLayout implements TimerView.OnTimerListen
         }
     };*/
 
-        @Override
-        public void timeOut() {
-            if (SDCSReadPinData.getInstance().getiEncryType() == 1) {
-                SDCSReadPinData.getInstance().sendConfirmResult(getResult());
-                SDCSReadPinData.getInstance().closeInputChar();
-                SerialUtil.getInstance().setStop(true);
-                Intent intent1 = new Intent(AppAction.ACTION_BROADCAST_CMD);
-                intent1.putExtra(AppAction.KEY_BROADCAST_CMD, PlayActivity.PAGE_PLAY);
-                getContext().sendBroadcast(intent1);
-            } else if (SDCSReadPinData.getInstance().getiEncryType() == 5) {
-                SDCSReadPinData.getInstance().closeInputChar();
-                SerialUtil.getInstance().setStop(true);
-                Intent intent1 = new Intent(AppAction.ACTION_BROADCAST_CMD);
-                intent1.putExtra(AppAction.KEY_BROADCAST_CMD, PlayActivity.PAGE_PLAY);
-                getContext().sendBroadcast(intent1);
-            }
-        }
-
-        @Override
-        public void onKeyReceive(SerialUtil.KEY key, int data) {
-            if (key.equals(SerialUtil.KEY.ENTER)) {
-                myHandler.sendEmptyMessage(MSG_ENTER);
-            } else if (key.equals(SerialUtil.KEY.CANCEL)) {
-                myHandler.sendEmptyMessage(MSG_CANCEL);
-            } else if (key.equals(SerialUtil.KEY.NUMBER)) {
-                Message message = new Message();
-                message.what = MSG_NUMBER;
-                message.arg1 = data;
-                myHandler.sendMessage(message);
-
-            }
-        }
-
-        public  void count(){
-
-            switch (passwordLength){
-                case 1:
-                    pass2.setVisibility(GONE);
-                    pass3.setVisibility(GONE);
-                    pass4.setVisibility(GONE);
-                    pass5.setVisibility(GONE);
-                    pass7.setVisibility(GONE);
-                    pass6.setVisibility(GONE);
-                    pass8.setVisibility(GONE);
-                    pass9.setVisibility(GONE);
-                    pass10.setVisibility(GONE);
-                    pass11.setVisibility(GONE);
-                    pass12.setVisibility(GONE);
-
-
-                    pass1.setVisibility(VISIBLE);
-                    AddPassword1();
-                    break;
-                case 2:
-                    pass2.setVisibility(VISIBLE);
-                    pass1.setVisibility(GONE);
-                    pass3.setVisibility(GONE);
-                    pass4.setVisibility(GONE);
-                    pass5.setVisibility(GONE);
-                    pass7.setVisibility(GONE);
-                    pass6.setVisibility(GONE);
-                    pass8.setVisibility(GONE);
-                    pass9.setVisibility(GONE);
-                    pass10.setVisibility(GONE);
-                    pass11.setVisibility(GONE);
-                    pass12.setVisibility(GONE);
-
-                    AddPassword2();
-                    break;
-                case 3:
-                    pass3.setVisibility(VISIBLE);
-                    AddPassword3();
-                    pass2.setVisibility(GONE);
-                    pass1.setVisibility(GONE);
-                    pass4.setVisibility(GONE);
-                    pass5.setVisibility(GONE);
-                    pass7.setVisibility(GONE);
-                    pass6.setVisibility(GONE);
-                    pass8.setVisibility(GONE);
-                    pass9.setVisibility(GONE);
-                    pass10.setVisibility(GONE);
-                    pass11.setVisibility(GONE);
-                    pass12.setVisibility(GONE);
-
-                    break;
-                case 4:
-                    pass4.setVisibility(GONE);
-                    pass2.setVisibility(GONE);
-                    pass3.setVisibility(GONE);
-                    pass1.setVisibility(GONE);
-                    pass5.setVisibility(GONE);
-                    pass7.setVisibility(GONE);
-                    pass6.setVisibility(GONE);
-                    pass8.setVisibility(GONE);
-                    pass9.setVisibility(GONE);
-                    pass10.setVisibility(GONE);
-                    pass11.setVisibility(GONE);
-                    pass12.setVisibility(GONE);
-
-                    pass4.setVisibility(VISIBLE);
-                    AddPassword4();
-                    break;
-                case 5:
-                    pass2.setVisibility(GONE);
-                    pass3.setVisibility(GONE);
-                    pass4.setVisibility(GONE);
-                    pass1.setVisibility(GONE);
-                    pass7.setVisibility(GONE);
-                    pass6.setVisibility(GONE);
-                    pass8.setVisibility(GONE);
-                    pass9.setVisibility(GONE);
-                    pass10.setVisibility(GONE);
-                    pass11.setVisibility(GONE);
-                    pass12.setVisibility(GONE);
-
-                    pass5.setVisibility(VISIBLE);
-                    AddPassword5();
-                    break;
-                case 6:
-                    pass2.setVisibility(GONE);
-                    pass3.setVisibility(GONE);
-                    pass4.setVisibility(GONE);
-                    pass5.setVisibility(GONE);
-                    pass7.setVisibility(GONE);
-                    pass1.setVisibility(GONE);
-                    pass8.setVisibility(GONE);
-                    pass9.setVisibility(GONE);
-                    pass10.setVisibility(GONE);
-                    pass11.setVisibility(GONE);
-                    pass12.setVisibility(GONE);
-
-                    pass6.setVisibility(VISIBLE);
-                    AddPassword6();
-                    break;
-                case 7:
-                    pass2.setVisibility(GONE);
-                    pass3.setVisibility(GONE);
-                    pass4.setVisibility(GONE);
-                    pass5.setVisibility(GONE);
-                    pass1.setVisibility(GONE);
-                    pass6.setVisibility(GONE);
-                    pass8.setVisibility(GONE);
-                    pass9.setVisibility(GONE);
-                    pass10.setVisibility(GONE);
-                    pass11.setVisibility(GONE);
-                    pass12.setVisibility(GONE);
-
-                    pass7.setVisibility(VISIBLE);
-                    AddPassword7();
-                    break;
-                case 8:
-                    pass2.setVisibility(GONE);
-                    pass3.setVisibility(GONE);
-                    pass4.setVisibility(GONE);
-                    pass5.setVisibility(GONE);
-                    pass7.setVisibility(GONE);
-                    pass6.setVisibility(GONE);
-                    pass1.setVisibility(GONE);
-                    pass9.setVisibility(GONE);
-                    pass10.setVisibility(GONE);
-                    pass11.setVisibility(GONE);
-                    pass12.setVisibility(GONE);
-
-                    pass8.setVisibility(VISIBLE);
-                    AddPassword8();
-                    break;
-                case 9:
-                    pass2.setVisibility(GONE);
-                    pass3.setVisibility(GONE);
-                    pass4.setVisibility(GONE);
-                    pass5.setVisibility(GONE);
-                    pass7.setVisibility(GONE);
-                    pass6.setVisibility(GONE);
-                    pass8.setVisibility(GONE);
-                    pass1.setVisibility(GONE);
-                    pass10.setVisibility(GONE);
-                    pass11.setVisibility(GONE);
-                    pass12.setVisibility(GONE);
-
-                    pass9.setVisibility(VISIBLE);
-                    AddPassword9();
-                    break;
-                case 10:
-                    pass2.setVisibility(GONE);
-                    pass3.setVisibility(GONE);
-                    pass4.setVisibility(GONE);
-                    pass5.setVisibility(GONE);
-                    pass7.setVisibility(GONE);
-                    pass6.setVisibility(GONE);
-                    pass8.setVisibility(GONE);
-                    pass9.setVisibility(GONE);
-                    pass1.setVisibility(GONE);
-                    pass11.setVisibility(GONE);
-                    pass12.setVisibility(GONE);
-
-                    pass10.setVisibility(VISIBLE);
-                    AddPassword10();
-                    break;
-                case 11:
-                    pass2.setVisibility(GONE);
-                    pass3.setVisibility(GONE);
-                    pass4.setVisibility(GONE);
-                    pass5.setVisibility(GONE);
-                    pass7.setVisibility(GONE);
-                    pass6.setVisibility(GONE);
-                    pass8.setVisibility(GONE);
-                    pass9.setVisibility(GONE);
-                    pass1.setVisibility(GONE);
-                    pass1.setVisibility(GONE);
-                    pass12.setVisibility(GONE);
-                    pass11.setVisibility(VISIBLE);
-                    AddPassword11();
-                    break;
-
-                case 12:
-                    pass2.setVisibility(GONE);
-                    pass3.setVisibility(GONE);
-                    pass4.setVisibility(GONE);
-                    pass5.setVisibility(GONE);
-                    pass7.setVisibility(GONE);
-                    pass6.setVisibility(GONE);
-                    pass8.setVisibility(GONE);
-                    pass9.setVisibility(GONE);
-                    pass1.setVisibility(GONE);
-                    pass11.setVisibility(GONE);
-                    pass10.setVisibility(GONE);
-                    pass5.setVisibility(GONE);
-                    AddPassword12();
-                    break;
-
-            }
-
-        }
-        public void cleanPass() {
-            switch (passwordLength) {
-                case 1:
-                    pass1.removeAllViews();
-
-                    break;
-                case 2:
-                    pass2.removeAllViews();
-
-                    break;
-                case 3:
-                    pass3.removeAllViews();
-
-                    break;
-                case 4:
-                    pass4.removeAllViews();
-
-                    break;
-                case 5:
-                    pass5.removeAllViews();
-
-                    break;
-                case 6:
-                    pass6.removeAllViews();
-
-                    break;
-                case 7:
-                    pass7.removeAllViews();
-
-                    break;
-                case 8:
-                    pass8.removeAllViews();
-
-                    break;
-                case 9:
-                    pass9.removeAllViews();
-
-                    break;
-                case 10:
-                    pass10.removeAllViews();
-
-                    break;
-                case 11:
-                    pass11.removeAllViews();
-
-                    break;
-
-                case 12:
-                    pass5.removeAllViews();
-
-                    break;
-
-
-            }
+    @Override
+    public void timeOut() {
+        if (SDCSReadPinData.getInstance().getiEncryType() == 1) {
+            SDCSReadPinData.getInstance().sendConfirmResult(getResult());
+            SDCSReadPinData.getInstance().closeInputChar();
+            SerialUtil.getInstance().setStop(true);
+            Intent intent1 = new Intent(AppAction.ACTION_BROADCAST_CMD);
+            intent1.putExtra(AppAction.KEY_BROADCAST_CMD, PlayActivity.PAGE_PLAY);
+            getContext().sendBroadcast(intent1);
+        } else if (SDCSReadPinData.getInstance().getiEncryType() == 5) {
+            SDCSReadPinData.getInstance().closeInputChar();
+            SerialUtil.getInstance().setStop(true);
+            Intent intent1 = new Intent(AppAction.ACTION_BROADCAST_CMD);
+            intent1.putExtra(AppAction.KEY_BROADCAST_CMD, PlayActivity.PAGE_PLAY);
+            getContext().sendBroadcast(intent1);
         }
     }
+
+    @Override
+    public void onKeyReceive(SerialUtil.KEY key, int data) {
+        if (key.equals(SerialUtil.KEY.ENTER)) {
+            myHandler.sendEmptyMessage(MSG_ENTER);
+        } else if (key.equals(SerialUtil.KEY.CANCEL)) {
+            myHandler.sendEmptyMessage(MSG_CANCEL);
+        } else if (key.equals(SerialUtil.KEY.NUMBER)) {
+            Message message = new Message();
+            message.what = MSG_NUMBER;
+            message.arg1 = data;
+            myHandler.sendMessage(message);
+
+        }
+    }
+
+    public void count() {
+
+        switch (passwordLength) {
+            case 1:
+                pass2.setVisibility(GONE);
+                pass3.setVisibility(GONE);
+                pass4.setVisibility(GONE);
+                pass5.setVisibility(GONE);
+                pass7.setVisibility(GONE);
+                pass6.setVisibility(GONE);
+                pass8.setVisibility(GONE);
+                pass9.setVisibility(GONE);
+                pass10.setVisibility(GONE);
+                pass11.setVisibility(GONE);
+                pass12.setVisibility(GONE);
+
+
+                pass1.setVisibility(VISIBLE);
+                AddPassword1();
+                break;
+            case 2:
+                pass2.setVisibility(VISIBLE);
+                pass1.setVisibility(GONE);
+                pass3.setVisibility(GONE);
+                pass4.setVisibility(GONE);
+                pass5.setVisibility(GONE);
+                pass7.setVisibility(GONE);
+                pass6.setVisibility(GONE);
+                pass8.setVisibility(GONE);
+                pass9.setVisibility(GONE);
+                pass10.setVisibility(GONE);
+                pass11.setVisibility(GONE);
+                pass12.setVisibility(GONE);
+
+                AddPassword2();
+                break;
+            case 3:
+                pass3.setVisibility(VISIBLE);
+                AddPassword3();
+                pass2.setVisibility(GONE);
+                pass1.setVisibility(GONE);
+                pass4.setVisibility(GONE);
+                pass5.setVisibility(GONE);
+                pass7.setVisibility(GONE);
+                pass6.setVisibility(GONE);
+                pass8.setVisibility(GONE);
+                pass9.setVisibility(GONE);
+                pass10.setVisibility(GONE);
+                pass11.setVisibility(GONE);
+                pass12.setVisibility(GONE);
+
+                break;
+            case 4:
+                pass4.setVisibility(GONE);
+                pass2.setVisibility(GONE);
+                pass3.setVisibility(GONE);
+                pass1.setVisibility(GONE);
+                pass5.setVisibility(GONE);
+                pass7.setVisibility(GONE);
+                pass6.setVisibility(GONE);
+                pass8.setVisibility(GONE);
+                pass9.setVisibility(GONE);
+                pass10.setVisibility(GONE);
+                pass11.setVisibility(GONE);
+                pass12.setVisibility(GONE);
+
+                pass4.setVisibility(VISIBLE);
+                AddPassword4();
+                break;
+            case 5:
+                pass2.setVisibility(GONE);
+                pass3.setVisibility(GONE);
+                pass4.setVisibility(GONE);
+                pass1.setVisibility(GONE);
+                pass7.setVisibility(GONE);
+                pass6.setVisibility(GONE);
+                pass8.setVisibility(GONE);
+                pass9.setVisibility(GONE);
+                pass10.setVisibility(GONE);
+                pass11.setVisibility(GONE);
+                pass12.setVisibility(GONE);
+
+                pass5.setVisibility(VISIBLE);
+                AddPassword5();
+                break;
+            case 6:
+                pass2.setVisibility(GONE);
+                pass3.setVisibility(GONE);
+                pass4.setVisibility(GONE);
+                pass5.setVisibility(GONE);
+                pass7.setVisibility(GONE);
+                pass1.setVisibility(GONE);
+                pass8.setVisibility(GONE);
+                pass9.setVisibility(GONE);
+                pass10.setVisibility(GONE);
+                pass11.setVisibility(GONE);
+                pass12.setVisibility(GONE);
+
+                pass6.setVisibility(VISIBLE);
+                AddPassword6();
+                break;
+            case 7:
+                pass2.setVisibility(GONE);
+                pass3.setVisibility(GONE);
+                pass4.setVisibility(GONE);
+                pass5.setVisibility(GONE);
+                pass1.setVisibility(GONE);
+                pass6.setVisibility(GONE);
+                pass8.setVisibility(GONE);
+                pass9.setVisibility(GONE);
+                pass10.setVisibility(GONE);
+                pass11.setVisibility(GONE);
+                pass12.setVisibility(GONE);
+
+                pass7.setVisibility(VISIBLE);
+                AddPassword7();
+                break;
+            case 8:
+                pass2.setVisibility(GONE);
+                pass3.setVisibility(GONE);
+                pass4.setVisibility(GONE);
+                pass5.setVisibility(GONE);
+                pass7.setVisibility(GONE);
+                pass6.setVisibility(GONE);
+                pass1.setVisibility(GONE);
+                pass9.setVisibility(GONE);
+                pass10.setVisibility(GONE);
+                pass11.setVisibility(GONE);
+                pass12.setVisibility(GONE);
+
+                pass8.setVisibility(VISIBLE);
+                AddPassword8();
+                break;
+            case 9:
+                pass2.setVisibility(GONE);
+                pass3.setVisibility(GONE);
+                pass4.setVisibility(GONE);
+                pass5.setVisibility(GONE);
+                pass7.setVisibility(GONE);
+                pass6.setVisibility(GONE);
+                pass8.setVisibility(GONE);
+                pass1.setVisibility(GONE);
+                pass10.setVisibility(GONE);
+                pass11.setVisibility(GONE);
+                pass12.setVisibility(GONE);
+
+                pass9.setVisibility(VISIBLE);
+                AddPassword9();
+                break;
+            case 10:
+                pass2.setVisibility(GONE);
+                pass3.setVisibility(GONE);
+                pass4.setVisibility(GONE);
+                pass5.setVisibility(GONE);
+                pass7.setVisibility(GONE);
+                pass6.setVisibility(GONE);
+                pass8.setVisibility(GONE);
+                pass9.setVisibility(GONE);
+                pass1.setVisibility(GONE);
+                pass11.setVisibility(GONE);
+                pass12.setVisibility(GONE);
+
+                pass10.setVisibility(VISIBLE);
+                AddPassword10();
+                break;
+            case 11:
+                pass2.setVisibility(GONE);
+                pass3.setVisibility(GONE);
+                pass4.setVisibility(GONE);
+                pass5.setVisibility(GONE);
+                pass7.setVisibility(GONE);
+                pass6.setVisibility(GONE);
+                pass8.setVisibility(GONE);
+                pass9.setVisibility(GONE);
+                pass1.setVisibility(GONE);
+                pass1.setVisibility(GONE);
+                pass12.setVisibility(GONE);
+                pass11.setVisibility(VISIBLE);
+                AddPassword11();
+                break;
+
+            case 12:
+                pass2.setVisibility(GONE);
+                pass3.setVisibility(GONE);
+                pass4.setVisibility(GONE);
+                pass5.setVisibility(GONE);
+                pass7.setVisibility(GONE);
+                pass6.setVisibility(GONE);
+                pass8.setVisibility(GONE);
+                pass9.setVisibility(GONE);
+                pass1.setVisibility(GONE);
+                pass11.setVisibility(GONE);
+                pass10.setVisibility(GONE);
+                pass5.setVisibility(GONE);
+                AddPassword12();
+                break;
+
+        }
+
+    }
+
+    public void cleanPass() {
+        currentIndex = 0;
+        passwordValue = new int[passwordLength];
+        switch (passwordLength) {
+            case 1:
+                pass1.removeAllViews();
+
+                break;
+            case 2:
+                pass2.removeAllViews();
+
+                break;
+            case 3:
+                pass3.removeAllViews();
+
+                break;
+            case 4:
+                pass4.removeAllViews();
+
+                break;
+            case 5:
+                pass5.removeAllViews();
+
+                break;
+            case 6:
+                pass6.removeAllViews();
+
+                break;
+            case 7:
+                pass7.removeAllViews();
+
+                break;
+            case 8:
+                pass8.removeAllViews();
+
+                break;
+            case 9:
+                pass9.removeAllViews();
+
+                break;
+            case 10:
+                pass10.removeAllViews();
+
+                break;
+            case 11:
+                pass11.removeAllViews();
+
+                break;
+
+            case 12:
+                pass5.removeAllViews();
+
+                break;
+
+
+        }
+    }
+}
 
 
 

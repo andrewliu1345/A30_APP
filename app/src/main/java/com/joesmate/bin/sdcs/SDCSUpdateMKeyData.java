@@ -236,11 +236,14 @@ public class SDCSUpdateMKeyData extends BaseData {
                         if (rbyte.length == 22) {
                             if (Arrays.equals(new byte[]{rbyte[0], rbyte[1], rbyte[2], rbyte[3], rbyte[4], rbyte[5]}, new byte[]{0x00, 0x14, (byte) 0xb0, 0x07, 0x00, 0x00})) {
                                 byte[] data = new byte[8];
-                                byte[] send = new byte[2 + BackCode.CODE_00.length() + 1 + 8];
+
                                 int iIndex = 0;
                                 System.arraycopy(rbyte, 6, data, 0, 8);
+
                                 LogMg.d(TAG, "CheckValue2=%s\n", AssitTool.BytesToHexString(data));
                                 if (getZMKindex() == 1) {//明文
+                                    String CheckValueStr = AssitTool.BytesToHexString(CheckValue2);
+                                    byte[] send = new byte[2 + BackCode.CODE_00.length() + 1 + CheckValueStr.length()];
                                     SharedPreferences.Editor editor = preferences.edit();
                                     editor.putString(Cmds.LOAD_MASTER_KEY, AssitTool.BytesToHexString(MasterKey));
                                     editor.commit();
@@ -248,20 +251,29 @@ public class SDCSUpdateMKeyData extends BaseData {
                                     send[iIndex++] = 'M';
                                     System.arraycopy(BackCode.CODE_00.getBytes(), 0, send, iIndex, 2);
                                     iIndex += 2;
-                                    send[iIndex++] = 8;
-                                    System.arraycopy(CheckValue2, 0, send, iIndex, 8);
+                                    send[iIndex++] = (byte) CheckValueStr.length();
+                                    System.arraycopy(CheckValueStr.getBytes(), 0, send, iIndex, CheckValueStr.length());
                                     backData(send);
 
                                 } else if (getZMKindex() == 2) {//密文
-                                    send[iIndex++] = 'U';
-                                    send[iIndex++] = 'M';
-                                    System.arraycopy(BackCode.CODE_00.getBytes(), 0, send, iIndex, 2);
-                                    iIndex += 2;
-                                    send[iIndex++] = 8;
-                                    System.arraycopy(data, 0, send, iIndex, 8);
-                                    backData(send);
+                                    String CheckValueStr = AssitTool.BytesToHexString(data);
+                                    byte[] send = new byte[2 + BackCode.CODE_00.length() + 1 + CheckValueStr.length()];
+                                    if (Arrays.equals(data, CheckValue2)) {
+                                        SharedPreferences.Editor editor = preferences.edit();
+                                        editor.putString(Cmds.LOAD_MASTER_KEY, AssitTool.BytesToHexString(MasterKey));
+                                        editor.commit();
+                                        send[iIndex++] = 'U';
+                                        send[iIndex++] = 'M';
+                                        System.arraycopy(BackCode.CODE_00.getBytes(), 0, send, iIndex, 2);
+                                        iIndex += 2;
+                                        send[iIndex++] = (byte) CheckValueStr.length();
+                                        System.arraycopy(CheckValueStr, 0, send, iIndex, CheckValueStr.length());
+                                        backData(send);
+                                        return;
+                                    }
+                                    sendConfirmCode(BackCode.CODE_01);
                                 } else
-                                    sendConfirmCode(BackCode.CODE_00);
+                                    sendConfirmCode(BackCode.CODE_01);
 //                                if (Arrays.equals(data, pinKeyStringArray)) {
 //                                    sendConfirmCode(BackCode.CODE_00);
 //                                } else {

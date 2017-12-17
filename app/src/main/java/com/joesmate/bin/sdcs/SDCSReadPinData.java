@@ -14,6 +14,7 @@ import com.joesmate.bin.keyBoard.SerialRequestFrame;
 import com.joesmate.bin.keyBoard.SerialResponseFrame;
 import com.joesmate.bin.keyBoard.SerialUtil;
 import com.joesmate.page.PlayActivity;
+import com.joesmate.util.LogMg;
 
 import java.util.Arrays;
 
@@ -97,6 +98,11 @@ public class SDCSReadPinData extends BaseData {
 
     private int passwordEndType;
 
+    private byte EndType;
+
+    private int iAccNoLen;
+
+    private String iAccNo = "000000000000";
 
     @Override
     public void setData(byte[] buffer, byte[] cmd) {
@@ -111,6 +117,7 @@ public class SDCSReadPinData extends BaseData {
             Log.d(TAG, "iEncryType:" + iEncryType);
             pos = pos + 1;
             if (iEncryType == 0) {
+                closeInputChar();
                 SerialUtil.getInstance().setStop(true);
                 sendConfirmCode(BackCode.CODE_00);
                 return;
@@ -154,9 +161,21 @@ public class SDCSReadPinData extends BaseData {
             pos = pos + displayContentLen;
 
 
-            passwordEndType = AssitTool.getArrayCount(new byte[]{buffer[pos]});
+            passwordEndType = AssitTool.getArrayCount(new byte[]{buffer[pos++]});
             Log.d(TAG, "passwordEndType:" + passwordEndType);
+            if (passwordEndType == 0)
+                EndType = '0';
+            if (passwordEndType == 1)
+                EndType = '1';
 
+            iAccNoLen = AssitTool.getArrayCount(new byte[]{buffer[pos++], buffer[pos++]});
+            LogMg.d(TAG, "iAccNoLen=%d", iAccNoLen);
+            if (iAccNoLen == 12) {
+                byte[] arrayAccNo = new byte[iAccNoLen];
+                System.arraycopy(buffer, pos, arrayAccNo, 0, iAccNoLen);
+                iAccNo = AssitTool.getString(arrayAccNo, AssitTool.UTF_8);
+                pos += iAccNoLen;
+            }
 
             sendConfirmCode(BackCode.CODE_00);
 
@@ -241,7 +260,7 @@ public class SDCSReadPinData extends BaseData {
     }
 
 
-    //再次输入密码
+    //关闭
     public void closeInputChar() {
         Log.d("myitm1", "close input pw ----");
         //0x82 是请输入密码，打开密码键盘
@@ -287,7 +306,7 @@ public class SDCSReadPinData extends BaseData {
         pos = pos + 1;
         final byte[] wbyte = new SerialRequestFrame().make_SD_Package(writeData);
         final SerialResponseFrame serialResponse = new SerialResponseFrame();
-
+        final String AccNo = this.iAccNo;
         SerialUtil.getInstance().getSerialPort().write(wbyte, wbyte.length);
 
 
@@ -329,12 +348,18 @@ public class SDCSReadPinData extends BaseData {
                                         //设置密码长度成功
 
                                         int pos2 = 0;
-                                        byte[] writeData2 = new byte[2 + 1 + 1];
-                                        System.arraycopy(CMD.SD_CMD_READ_PIN, 0, writeData2, pos2, 2);
+                                        byte[] writeData2 = new byte[2 + 1+ 2 + AccNo.length()];
+                                        System.arraycopy(CMD.SD_CMD_READ_ACCNO_PIN, 0, writeData2, pos2, 2);
                                         pos2 = pos2 + 2;
-                                        System.arraycopy(new byte[]{0x00}, 0, writeData2, pos2, 1);
-                                        pos2 = pos2 + 1;
-                                        System.arraycopy(new byte[]{0x03}, 0, writeData2, pos2, 1);
+//                                        System.arraycopy(new byte[]{0x01}, 0, writeData2, pos2, 1);
+//                                        pos2++;
+                                        System.arraycopy(new byte[]{0x02}, 0, writeData2, pos2, 1);
+                                        pos2++;
+                                        System.arraycopy(new byte[]{0x30}, 0, writeData2, pos2, 1);
+                                        pos2++;
+                                        System.arraycopy(new byte[]{EndType}, 0, writeData2, pos2, 1);
+                                        pos2++;
+                                        System.arraycopy(AccNo.getBytes(), 0, writeData2, pos2, AccNo.length());
                                         final byte[] wbyte2 = new SerialRequestFrame().make_SD_Package(writeData2);
                                         final SerialResponseFrame serialResponse2 = new SerialResponseFrame();
 

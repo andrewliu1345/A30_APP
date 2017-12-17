@@ -35,7 +35,8 @@ public class SDCSResetPinData extends BaseData {
         if (Arrays.equals(Cmds.CMD_IP.getBytes(), cmd)) {
             ResetPinPad();
             SharedPreferences.Editor editor = App.getInstance().preferences.edit();
-            editor.remove(Cmds.LOAD_MASTER_KEY);
+            editor.remove(Cmds.LOAD_MASTER_KEY);//主密钥
+            editor.remove(Cmds.WORK_KEY);//工作密钥
             editor.commit();
             //sendConfirmCode(BackCode.CODE_00);
             //legalData();

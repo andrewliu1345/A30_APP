@@ -238,23 +238,28 @@ public class SDCSDownLoadWKeyData extends BaseData {
                                 byte[] data = new byte[8];
                                 LogMg.d(TAG, "CheckValue2=%s\n", AssitTool.BytesToHexString(data));
                                 System.arraycopy(rbyte, 6, data, 0, 8);
+                                String CheckValueStr = AssitTool.BytesToHexString(data);
+
                                 if (Arrays.equals(checkvaluel, data)) {
-                                    byte[] send = new byte[2 + BackCode.CODE_00.length() + 1 + 8];
+                                    SharedPreferences.Editor editor = App.getInstance().preferences.edit();
+                                    editor.putString(Cmds.WORK_KEY, wPinString);
+                                    editor.commit();
+                                    byte[] send = new byte[2 + BackCode.CODE_00.length() + 1 + CheckValueStr.length()];
                                     send[iIndex++] = 'U';
                                     send[iIndex++] = 'W';
                                     System.arraycopy(BackCode.CODE_00.getBytes(), 0, send, iIndex, 2);
                                     iIndex += 2;
-                                    send[iIndex++] = 8;
-                                    System.arraycopy(data, 0, send, iIndex, 8);
+                                    send[iIndex++] = (byte) CheckValueStr.length();
+                                    System.arraycopy(CheckValueStr.getBytes(), 0, send, iIndex, 8);
                                     backData(send);
                                 } else {
-                                    byte[] send = new byte[2 + BackCode.CODE_15.length() + 1 + 8];
+                                    byte[] send = new byte[2 + BackCode.CODE_15.length() + 1 + CheckValueStr.length()];
                                     send[iIndex++] = 'U';
                                     send[iIndex++] = 'W';
                                     System.arraycopy(BackCode.CODE_15.getBytes(), 0, send, iIndex, 3);
                                     iIndex += 3;
-                                    send[iIndex++] = 8;
-                                    System.arraycopy(data, 0, send, iIndex, 8);
+                                    send[iIndex++] = (byte) CheckValueStr.length();
+                                    System.arraycopy(CheckValueStr.getBytes(), 0, send, iIndex, CheckValueStr.length());
                                     backData(send);
                                 }
                             } else {
