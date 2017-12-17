@@ -15,6 +15,8 @@ import com.joesmate.bin.BaseData;
 import com.joesmate.bin.keyBoard.SerialRequestFrame;
 import com.joesmate.bin.keyBoard.SerialResponseFrame;
 import com.joesmate.bin.keyBoard.SerialUtil;
+import com.joesmate.crypto.SM4;
+import com.joesmate.crypto.SM4Utils;
 import com.joesmate.page.PlayActivity;
 import com.joesmate.util.ANSIFormat;
 import com.joesmate.util.ANSIFormat_SM;
@@ -229,7 +231,9 @@ public class SDCSReadPinData extends BaseData {
 
             if (WorkKey.length() > 0) {
                 byte[] arrayWorkKey = AssitTool.HexStringToBytes(WorkKey);
-                byte[] cipher = KeyBordProtocol.getInstance().SM4Encrypt(iPinBlock, arrayWorkKey);
+                //KeyBordProtocol.getInstance().SM4Encrypt(iPinBlock, arrayWorkKey);
+                byte[] cipher = SM4Utils.SM4_ECB(iPinBlock, arrayWorkKey, SM4.SM4_ENCRYPT);
+
                 String cipherstr = AssitTool.BytesToHexString(cipher);
                 if (cipher == null) {
                     sendConfirmCode(BackCode.CODE_01);

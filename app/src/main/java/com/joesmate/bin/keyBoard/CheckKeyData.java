@@ -10,6 +10,8 @@ import com.joesmate.CMD;
 import com.joesmate.Cmds;
 import com.joesmate.KeyBordProtocol;
 import com.joesmate.bin.BaseData;
+import com.joesmate.crypto.SM4Utils;
+import com.joesmate.util.LogMg;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -104,10 +106,10 @@ public class CheckKeyData extends BaseData {
 //            writeData[pos++] = (byte) KeyIndex;
         }
         if (iKey.length() > 0) {
-            byte[] arrykey = new byte[iKey.length() / 2];
-            arrykey = AssitTool.HexStringToBytes(iKey);
-            CheckValueArray = KeyBordProtocol.getInstance().getCheckValues(arrykey);
+            byte[] arrykey = AssitTool.HexStringToBytes(iKey);
+            CheckValueArray = SM4Utils.getCheckValues(arrykey); //KeyBordProtocol.getInstance().getCheckValues(arrykey);
             CheckValueString = AssitTool.BytesToHexString(CheckValueArray);
+            LogMg.d("CHeckKeyData", "CheckValueString:=%s", CheckValueString);
             int iIndex = 0;
             byte[] send = new byte[2 + BackCode.CODE_00.length() + 1 + CheckValueString.length()];
             send[iIndex++] = 'C';
@@ -115,7 +117,7 @@ public class CheckKeyData extends BaseData {
             System.arraycopy(BackCode.CODE_00.getBytes(), 0, send, iIndex, 2);
             iIndex += 2;
             send[iIndex++] = (byte) CheckValueString.length();
-            System.arraycopy(CheckValueString.getBytes(), 0, send, iIndex, CheckValueString.length()/2);
+            System.arraycopy(CheckValueString.getBytes(), 0, send, iIndex, CheckValueString.length() / 2);
             backData(send);
         } else {
             sendConfirmCode(BackCode.CODE_01);

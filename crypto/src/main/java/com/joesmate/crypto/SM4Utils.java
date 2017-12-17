@@ -5,14 +5,27 @@ package com.joesmate.crypto;
  */
 
 public class SM4Utils {
-    public static byte[] SM4_ECB(byte[] in, byte[] key, int CryptFlag) throws Exception {
+    public static byte[] SM4_ECB(byte[] in, byte[] key, int CryptFlag) {
         byte[] out = null;
         SM4_Context ctx = new SM4_Context();
-        ctx.isPadding = true;
+        ctx.isPadding = false;
         ctx.mode = CryptFlag;
         SM4 sm4 = new SM4();
-        sm4.sm4_setkey_enc(ctx, key);
-        out = sm4.sm4_crypt_ecb(ctx, in);
+        try {
+            if (CryptFlag == SM4.SM4_DECRYPT) {
+                sm4.sm4_setkey_dec(ctx, key);
+            } else {
+                sm4.sm4_setkey_enc(ctx, key);
+            }
+
+            byte[] tmp = sm4.sm4_crypt_ecb(ctx, in);
+            int len = tmp.length;
+            out = new byte[len];
+            System.arraycopy(tmp, 0, out, 0, len);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         return out;
     }
 

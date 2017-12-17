@@ -180,11 +180,11 @@ public class SDCSUpdateMKeyData extends BaseData {
         byte[] tmp = new byte[ZMKStrLength];
         byte[] out = new byte[ZMKStrLength];
         if (ZMKindex == 1) {
-            CheckValue2 = KeyBordProtocol.getInstance().getCheckValues(MasterKey);
+            CheckValue2 = SM4Utils.getCheckValues(MasterKey);//KeyBordProtocol.getInstance().getCheckValues(MasterKey);
             LoadMasterKey = preferences.getString(Cmds.LOAD_MASTER_KEY, DefKey);//明文密钥
             byte[] loadMasterKey = AssitTool.HexStringToBytes(LoadMasterKey);
             try {
-                out = KeyBordProtocol.getInstance().SM4Encrypt(MasterKey, loadMasterKey);
+                out = SM4Utils.SM4_ECB(MasterKey, loadMasterKey, SM4.SM4_ENCRYPT); //KeyBordProtocol.getInstance().SM4Encrypt(MasterKey, loadMasterKey);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -195,7 +195,7 @@ public class SDCSUpdateMKeyData extends BaseData {
             CheckValue1 = AssitTool.HexStringToBytes(pinKeyString);
             LoadMasterKey = preferences.getString(Cmds.LOAD_MASTER_KEY, DefKey);//明文密钥
             byte[] loadMasterKey = AssitTool.HexStringToBytes(LoadMasterKey);
-            tmp = KeyBordProtocol.getInstance().SM4Dcrypt(MasterKey, loadMasterKey);
+            tmp = SM4Utils.SM4_ECB(MasterKey, loadMasterKey, SM4.SM4_DECRYPT); //KeyBordProtocol.getInstance().SM4Dcrypt(MasterKey, loadMasterKey);
 //            CheckValue2 = KeyBordProtocol.getInstance().getCheckValues(tmp);
 //            if (!Arrays.equals(CheckValue1, CheckValue2)) {
 //                sendConfirmCode(BackCode.CODE_01);

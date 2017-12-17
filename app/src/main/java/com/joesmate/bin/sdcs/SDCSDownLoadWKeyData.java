@@ -13,6 +13,8 @@ import com.joesmate.bin.BaseData;
 import com.joesmate.bin.keyBoard.SerialRequestFrame;
 import com.joesmate.bin.keyBoard.SerialResponseFrame;
 import com.joesmate.bin.keyBoard.SerialUtil;
+import com.joesmate.crypto.SM4;
+import com.joesmate.crypto.SM4Utils;
 import com.joesmate.util.LogMg;
 
 import java.util.Arrays;
@@ -242,12 +244,11 @@ public class SDCSDownLoadWKeyData extends BaseData {
                             if (Arrays.equals(new byte[]{rbyte[0], rbyte[1], rbyte[2], rbyte[3], rbyte[4], rbyte[5]}, new byte[]{0x00, 0x14, (byte) 0xa0, 0x08, 0x00, 0x00})) {
                                 int iIndex = 0;
                                 byte[] data = new byte[8];
-                                LogMg.d(TAG, "CheckValue2=%s\n", AssitTool.BytesToHexString(data));
+                                LogMg.d("SDCSDownLoadWkeyData", "CheckValue=%s\n", AssitTool.BytesToHexString(data));
                                 System.arraycopy(rbyte, 6, data, 0, 8);
                                 String CheckValueStr = AssitTool.BytesToHexString(data);
-
                                 if (Arrays.equals(checkvaluel, data)) {
-                                    byte[] arrworkkey = KeyBordProtocol.getInstance().SM4Dcrypt(WorkKey, arryLoadMastKey);
+                                    byte[] arrworkkey = SM4Utils.SM4_ECB(WorkKey, arryLoadMastKey, SM4.SM4_DECRYPT);//KeyBordProtocol.getInstance().SM4Dcrypt(WorkKey, arryLoadMastKey);
                                     String workkeystr = AssitTool.BytesToHexString(arrworkkey);
                                     SharedPreferences.Editor editor = App.getInstance().preferences.edit();
                                     editor.putString(Cmds.WORK_KEY, workkeystr);
