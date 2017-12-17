@@ -545,103 +545,104 @@ public class SetPassWord extends LinearLayout implements TimerView.OnTimerListen
                     txtMsg.setVisibility(INVISIBLE);
                     Log.d(TAG, "----- ACTION_BROADCAST_INPUT_PW_ENTER ");
 
-                    if (SDCSReadPinData.getInstance().getiEncryType() == 1) {
-                        if (currentIndex < passwordLength) {
-                            txtMsg.setVisibility(VISIBLE);
-                            txtMsg.setText("密码必须输入" + passwordLength + "位");
-                            Log.e("密码必须输入", "" + 1);
-                            count();
-                            SerialUtil.getInstance().setStop(true);
-                            SDCSReadPinData.getInstance().inputChar();
+                    // if (SDCSReadPinData.getInstance().getiEncryType() == 1) {
+                    if (currentIndex < passwordLength) {
+                        txtMsg.setVisibility(VISIBLE);
+                        txtMsg.setText("必须输入" + passwordLength + "位");
+                        Log.e("密码必须输入", "" + 1);
+                        count();
+                        SerialUtil.getInstance().setStop(true);
+                        SDCSReadPinData.getInstance().inputChar();
 
-                            cleanPass();
-                        } else {
-                            Log.e("密码必须输入", "" + 2);
-                            SDCSReadPinData.getInstance().sendConfirmResult(getResult());
-                            SerialUtil.getInstance().setStop(true);
-                            Intent intent1 = new Intent(AppAction.ACTION_BROADCAST_CMD);
-                            intent1.putExtra(AppAction.KEY_BROADCAST_CMD, PlayActivity.PAGE_PLAY);
-                            getContext().sendBroadcast(intent1);
-                        }
-
+                        cleanPass();
+                    } else {
+                        Log.e("密码必须输入", "" + 2);
+                        SDCSReadPinData.getInstance().sendConfirmResult(getResult());
+                        SerialUtil.getInstance().setStop(true);
+                        Intent intent1 = new Intent(AppAction.ACTION_BROADCAST_CMD);
+                        intent1.putExtra(AppAction.KEY_BROADCAST_CMD, PlayActivity.PAGE_PLAY);
+                        getContext().sendBroadcast(intent1);
 
                     }
 
-                    if (SDCSReadPinData.getInstance().getiEncryType() == 5) {
-                        if (currentIndex < passwordLength) {
-                            txtMsg.setVisibility(VISIBLE);
-                            txtMsg.setText("密码必须输入" + passwordLength + "位");
-                            Log.e("密码必须输入", "" + 3);
-                            count();
-                        }
-                    }
+
+                    //     }
+
+//                    if (SDCSReadPinData.getInstance().getiEncryType() == 5) {
+//                        if (currentIndex < passwordLength) {
+//                            txtMsg.setVisibility(VISIBLE);
+//                            txtMsg.setText("必须输入" + passwordLength + "位");
+//                            Log.e("密码必须输入", "" + 3);
+//                            count();
+//                        }
+//                    }
                     break;
                 case MSG_NUMBER:
 
 
-                    if (SDCSReadPinData.getInstance().getiEncryType() == 1) {
-                        // char str = (char) intent.getByteExtra("inputChar", (byte) 0);
-                        //int str1 = str - 48;
-                        int str1 = msg.arg1 - 48;
-                        Log.d(TAG, "----- ACTION_BROADCAST_INPUT_PW_ONECHAR :" + str1);
-                        //txtMsgAgain.setVisibility(INVISIBLE);
-                        txtMsg.setVisibility(INVISIBLE);
-                        if (currentIndex < passwordLength) {
-                            Log.e("密码必须输入", "" + 4);
+//                    if (SDCSReadPinData.getInstance().getiEncryType() == 1) {
+                    // char str = (char) intent.getByteExtra("inputChar", (byte) 0);
+                    //int str1 = str - 48;
+                    int str1 = msg.arg1 - 48;
+                    Log.d(TAG, "----- ACTION_BROADCAST_INPUT_PW_ONECHAR :" + str1);
+                    //txtMsgAgain.setVisibility(INVISIBLE);
+                    txtMsg.setVisibility(INVISIBLE);
+                    if (currentIndex < passwordLength) {
+                        Log.e("密码必须输入", "" + 4);
 
-                            Log.d(TAG, "密码位数:" + currentIndex);
-                            count();
-                            passwordValue[ currentIndex++] = str1;
-                            Log.d(TAG, "密码位数:" + str1);
-                            if (currentIndex == passwordLength && endType == 1) {
-                                Log.e("密码必须输入", "" + 5);
-                                SDCSReadPinData.getInstance().sendConfirmResult(getResult());
-                                Intent intent1 = new Intent(AppAction.ACTION_BROADCAST_CMD);
-                                intent1.putExtra(AppAction.KEY_BROADCAST_CMD, PlayActivity.PAGE_PLAY);
-                                getContext().sendBroadcast(intent1);
-                                SDCSReadPinData.getInstance().closeInputChar();
+                        Log.d(TAG, "密码位数:" + currentIndex);
+                        count();
+                        passwordValue[currentIndex++] = str1;
+                        Log.d(TAG, "密码位数:" + str1);
+                        if (currentIndex == passwordLength && endType == 1) {
+                            Log.e("密码必须输入", "" + 5);
+                            SDCSReadPinData.getInstance().sendConfirmResult(getResult());
+                            Intent intent1 = new Intent(AppAction.ACTION_BROADCAST_CMD);
+                            intent1.putExtra(AppAction.KEY_BROADCAST_CMD, PlayActivity.PAGE_PLAY);
+                            getContext().sendBroadcast(intent1);
+                            SDCSReadPinData.getInstance().closeInputChar();
 
-
-                            }
-                           ;
-                        }
-                    }
-
-                    if (SDCSReadPinData.getInstance().getiEncryType() == 5) {
-
-                        Log.d(TAG, "----- ACTION_BROADCAST_INPUT_PW_ONECHAR ");
-                        //txtMsgAgain.setVisibility(INVISIBLE);
-                        txtMsg.setVisibility(INVISIBLE);
-                        if (currentIndex < passwordLength) {
-                            currentIndex++;
-                            Log.e("密码必须输入", "" + 6);
-                            count();
-                            Log.d(TAG, "----- currentIndex:" + currentIndex);
 
                         }
+
                     }
+//                    }
+
+//                    if (SDCSReadPinData.getInstance().getiEncryType() == 5) {
+//
+//                        Log.d(TAG, "----- ACTION_BROADCAST_INPUT_PW_ONECHAR ");
+//                        //txtMsgAgain.setVisibility(INVISIBLE);
+//                        txtMsg.setVisibility(INVISIBLE);
+//                        if (currentIndex < passwordLength) {
+//                            currentIndex++;
+//                            Log.e("密码必须输入", "" + 6);
+//                            count();
+//                            Log.d(TAG, "----- currentIndex:" + currentIndex);
+//
+//                        }
+//                    }
 
                     break;
                 case MSG_CANCEL:
                     Log.d(TAG, "----- ACTION_BROADCAST_INPUT_PW_BACK ");
-                    if (SDCSReadPinData.getInstance().getiEncryType() == 1) {
-                        //txtMsgAgain.setVisibility(INVISIBLE);
-                        txtMsg.setVisibility(INVISIBLE);
-                        currentIndex = 0;
-                        Log.e("密码必须输入", "" + 7);
-                        resetPassword();
-                        Log.d(TAG, "----- currentIndex:" + currentIndex);
-                        cleanPass();
-                    }
+                    //if (SDCSReadPinData.getInstance().getiEncryType() == 1) {
+                    //txtMsgAgain.setVisibility(INVISIBLE);
+                    txtMsg.setVisibility(INVISIBLE);
+                    currentIndex = 0;
+                    Log.e("密码必须输入", "" + 7);
+                    resetPassword();
+                    Log.d(TAG, "----- currentIndex:" + currentIndex);
+                    cleanPass();
+                    //   }
 
-                    if (SDCSReadPinData.getInstance().getiEncryType() == 5) {
-                        //txtMsgAgain.setVisibility(INVISIBLE);
-                        txtMsg.setVisibility(INVISIBLE);
-                        currentIndex = 0;
-                        Log.e("密码必须输入", "" + 8);
-                        Log.d(TAG, "----- currentIndex:" + currentIndex);
-                        cleanPass();
-                    }
+//                    if (SDCSReadPinData.getInstance().getiEncryType() == 5) {
+//                        //txtMsgAgain.setVisibility(INVISIBLE);
+//                        txtMsg.setVisibility(INVISIBLE);
+//                        currentIndex = 0;
+//                        Log.e("密码必须输入", "" + 8);
+//                        Log.d(TAG, "----- currentIndex:" + currentIndex);
+//                        cleanPass();
+//                    }
                     break;
             }
             super.handleMessage(msg);
@@ -909,7 +910,7 @@ public class SetPassWord extends LinearLayout implements TimerView.OnTimerListen
 
 
     String getResult() {
-        String str = "00";
+        String str = "";
         if (passwordNumber == 1) {
             for (int i = 0; i < passwordLength; ++i) {
                 if (passwordValue[i] != 10) {
@@ -1037,18 +1038,19 @@ public class SetPassWord extends LinearLayout implements TimerView.OnTimerListen
     public void timeOut() {
         if (SDCSReadPinData.getInstance().getiEncryType() == 1) {
             SDCSReadPinData.getInstance().sendConfirmResult(getResult());
-            SDCSReadPinData.getInstance().closeInputChar();
-            SerialUtil.getInstance().setStop(true);
-            Intent intent1 = new Intent(AppAction.ACTION_BROADCAST_CMD);
-            intent1.putExtra(AppAction.KEY_BROADCAST_CMD, PlayActivity.PAGE_PLAY);
-            getContext().sendBroadcast(intent1);
-        } else if (SDCSReadPinData.getInstance().getiEncryType() == 5) {
-            SDCSReadPinData.getInstance().closeInputChar();
-            SerialUtil.getInstance().setStop(true);
-            Intent intent1 = new Intent(AppAction.ACTION_BROADCAST_CMD);
-            intent1.putExtra(AppAction.KEY_BROADCAST_CMD, PlayActivity.PAGE_PLAY);
-            getContext().sendBroadcast(intent1);
         }
+        SDCSReadPinData.getInstance().closeInputChar();
+        SerialUtil.getInstance().setStop(true);
+        Intent intent1 = new Intent(AppAction.ACTION_BROADCAST_CMD);
+        intent1.putExtra(AppAction.KEY_BROADCAST_CMD, PlayActivity.PAGE_PLAY);
+        getContext().sendBroadcast(intent1);
+//        } else if (SDCSReadPinData.getInstance().getiEncryType() == 5) {
+//            SDCSReadPinData.getInstance().closeInputChar();
+//            SerialUtil.getInstance().setStop(true);
+//            Intent intent1 = new Intent(AppAction.ACTION_BROADCAST_CMD);
+//            intent1.putExtra(AppAction.KEY_BROADCAST_CMD, PlayActivity.PAGE_PLAY);
+//            getContext().sendBroadcast(intent1);
+//        }
     }
 
     @Override

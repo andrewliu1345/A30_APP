@@ -193,7 +193,7 @@ public class SDCSDownLoadWKeyData extends BaseData {
 //        String DefKey = DefaultKey.get(wPinLengthType * 2);//最初默认密钥
 //        String LoadMasterKey;
         final byte WorkKey[] = AssitTool.HexStringToBytes(wPinString);
-        CheckValue1 = AssitTool.HexStringToBytes(pinKeyString);
+        CheckValue1 = AssitTool.HexStringToBytes(pinKeyString.substring(0, 16));
 //        LoadMasterKey = preferences.getString(Cmds.LOAD_MASTER_KEY, DefKey);//明文密钥
 //        byte[] loadMasterKey = AssitTool.HexStringToBytes(LoadMasterKey);
 //        byte[] tmp = KeyBordProtocol.getInstance().SM4Dcrypt(WorkKey, loadMasterKey);
@@ -226,6 +226,12 @@ public class SDCSDownLoadWKeyData extends BaseData {
                 new Runnable() {
                     @Override
                     public void run() {
+                        SharedPreferences preferences = App.getInstance().preferences;
+                        String LoadMastkey = preferences.getString(Cmds.LOAD_MASTER_KEY, "");
+                        if (LoadMastkey.length() <= 0) {
+                            sendConfirmCode(BackCode.CODE_01);
+                        }
+                        byte[] arryLoadMastKey = AssitTool.HexStringToBytes(LoadMastkey);
                         SerialUtil.getInstance().setStop(false);
                         SerialUtil.getInstance().getmSReadThread().run();
                         SerialResponseFrame.lock.lock();
@@ -241,8 +247,10 @@ public class SDCSDownLoadWKeyData extends BaseData {
                                 String CheckValueStr = AssitTool.BytesToHexString(data);
 
                                 if (Arrays.equals(checkvaluel, data)) {
+                                    byte[] arrworkkey = KeyBordProtocol.getInstance().SM4Dcrypt(WorkKey, arryLoadMastKey);
+                                    String workkeystr = AssitTool.BytesToHexString(arrworkkey);
                                     SharedPreferences.Editor editor = App.getInstance().preferences.edit();
-                                    editor.putString(Cmds.WORK_KEY, wPinString);
+                                    editor.putString(Cmds.WORK_KEY, workkeystr);
                                     editor.commit();
                                     byte[] send = new byte[2 + BackCode.CODE_00.length() + 1 + CheckValueStr.length()];
                                     send[iIndex++] = 'U';

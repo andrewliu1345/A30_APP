@@ -1,6 +1,7 @@
 package com.joesmate.bin.sdcs;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.joesmate.App;
@@ -9,12 +10,16 @@ import com.joesmate.AssitTool;
 import com.joesmate.BackCode;
 import com.joesmate.CMD;
 import com.joesmate.Cmds;
+import com.joesmate.KeyBordProtocol;
 import com.joesmate.bin.BaseData;
 import com.joesmate.bin.keyBoard.SerialRequestFrame;
 import com.joesmate.bin.keyBoard.SerialResponseFrame;
 import com.joesmate.bin.keyBoard.SerialUtil;
 import com.joesmate.page.PlayActivity;
+import com.joesmate.util.ANSIFormat;
+import com.joesmate.util.ANSIFormat_SM;
 import com.joesmate.util.LogMg;
+import com.joesmate.util.Util;
 
 import java.util.Arrays;
 
@@ -180,13 +185,15 @@ public class SDCSReadPinData extends BaseData {
             sendConfirmCode(BackCode.CODE_00);
 
             App.isThirdpartySerial = false;
-            if (iEncryType == 1) {
-                inputChar();
-                legalData();
-            }
-            if (iEncryType == 5) {
-                OperationSerial();
-            }
+            inputChar();
+            legalData();
+//            if (iEncryType == 1) {
+//                inputChar();
+//                legalData();
+//            }
+//            if (iEncryType == 5) {
+//                OperationSerial();
+//            }
 
 
         }
@@ -201,17 +208,48 @@ public class SDCSReadPinData extends BaseData {
     public void sendConfirmResult(String result) {
         // closeInputChar();
         String backCode = Cmds.CMD_RP + BackCode.CODE_20;
-        int resultSize = result.length();
-        byte[] arrayData = new byte[2 + 2 + 2 + resultSize];
-        int pos = 0;
-        System.arraycopy(backCode.getBytes(), 0, arrayData, pos, 4);
-        pos = pos + 4;
 
-        System.arraycopy(AssitTool.getCount42(resultSize), 0, arrayData, pos, 2);
-        pos = pos + 2;
-        System.arraycopy(result.getBytes(), 0, arrayData, pos, resultSize);
-        Log.d(TAG, "sendConfirmCode2222:" + arrayData);
-        backData(arrayData);
+        if (iEncryType == 1) {
+            int resultSize = result.length();
+            byte[] arrayData = new byte[2 + 2 + 2 + resultSize];
+            int pos = 0;
+            System.arraycopy(backCode.getBytes(), 0, arrayData, pos, 4);
+            pos = pos + 4;
+
+            System.arraycopy(AssitTool.getCount42(resultSize), 0, arrayData, pos, 2);
+            pos = pos + 2;
+            System.arraycopy(result.getBytes(), 0, arrayData, pos, resultSize);
+            LogMg.d(TAG, "返回密码明文%s", arrayData);
+
+            backData(arrayData);
+        } else if (iEncryType == 5) {
+            SharedPreferences preferences = App.getInstance().preferences;
+            String WorkKey = preferences.getString(Cmds.WORK_KEY, "");
+            byte[] iPinBlock = ANSIFormat_SM.process(result, iAccNo);
+
+            if (WorkKey.length() > 0) {
+                byte[] arrayWorkKey = AssitTool.HexStringToBytes(WorkKey);
+                byte[] cipher = KeyBordProtocol.getInstance().SM4Encrypt(iPinBlock, arrayWorkKey);
+                String cipherstr = AssitTool.BytesToHexString(cipher);
+                if (cipher == null) {
+                    sendConfirmCode(BackCode.CODE_01);
+                    return;
+                }
+                int cipherlen = cipherstr.length();
+                byte[] arrayData = new byte[2 + 2 + 2 + cipherlen];
+                int pos = 0;
+                System.arraycopy(backCode.getBytes(), 0, arrayData, pos, 4);
+                pos = pos + 4;
+                System.arraycopy(AssitTool.getCount42(cipherlen), 0, arrayData, pos, 2);
+                pos = pos + 2;
+                System.arraycopy(cipherstr.getBytes(), 0, arrayData, pos, cipherlen);
+                pos += cipherlen;
+                LogMg.d(TAG, "返回密码明文%s", arrayData);
+                backData(arrayData);
+            } else {
+                sendConfirmCode(BackCode.CODE_01);
+            }
+        }
     }
 
 
@@ -348,7 +386,7 @@ public class SDCSReadPinData extends BaseData {
                                         //设置密码长度成功
 
                                         int pos2 = 0;
-                                        byte[] writeData2 = new byte[2 + 1+ 2 + AccNo.length()];
+                                        byte[] writeData2 = new byte[2 + 1 + 2 + AccNo.length()];
                                         System.arraycopy(CMD.SD_CMD_READ_ACCNO_PIN, 0, writeData2, pos2, 2);
                                         pos2 = pos2 + 2;
 //                                        System.arraycopy(new byte[]{0x01}, 0, writeData2, pos2, 1);

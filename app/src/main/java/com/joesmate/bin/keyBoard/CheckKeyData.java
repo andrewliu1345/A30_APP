@@ -110,12 +110,12 @@ public class CheckKeyData extends BaseData {
             CheckValueString = AssitTool.BytesToHexString(CheckValueArray);
             int iIndex = 0;
             byte[] send = new byte[2 + BackCode.CODE_00.length() + 1 + CheckValueString.length()];
-            send[iIndex++] = 'U';
-            send[iIndex++] = 'W';
+            send[iIndex++] = 'C';
+            send[iIndex++] = 'Y';
             System.arraycopy(BackCode.CODE_00.getBytes(), 0, send, iIndex, 2);
             iIndex += 2;
             send[iIndex++] = (byte) CheckValueString.length();
-            System.arraycopy(CheckValueString.getBytes(), 0, send, iIndex, 8);
+            System.arraycopy(CheckValueString.getBytes(), 0, send, iIndex, CheckValueString.length()/2);
             backData(send);
         } else {
             sendConfirmCode(BackCode.CODE_01);

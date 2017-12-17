@@ -177,7 +177,7 @@ public class SDCSUpdateMKeyData extends BaseData {
         String DefKey = DefaultKey.get(ZMKLengthType * 2);//最初默认密钥
         String LoadMasterKey;
         final byte MasterKey[] = AssitTool.HexStringToBytes(ZMKString);
-
+        byte[] tmp = new byte[ZMKStrLength];
         byte[] out = new byte[ZMKStrLength];
         if (ZMKindex == 1) {
             CheckValue2 = KeyBordProtocol.getInstance().getCheckValues(MasterKey);
@@ -195,13 +195,17 @@ public class SDCSUpdateMKeyData extends BaseData {
             CheckValue1 = AssitTool.HexStringToBytes(pinKeyString);
             LoadMasterKey = preferences.getString(Cmds.LOAD_MASTER_KEY, DefKey);//明文密钥
             byte[] loadMasterKey = AssitTool.HexStringToBytes(LoadMasterKey);
-            byte[] tmp = KeyBordProtocol.getInstance().SM4Dcrypt(MasterKey, loadMasterKey);
-            CheckValue2 = KeyBordProtocol.getInstance().getCheckValues(tmp);
-            if (Arrays.equals(CheckValue1, CheckValue2))
-                sendConfirmCode(BackCode.CODE_01);
+            tmp = KeyBordProtocol.getInstance().SM4Dcrypt(MasterKey, loadMasterKey);
+//            CheckValue2 = KeyBordProtocol.getInstance().getCheckValues(tmp);
+//            if (!Arrays.equals(CheckValue1, CheckValue2)) {
+//                sendConfirmCode(BackCode.CODE_01);
+//                return;
+//            }
+            CheckValue2 = AssitTool.HexStringToBytes(pinKeyString.substring(0, 16));
             out = MasterKey;
-        }
 
+        }
+        final byte MasterKey2[] = tmp;
 
         byte[] data = out;
 
@@ -245,7 +249,7 @@ public class SDCSUpdateMKeyData extends BaseData {
                                     String CheckValueStr = AssitTool.BytesToHexString(CheckValue2);
                                     byte[] send = new byte[2 + BackCode.CODE_00.length() + 1 + CheckValueStr.length()];
                                     SharedPreferences.Editor editor = preferences.edit();
-                                    editor.putString(Cmds.LOAD_MASTER_KEY, AssitTool.BytesToHexString(MasterKey));
+                                    editor.putString(Cmds.LOAD_MASTER_KEY, ZMKString);
                                     editor.commit();
                                     send[iIndex++] = 'U';
                                     send[iIndex++] = 'M';
@@ -257,17 +261,17 @@ public class SDCSUpdateMKeyData extends BaseData {
 
                                 } else if (getZMKindex() == 2) {//密文
                                     String CheckValueStr = AssitTool.BytesToHexString(data);
-                                    byte[] send = new byte[2 + BackCode.CODE_00.length() + 1 + CheckValueStr.length()];
+                                    byte[] send = new byte[2 + 2 + 1 + CheckValueStr.length()];
                                     if (Arrays.equals(data, CheckValue2)) {
                                         SharedPreferences.Editor editor = preferences.edit();
-                                        editor.putString(Cmds.LOAD_MASTER_KEY, AssitTool.BytesToHexString(MasterKey));
+                                        editor.putString(Cmds.LOAD_MASTER_KEY, AssitTool.BytesToHexString(MasterKey2));
                                         editor.commit();
                                         send[iIndex++] = 'U';
                                         send[iIndex++] = 'M';
                                         System.arraycopy(BackCode.CODE_00.getBytes(), 0, send, iIndex, 2);
                                         iIndex += 2;
                                         send[iIndex++] = (byte) CheckValueStr.length();
-                                        System.arraycopy(CheckValueStr, 0, send, iIndex, CheckValueStr.length());
+                                        System.arraycopy(CheckValueStr.getBytes(), 0, send, iIndex, CheckValueStr.length());
                                         backData(send);
                                         return;
                                     }
