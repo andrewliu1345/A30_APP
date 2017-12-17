@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.joesmate.App;
 import com.joesmate.BackCode;
+import com.joesmate.CMD;
 import com.joesmate.Cmds;
 import com.joesmate.bin.BaseData;
 import com.joesmate.bin.keyBoard.SerialRequestFrame;
@@ -34,10 +35,7 @@ public class SDCSResetPinData extends BaseData {
         int pos = 0;
         if (Arrays.equals(Cmds.CMD_IP.getBytes(), cmd)) {
             ResetPinPad();
-            SharedPreferences.Editor editor = App.getInstance().preferences.edit();
-            editor.remove(Cmds.LOAD_MASTER_KEY);//主密钥
-            editor.remove(Cmds.WORK_KEY);//工作密钥
-            editor.commit();
+
             //sendConfirmCode(BackCode.CODE_00);
             //legalData();
 
@@ -51,7 +49,11 @@ public class SDCSResetPinData extends BaseData {
     }
 
     public void ResetPinPad() {
-
+        SharedPreferences.Editor editor = App.getInstance().preferences.edit();
+        editor.remove(Cmds.LOAD_MASTER_KEY);//明文主密钥
+        editor.remove(Cmds.MASTER_KEY);//密文主密钥
+        editor.remove(Cmds.WORK_KEY);//工作密钥
+        editor.commit();
         byte[] data = {(byte) 0xa0, 0x10};
         final byte[] wbyte = new SerialRequestFrame().make_SD_Package(data);
         final SerialResponseFrame serialResponse = new SerialResponseFrame();

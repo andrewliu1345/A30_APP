@@ -229,7 +229,8 @@ public class SDCSDownLoadWKeyData extends BaseData {
                     @Override
                     public void run() {
                         SharedPreferences preferences = App.getInstance().preferences;
-                        String LoadMastkey = preferences.getString(Cmds.LOAD_MASTER_KEY, "");
+                        String LoadMastkey = preferences.getString(Cmds.MASTER_KEY, preferences.getString(Cmds.LOAD_MASTER_KEY, ""));
+                        LogMg.d(TAG, "Mastkey:%s", LoadMastkey);
                         if (LoadMastkey.length() <= 0) {
                             sendConfirmCode(BackCode.CODE_01);
                         }
@@ -244,12 +245,14 @@ public class SDCSDownLoadWKeyData extends BaseData {
                             if (Arrays.equals(new byte[]{rbyte[0], rbyte[1], rbyte[2], rbyte[3], rbyte[4], rbyte[5]}, new byte[]{0x00, 0x14, (byte) 0xa0, 0x08, 0x00, 0x00})) {
                                 int iIndex = 0;
                                 byte[] data = new byte[8];
-                                LogMg.d("SDCSDownLoadWkeyData", "CheckValue=%s\n", AssitTool.BytesToHexString(data));
+
                                 System.arraycopy(rbyte, 6, data, 0, 8);
                                 String CheckValueStr = AssitTool.BytesToHexString(data);
+                                LogMg.d(TAG, "CheckValueStr=%s\n",CheckValueStr );
                                 if (Arrays.equals(checkvaluel, data)) {
                                     byte[] arrworkkey = SM4Utils.SM4_ECB(WorkKey, arryLoadMastKey, SM4.SM4_DECRYPT);//KeyBordProtocol.getInstance().SM4Dcrypt(WorkKey, arryLoadMastKey);
                                     String workkeystr = AssitTool.BytesToHexString(arrworkkey);
+                                    LogMg.d(TAG, "workkeystr:%s", workkeystr);
                                     SharedPreferences.Editor editor = App.getInstance().preferences.edit();
                                     editor.putString(Cmds.WORK_KEY, workkeystr);
                                     editor.commit();
