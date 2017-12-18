@@ -1,6 +1,7 @@
 package com.joesmate.widget;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -18,7 +19,9 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.joesmate.R;
+import com.joesmate.SharedpreferencesData;
 import com.joesmate.listener.OnPlayListener;
+import com.joesmate.util.LogMg;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -26,9 +29,9 @@ import java.util.ArrayList;
 /**
  * Created by bill on 2016/1/13.
  */
-public class MediaImages  extends LinearLayout implements ViewPager.OnPageChangeListener {
+public class MediaImages extends LinearLayout implements ViewPager.OnPageChangeListener {
 
-
+    final static String TAG = MediaImages.class.getName();
     /**
      * ViewPager
      */
@@ -63,17 +66,18 @@ public class MediaImages  extends LinearLayout implements ViewPager.OnPageChange
 
     ViewGroup group;
 
-    private int[] imgIdArray ;
+    private int[] imgIdArray;
 
-    private  Context mcontext ;
+    private Context mcontext;
 
-    int playSecond ;
+    int playSecond;
 
-    int currentIndex ;
+    int currentIndex;
 
 
     OnPlayListener onPlayListener;
-    public MediaImages(Context context ,OnPlayListener onPlayListener) {
+
+    public MediaImages(Context context, OnPlayListener onPlayListener) {
         super(context);
         mcontext = context;
         this.onPlayListener = onPlayListener;
@@ -82,7 +86,7 @@ public class MediaImages  extends LinearLayout implements ViewPager.OnPageChange
 
     }
 
-    public MediaImages(Context context ,OnPlayListener onPlayListener,AttributeSet attrs) {
+    public MediaImages(Context context, OnPlayListener onPlayListener, AttributeSet attrs) {
         super(context, attrs);
         mcontext = context;
         this.onPlayListener = onPlayListener;
@@ -92,14 +96,13 @@ public class MediaImages  extends LinearLayout implements ViewPager.OnPageChange
     }
 
 
-    public void setSource(ArrayList<File> files ,int second ){
-        if(files.size() == 2 )
-        {
+    public void setSource(ArrayList<File> files, int second) {
+        if (files.size() == 2) {
             files.add(files.get(0));
             files.add(files.get(1));
         }
 
-        if(files.size() > 1) {
+        if (files.size() > 1) {
 
             //大于等于2张图片
 
@@ -156,9 +159,9 @@ public class MediaImages  extends LinearLayout implements ViewPager.OnPageChange
             viewPager.setOnPageChangeListener(this);
             //设置ViewPager的默认项, 设置为长度的100倍，这样子开始就能往左滑动
             //viewPager.setCurrentItem((mImageViews.length) * 100);
-            int n = Integer.MAX_VALUE / 2 % files.size();
-            int itemPosition = Integer.MAX_VALUE / 2 - n;
-            viewPager.setCurrentItem(itemPosition);
+//            int n = Integer.MAX_VALUE / 2 % files.size();
+//            int itemPosition = Integer.MAX_VALUE / 2 - n;
+//            viewPager.setCurrentItem(itemPosition);
 
             handler.removeMessages(0);
             handler.postDelayed(new Runnable() {
@@ -169,19 +172,25 @@ public class MediaImages  extends LinearLayout implements ViewPager.OnPageChange
                     Log.e("bill", "------index:" + currentIndex);
                     viewPager.setCurrentItem(currentIndex + 1);
                     handler.postDelayed(this, playSecond * 1000);
+                    if (SharedpreferencesData.getInstance().getPoster_type() == 2) {
+                        LogMg.d(TAG, "getPoster_type :%d", SharedpreferencesData.getInstance().getPoster_type());
+                        LogMg.d(TAG, "currentIndex :%d", currentIndex);
+                        LogMg.d(TAG, "mImageViews.length :%d", mImageViews.length);
+                        if (currentIndex == mImageViews.length - 1) {
+                            handler1.sendEmptyMessage(0);
+                        }
+                    }
                 }
             }, playSecond * 1000);
-            handler1.removeMessages(0);
-            handler1.sendEmptyMessageDelayed(0, 5 * 60 * 1000);
-        }
 
-        else
-        {
+//            handler1.removeMessages(0);
+//            handler1.sendEmptyMessageDelayed(0, 5 * 60 * 1000);
+        } else {
             //只有一张图片
             adImageView.setVisibility(VISIBLE);
             viewPager.setVisibility(GONE);
             dotGroup.setVisibility(GONE);
-            if(files.size()==1) {
+            if (files.size() == 1) {
                 BitmapFactory.Options options = new BitmapFactory.Options();
                 options.inPreferredConfig = Bitmap.Config.RGB_565;
                 options.inPurgeable = true;
@@ -195,10 +204,11 @@ public class MediaImages  extends LinearLayout implements ViewPager.OnPageChange
     }
 
     public Handler handler = new Handler();
+
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
-        group = (ViewGroup)findViewById(R.id.viewGroup);
+        group = (ViewGroup) findViewById(R.id.viewGroup);
         viewPager = (ViewPager) findViewById(R.id.viewPager);
         adImageView = (ImageView) findViewById(R.id.adImageView);
         dotGroup = (RelativeLayout) findViewById(R.id.dotgroup);
@@ -244,7 +254,7 @@ public class MediaImages  extends LinearLayout implements ViewPager.OnPageChange
                     Bitmap bitmap = bitmapDrawable.getBitmap();
                     if (bitmap != null)
                         bitmap.recycle();
-                        bitmap = null ;
+                    bitmap = null;
                 }
             }
         }
@@ -252,12 +262,12 @@ public class MediaImages  extends LinearLayout implements ViewPager.OnPageChange
     }
 
 
-    public Handler handler1 = new Handler(){
+    public Handler handler1 = new Handler() {
 
         @Override
         public void handleMessage(Message msg) {
             Log.e("bill", "------check tick is coming  ");
-            if(onPlayListener != null ){
+            if (onPlayListener != null) {
                 onPlayListener.onPlayFinish();
             }
         }
@@ -266,9 +276,7 @@ public class MediaImages  extends LinearLayout implements ViewPager.OnPageChange
 
 
     /**
-     *
      * @author xiaanming
-     *
      */
     public class MyAdapter extends PagerAdapter {
 
@@ -284,7 +292,7 @@ public class MediaImages  extends LinearLayout implements ViewPager.OnPageChange
 
         @Override
         public void destroyItem(View container, int position, Object object) {
-           // ((ViewPager)container).removeView(mImageViews[position % mImageViews.length]);
+            // ((ViewPager)container).removeView(mImageViews[position % mImageViews.length]);
 
         }
 
@@ -295,18 +303,14 @@ public class MediaImages  extends LinearLayout implements ViewPager.OnPageChange
         public Object instantiateItem(View container, int position) {
             try {
                 ((ViewPager) container).addView(mImageViews[position % mImageViews.length], 0);
-            }
-            catch(Exception e){
+            } catch (Exception e) {
                 //handler something
             }
             return mImageViews[position % mImageViews.length];
         }
 
 
-
     }
-
-
 
 
     @Override
@@ -326,13 +330,14 @@ public class MediaImages  extends LinearLayout implements ViewPager.OnPageChange
 
     /**
      * 设置选中的tip的背景
+     *
      * @param selectItems
      */
-    private void setImageBackground(int selectItems){
-        for(int i=0; i<tips.length; i++){
-            if(i == selectItems){
+    private void setImageBackground(int selectItems) {
+        for (int i = 0; i < tips.length; i++) {
+            if (i == selectItems) {
                 tips[i].setBackgroundResource(R.drawable.page_indicator_focused);
-            }else{
+            } else {
                 tips[i].setBackgroundResource(R.drawable.page_indicator_unfocused);
             }
         }

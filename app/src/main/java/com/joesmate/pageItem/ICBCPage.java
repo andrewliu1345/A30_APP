@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Handler;
@@ -728,8 +729,8 @@ public class ICBCPage extends LinearLayout implements OnTimerListener, OnJsListe
                         PdfReader reader = new PdfReader(ICBCSignData.getInstance().getPDFPath());//选择需要印章的pdf;
                         float scale1 = (float) ICBCSignData.getInstance().getSignWidth() / (float) ICBCSignData.getInstance().getSignHeight();
                         Log.e("bill", " getSignWidth:" + ICBCSignData.getInstance().getSignWidth() + "  getSignHeight: " + ICBCSignData.getInstance().getSignHeight());
-                        int width = (int) (600 * scale);
-                        int height = 400;
+                        int width = 600;
+                        int height = (int) (600 / scale1);
                         ICBCSignData.getInstance().setPicHeight(height);
                         ICBCSignData.getInstance().setPicWidth(width);
                         Log.e("bill", "scale:" + scale1 + " width:" + width + "  height: " + height);
@@ -919,8 +920,8 @@ public class ICBCPage extends LinearLayout implements OnTimerListener, OnJsListe
                         PdfReader reader = new PdfReader(ICBCSignData.getInstance().getPDFPath());//选择需要印章的pdf;
                         Log.e("bill", " getSignWidth:" + ICBCSignData.getInstance().getSignWidth() + "  getSignHeight: " + ICBCSignData.getInstance().getSignHeight());
                         float scale = (float) ICBCSignData.getInstance().getSignWidth() / (float) ICBCSignData.getInstance().getSignHeight();
-                        int width = (int) (600 * scale);
-                        int height = 400;
+                        int width = 600;
+                        int height = (int) (600 / scale);
                         ICBCSignData.getInstance().setPicHeight(height);
                         ICBCSignData.getInstance().setPicWidth(width);
                         Log.e("bill", "scale:" + scale + " width:" + width + "  height: " + height);
@@ -1142,28 +1143,34 @@ public class ICBCPage extends LinearLayout implements OnTimerListener, OnJsListe
 
     void signaturePdf() {
         //creat signature bitmap
-        int width = ICBCSignData.getInstance().getSignHeight(), height = ICBCSignData.getInstance().getSignHeight();
-        Bitmap bm = signatureFrame.getSignatureBitmap();
-        Bitmap bitmap = Bitmap.createBitmap(bm, 0, 0, width, height);
+        int width = ICBCSignData.getInstance().getSignWidth(), height = ICBCSignData.getInstance().getSignHeight();
+//        Bitmap bm = signatureFrame.getSignatureBitmap();
+//        int w = bm.getWidth();
+//        int h = bm.getHeight();
+//        float scaleWidth = (float) width / w;
+//        float scaleHeight = (float) height / h;
+//        Matrix matrix = new Matrix();
+//        matrix.postScale(scaleWidth, scaleHeight);
+//        Bitmap bitmap = Bitmap.createBitmap(bm, 0, 0, w, h,matrix,true);
         File dir = new File(FileInf.PDF);
         if (!dir.exists()) {
             dir.mkdirs();
         }
-        File file = new File(ICBCSignData.getInstance().getSignImagePath());
-        if (!file.exists()) {
-            try {
-                file.createNewFile();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        FileOutputStream fos = null;
-        try {
-            fos = new FileOutputStream(file);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
+//        File file = new File(ICBCSignData.getInstance().getSignImagePath());
+//        if (!file.exists()) {
+//            try {
+//                file.createNewFile();
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//        FileOutputStream fos = null;
+//        try {
+//            fos = new FileOutputStream(file);
+//        } catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//        }
+//        bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
 
         //sign to pdf
         String InPdfFilePath = ICBCSignData.getInstance().getPDFPath();

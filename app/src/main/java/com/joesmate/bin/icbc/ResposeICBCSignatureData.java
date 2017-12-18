@@ -1,6 +1,7 @@
 package com.joesmate.bin.icbc;
 
 import android.graphics.Bitmap;
+import android.graphics.Matrix;
 import android.util.Log;
 
 import com.joesmate.AssitTool;
@@ -54,7 +55,16 @@ public class ResposeICBCSignatureData extends BaseData {
 
     public void setResposeBitmap(Bitmap bitmap) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+        int width = ICBCSignData.getInstance().getSignWidth(), height = ICBCSignData.getInstance().getSignHeight();
+
+        int w = bitmap.getWidth();
+        int h = bitmap.getHeight();
+        float scaleWidth = (float) width / w;
+        float scaleHeight = (float) height / h;
+        Matrix matrix = new Matrix();
+        matrix.postScale(scaleWidth, scaleHeight);
+        Bitmap bm = Bitmap.createBitmap(bitmap, 0, 0, w, h,matrix,true);
+        bm.compress(Bitmap.CompressFormat.PNG, 100, baos);
         imgData = baos.toByteArray();
 
         File file = new File(ICBCSignData.getInstance().getSignImagePath());

@@ -572,7 +572,7 @@ public class SetPassWord extends LinearLayout implements TimerView.OnTimerListen
                     Log.d(TAG, "----- ACTION_BROADCAST_INPUT_PW_ENTER ");
 
                     // if (SDCSReadPinData.getInstance().getiEncryType() == 1) {
-                    if (currentIndex < passwordLength&&endType == 1) {
+                    if (currentIndex < passwordLength && endType == 1) {
                         txtMsg.setVisibility(VISIBLE);
                         txtMsg.setText("必须输入" + passwordLength + "位");
                         Log.e("密码必须输入", "" + 1);
@@ -989,7 +989,7 @@ public class SetPassWord extends LinearLayout implements TimerView.OnTimerListen
     String getResult() {
         String str = "";
         if (passwordNumber == 1) {
-            for (int i = 0; i < passwordLength; ++i) {
+            for (int i = 0; i < currentIndex; ++i) {
                 if (passwordValue[i] != 10) {
                     str = str + passwordValue[i];
                 }
@@ -1113,9 +1113,9 @@ public class SetPassWord extends LinearLayout implements TimerView.OnTimerListen
 
     @Override
     public void timeOut() {
-        if (SDCSReadPinData.getInstance().getiEncryType() == 1) {
-            SDCSReadPinData.getInstance().sendConfirmResult(getResult());
-        }
+//        if (SDCSReadPinData.getInstance().getiEncryType() == 1) {
+//            SDCSReadPinData.getInstance().sendConfirmResult(getResult());
+//        }
         SDCSReadPinData.getInstance().closeInputChar();
         SerialUtil.getInstance().setStop(true);
         Intent intent1 = new Intent(AppAction.ACTION_BROADCAST_CMD);

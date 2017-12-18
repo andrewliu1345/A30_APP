@@ -13,6 +13,7 @@ import com.joesmate.FileInf.FileType;
 import com.joesmate.SharedpreferencesData;
 import com.joesmate.listener.OnPlayListener;
 import com.joesmate.page.PlayActivity.OnResUpdateListener;
+import com.joesmate.util.LogMg;
 import com.joesmate.widget.MediaImages;
 import com.joesmate.widget.MediaVideo;
 
@@ -38,6 +39,8 @@ public class ICBCPlayView extends FrameLayout implements OnPlayListener {
     int curIndex_video;
     int curIndex;
     boolean isStartPlay;
+    boolean isImgFinish, isVidFinish;
+    int whtype;
     OnResUpdateListener onResUpdateListener;
     Context m_context;
 
@@ -117,8 +120,8 @@ public class ICBCPlayView extends FrameLayout implements OnPlayListener {
 
     public void play(int playSecond) {
         m_PlaySecond = playSecond;
-	/*	if(!AssitTool.isPlay()){
-			Log.w(TAG, "res nothing");
+    /*	if(!AssitTool.isPlay()){
+            Log.w(TAG, "res nothing");
 			if(onResUpdateListener != null){
 				onResUpdateListener.nothing();
 			}
@@ -143,7 +146,7 @@ public class ICBCPlayView extends FrameLayout implements OnPlayListener {
             //fileUrls_IMG = AssitTool.getFileUrls_IMG(FileInf.RES);
 
 			/*if (curIndex_img >= fileUrls_IMG.size()) {
-				curIndex_img = 0;
+                curIndex_img = 0;
 			}
 			File curFile = fileUrls_IMG.get(curIndex_img);
 			if(curFile == null || !curFile.exists()){
@@ -210,16 +213,59 @@ public class ICBCPlayView extends FrameLayout implements OnPlayListener {
                 }
             }
         }
+        //混合广告
         if (SharedpreferencesData.getInstance().getPoster_type() == 2) {
+//            if (!AssitTool.isImgCanPlay() && !AssitTool.isVideoCanPlay()) {
+//                Log.w(TAG, "res img and video are not exist");
+//                if (onResUpdateListener != null) {
+//                    onResUpdateListener.nothing();
+//                }
+//                return;
+//            } else
+            if (AssitTool.isImgCanPlay() & !AssitTool.isVideoCanPlay()) {
+                SharedpreferencesData.getInstance().setPoster_type(0);
+                play(SharedpreferencesData.getInstance().getShowTime());
+            } else if (AssitTool.isImgCanPlay() & !AssitTool.isVideoCanPlay()) {
+                SharedpreferencesData.getInstance().setPoster_type(1);
+                play(SharedpreferencesData.getInstance().getShowTime());
+            } else if (AssitTool.isImgCanPlay() & AssitTool.isVideoCanPlay()) {
+                whtype = 0;
+                mediaImages = new MediaImages(m_context, this);
+                mediaImages.setVisibility(VISIBLE);
+                addView(mediaImages, mparams);
+                mediaImages.setSource(AssitTool.getFileUrls_IMG(FileInf.IMAGE), playSecond);
+                mediaImages.setVisibility(View.VISIBLE);
+//            isImgFinish = false;
+//            isVidFinish = true;
+            }
 
         }
-
     }
 
+    public void playvideo() {
+        whtype = 1;
+        fileUrls_VIDEO = AssitTool.getFileUrls_VIDEO(FileInf.VIDEO);
+//        if (curIndex_video >= fileUrls_VIDEO.size()) {
+//            curIndex_video = 0;
+//        }
+        File curFile = fileUrls_VIDEO.get(curIndex_video);
+        FileType fileType = AssitTool.fileType(curFile.getAbsolutePath());
+        if (fileType == FileType.VIDEO) {
+            mediaVideo = new MediaVideo(m_context, this);
+            mediaVideo.setVisibility(View.INVISIBLE);
+            addView(mediaVideo, mparams);
+            curIndex_video++;
+            mediaVideo.setDataSource(curFile.getAbsolutePath(), 0); //SharedpreferencesData.getInstance().getShowTime());
+            mediaVideo.setVisibility(View.VISIBLE);
+
+        } else {
+            onPlayFinish();
+        }
+    }
 
     @Override
     public void onPlayFinish() {
-        Log.d(TAG,"onPlayFinish");
+        Log.d(TAG, "onPlayFinish");
         if (mediaVideo != null) {
             mediaVideo.setVisibility(View.INVISIBLE);
         }
@@ -229,10 +275,11 @@ public class ICBCPlayView extends FrameLayout implements OnPlayListener {
         }
         this.removeAllViews();
         if (SharedpreferencesData.getInstance().getPoster_type() == 0) {
-/*			curIndex_img++;
-			if (curIndex_img >= fileUrls_IMG.size()) {
-				curIndex_img = 0;
-			}*/
+           // curIndex_img++;
+//            if (curIndex_img >= fileUrls_IMG.size()) {
+//                curIndex_img = 0;
+//            }
+        //    play(SharedpreferencesData.getInstance().getShowTime());
         }
         if (SharedpreferencesData.getInstance().getPoster_type() == 1) {
             curIndex_video++;
@@ -240,12 +287,23 @@ public class ICBCPlayView extends FrameLayout implements OnPlayListener {
             if (curIndex_video >= fileUrls_VIDEO.size()) {
                 curIndex_video = 0;
             }
+            play(SharedpreferencesData.getInstance().getShowTime());
         }
         if (SharedpreferencesData.getInstance().getPoster_type() == 2) {
+            if (whtype == 0) {
+                LogMg.d(TAG, "playvideo()");
+                //curIndex_video++;
+                playvideo();
+            } else if (whtype == 1 && curIndex_video < fileUrls_VIDEO.size()) {
+                playvideo();
+            } else {
+                play(SharedpreferencesData.getInstance().getShowTime());
+                LogMg.d(TAG, "play(SharedpreferencesData.getInstance().getShowTime());");
+            }
 
         }
 
-        play(SharedpreferencesData.getInstance().getShowTime() * 1000);
+        //play(SharedpreferencesData.getInstance().getShowTime() * 1000);
 
     }
 }
