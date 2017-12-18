@@ -49,6 +49,12 @@ public class SDCSReadPinData extends BaseData {
 
     private int iEncryType;
 
+    public int getiDisplayType() {
+        return iDisplayType;
+    }
+
+    private int iDisplayType;
+
     public int getiInputPasswordNumber() {
         return iInputPasswordNumber;
     }
@@ -181,9 +187,10 @@ public class SDCSReadPinData extends BaseData {
                 byte[] arrayAccNo = new byte[iAccNoLen];
                 System.arraycopy(buffer, pos, arrayAccNo, 0, iAccNoLen);
                 iAccNo = AssitTool.getString(arrayAccNo, AssitTool.UTF_8);
-                pos += iAccNoLen;
-            }
 
+            }
+            pos += iAccNoLen;
+            iDisplayType = buffer[pos++];
             sendConfirmCode(BackCode.CODE_00);
 
             App.isThirdpartySerial = false;

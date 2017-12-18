@@ -728,8 +728,8 @@ public class ICBCPage extends LinearLayout implements OnTimerListener, OnJsListe
                         PdfReader reader = new PdfReader(ICBCSignData.getInstance().getPDFPath());//选择需要印章的pdf;
                         float scale1 = (float) ICBCSignData.getInstance().getSignWidth() / (float) ICBCSignData.getInstance().getSignHeight();
                         Log.e("bill", " getSignWidth:" + ICBCSignData.getInstance().getSignWidth() + "  getSignHeight: " + ICBCSignData.getInstance().getSignHeight());
-                        int width = ICBCSignData.getInstance().getSignWidth();
-                        int height = ICBCSignData.getInstance().getSignHeight();
+                        int width = (int) (600 * scale);
+                        int height = 400;
                         ICBCSignData.getInstance().setPicHeight(height);
                         ICBCSignData.getInstance().setPicWidth(width);
                         Log.e("bill", "scale:" + scale1 + " width:" + width + "  height: " + height);

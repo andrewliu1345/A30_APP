@@ -1,7 +1,11 @@
 package com.joesmate.widget;
 
+import android.app.ActionBar;
 import android.content.Context;
+import android.content.Entity;
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Handler;
 import android.os.Message;
 import android.util.AttributeSet;
@@ -14,7 +18,12 @@ import com.joesmate.AppAction;
 import com.joesmate.R;
 import com.joesmate.bin.keyBoard.SerialUtil;
 import com.joesmate.bin.sdcs.SDCSReadPinData;
+import com.joesmate.bin.sdcs.SDCSResetPinData;
 import com.joesmate.page.PlayActivity;
+import com.joesmate.util.LogMg;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by bill on 2016/1/13.
@@ -447,7 +456,7 @@ public class SetPassWord extends LinearLayout implements TimerView.OnTimerListen
     //LinearLayout inputPasswordContentAgain;
 
     LinearLayout passwordGrp, pass1, pass2, pass3, pass4, pass5, pass6, pass7, pass8, pass9, pass10, pass11, pass12;
-
+    Map<Integer, LinearLayout> passmap;
     // ImageView pass1;
 
 
@@ -461,6 +470,8 @@ public class SetPassWord extends LinearLayout implements TimerView.OnTimerListen
     int passwordLength = SDCSReadPinData.getInstance().getiInputPassworfLength();
     int passwordNumber = 1;
     int endType = 0;
+    int iDisplayType = 0;
+    int iEncryType = 0;
     public static final String TAG = "SetPassWord";
     //ArrayList<ImageView> passwords;
     //ArrayList<ImageView> passwordsAgain;
@@ -495,46 +506,61 @@ public class SetPassWord extends LinearLayout implements TimerView.OnTimerListen
 
     }
 
+    public void count(int iNum) {
+        for (Map.Entry<Integer, LinearLayout> passEntity :
+                passmap.entrySet())
+            passEntity.getValue().setVisibility(GONE);
+        LinearLayout pass = passmap.get(passwordLength);
+        pass.setVisibility(VISIBLE);
+        if (iDisplayType == 1 && iEncryType == 1)
+            AddPasswordX(pass, iNum);
+        else
+            AddPasswordY(pass, iNum);
+    }
+
     public void passlength() {
         init();
-        switch (passwordLength) {
-            case 1:
-                pass1.setVisibility(VISIBLE);
-                break;
-            case 2:
-                pass2.setVisibility(VISIBLE);
-                break;
-            case 4:
-                pass4.setVisibility(VISIBLE);
-                break;
-            case 5:
-                pass5.setVisibility(VISIBLE);
-                break;
-            case 6:
-                pass6.setVisibility(VISIBLE);
-                break;
-            case 7:
-                pass7.setVisibility(VISIBLE);
-                break;
-            case 8:
-                pass8.setVisibility(VISIBLE);
-                break;
-            case 3:
-                pass3.setVisibility(VISIBLE);
-                break;
-            case 9:
-                pass9.setVisibility(VISIBLE);
-                break;
-            case 10:
-                pass10.setVisibility(VISIBLE);
-                break;
-            case 11:
-                pass11.setVisibility(VISIBLE);
-                break;
-            case 12:
-                pass12.setVisibility(VISIBLE);
-                break;
-        }
+        LinearLayout pass = passmap.get(passwordLength);
+        if (pass != null)
+            pass.setVisibility(VISIBLE);
+//        switch (passwordLength) {
+//            case 1:
+//                pass1.setVisibility(VISIBLE);
+//                break;
+//            case 2:
+//                pass2.setVisibility(VISIBLE);
+//                break;
+//            case 4:
+//                pass4.setVisibility(VISIBLE);
+//                break;
+//            case 5:
+//                pass5.setVisibility(VISIBLE);
+//                break;
+//            case 6:
+//                pass6.setVisibility(VISIBLE);
+//                break;
+//            case 7:
+//                pass7.setVisibility(VISIBLE);
+//                break;
+//            case 8:
+//                pass8.setVisibility(VISIBLE);
+//                break;
+//            case 3:
+//                pass3.setVisibility(VISIBLE);
+//                break;
+//            case 9:
+//                pass9.setVisibility(VISIBLE);
+//                break;
+//            case 10:
+//                pass10.setVisibility(VISIBLE);
+//                break;
+//            case 11:
+//                pass11.setVisibility(VISIBLE);
+//                break;
+//            case 12:
+//                pass12.setVisibility(VISIBLE);
+//                break;
+//        }
     }
 
     Handler myHandler = new Handler() {
@@ -546,7 +572,7 @@ public class SetPassWord extends LinearLayout implements TimerView.OnTimerListen
                     Log.d(TAG, "----- ACTION_BROADCAST_INPUT_PW_ENTER ");
 
                     // if (SDCSReadPinData.getInstance().getiEncryType() == 1) {
-                    if (currentIndex < passwordLength) {
+                    if (currentIndex < passwordLength&&endType == 1) {
                         txtMsg.setVisibility(VISIBLE);
                         txtMsg.setText("必须输入" + passwordLength + "位");
                         Log.e("密码必须输入", "" + 1);
@@ -591,19 +617,19 @@ public class SetPassWord extends LinearLayout implements TimerView.OnTimerListen
                         Log.e("密码必须输入", "" + 4);
 
                         Log.d(TAG, "密码位数:" + currentIndex);
-                        count();
+                        count(str1);
                         passwordValue[currentIndex++] = str1;
                         Log.d(TAG, "密码位数:" + str1);
-                        if (currentIndex == passwordLength && endType == 1) {
-                            Log.e("密码必须输入", "" + 5);
-                            SDCSReadPinData.getInstance().sendConfirmResult(getResult());
-                            Intent intent1 = new Intent(AppAction.ACTION_BROADCAST_CMD);
-                            intent1.putExtra(AppAction.KEY_BROADCAST_CMD, PlayActivity.PAGE_PLAY);
-                            getContext().sendBroadcast(intent1);
-                            SDCSReadPinData.getInstance().closeInputChar();
-
-
-                        }
+//                        if (currentIndex == passwordLength && endType == 1) {
+//                            Log.e("密码必须输入", "" + 5);
+//                            SDCSReadPinData.getInstance().sendConfirmResult(getResult());
+//                            Intent intent1 = new Intent(AppAction.ACTION_BROADCAST_CMD);
+//                            intent1.putExtra(AppAction.KEY_BROADCAST_CMD, PlayActivity.PAGE_PLAY);
+//                            getContext().sendBroadcast(intent1);
+//                            SDCSReadPinData.getInstance().closeInputChar();
+//
+//
+//                        }
 
                     }
 //                    }
@@ -650,18 +676,36 @@ public class SetPassWord extends LinearLayout implements TimerView.OnTimerListen
     };
 
     public void init() {
-        pass1 = (LinearLayout) findViewById(R.id.pass1);
-        pass2 = (LinearLayout) findViewById(R.id.pass2);
-        pass3 = (LinearLayout) findViewById(R.id.pass3);
-        pass4 = (LinearLayout) findViewById(R.id.pass4);
-        pass5 = (LinearLayout) findViewById(R.id.pass5);
-        pass6 = (LinearLayout) findViewById(R.id.pass6);
-        pass7 = (LinearLayout) findViewById(R.id.pass7);
-        pass8 = (LinearLayout) findViewById(R.id.pass8);
-        pass9 = (LinearLayout) findViewById(R.id.pass9);
-        pass10 = (LinearLayout) findViewById(R.id.pass10);
-        pass11 = (LinearLayout) findViewById(R.id.pass11);
-        pass12 = (LinearLayout) findViewById(R.id.pass12);
+        pass1 = findViewById(R.id.pass1);
+        pass2 = findViewById(R.id.pass2);
+        pass3 = findViewById(R.id.pass3);
+        pass4 = findViewById(R.id.pass4);
+        pass5 = findViewById(R.id.pass5);
+        pass6 = findViewById(R.id.pass6);
+        pass7 = findViewById(R.id.pass7);
+        pass8 = findViewById(R.id.pass8);
+        pass9 = findViewById(R.id.pass9);
+        pass10 = findViewById(R.id.pass10);
+        pass11 = findViewById(R.id.pass11);
+        pass12 = findViewById(R.id.pass12);
+
+        passmap = new HashMap<Integer, LinearLayout>() {
+            {
+                put(1, pass1);
+                put(2, pass2);
+                put(3, pass3);
+                put(4, pass4);
+                put(5, pass5);
+                put(6, pass6);
+                put(7, pass7);
+                put(8, pass8);
+                put(9, pass9);
+                put(10, pass10);
+                put(11, pass11);
+                put(12, pass12);
+
+            }
+        };
     }
 
     @Override
@@ -670,6 +714,8 @@ public class SetPassWord extends LinearLayout implements TimerView.OnTimerListen
 
         passwordNumber = SDCSReadPinData.getInstance().getiInputPasswordNumber();
         endType = SDCSReadPinData.getInstance().getPasswordEndType();
+        iDisplayType = SDCSReadPinData.getInstance().getiDisplayType();
+        iEncryType = SDCSReadPinData.getInstance().getiEncryType();
         //passwordNum = 6 ;
         inflate(mcontext, R.layout.set_password_layout, this);
         passlength();
@@ -894,6 +940,37 @@ public class SetPassWord extends LinearLayout implements TimerView.OnTimerListen
         pass5.addView(img);
     }
 
+    //明文显示
+    void AddPasswordX(LinearLayout pass, int iINnum) {
+        //添加密码
+        Log.e("添加密码", "秒123");
+        TextView txt = new TextView(mcontext);
+        LayoutParams params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        params.setMargins((int) 22.8f, (int) 12f, (int) 25f, (int) 19.5f);
+//        params.weight=305;
+//        params.height=247;
+        txt.setLayoutParams(params);
+        float w1 = pass.getWeightSum();
+        int w2 = pass.getWidth();
+        LogMg.d(TAG, "w1=%f", w1);
+        LogMg.d(TAG, "w2=%d", w2);
+        pass.addView(txt);
+        txt.setTextSize(35);
+        txt.setTextColor(Color.BLACK);
+        txt.setText("" + iINnum);
+    }
+
+    //圆点显示
+    void AddPasswordY(LinearLayout pass, int iINnum) {
+        //添加密码
+        Log.e("添加密码", "秒123");
+        ImageView img = new ImageView(mcontext);
+        img.setImageDrawable(getResources().getDrawable(R.drawable.blankdot));
+        LayoutParams params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        params.setMargins((int) 19.5f, (int) 19.5f, (int) 19.5f, (int) 19.5f);
+        img.setLayoutParams(params);
+        pass.addView(img);
+    }
 
     void resetPassword() {
         Log.e("重置密码", "秒123");
@@ -1167,6 +1244,7 @@ public class SetPassWord extends LinearLayout implements TimerView.OnTimerListen
                 pass12.setVisibility(GONE);
 
                 pass6.setVisibility(VISIBLE);
+                //AddPasswordX(pass6, 1);
                 AddPassword6();
                 break;
             case 7:
