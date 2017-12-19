@@ -473,7 +473,7 @@ public class PlayActivity extends Activity implements OnSystemUiVisibilityChange
                 }
                 if (SharedpreferencesData.getInstance().getPoster_type() == 2) {
  Log.d("bill", "Poster_type  2");
-                    if (AssitTool.isImgCanPlay() && AssitTool.isVideoCanPlay()) {
+                    if (AssitTool.isImgCanPlay() || AssitTool.isVideoCanPlay()) {
                         icbcplayView = new ICBCPlayView(PlayActivity.this, onResUpdateListener, AssitTool.getLayoutParams());
                         icbcplayView.play(SharedpreferencesData.getInstance().getShowTime());
                         displayPage(icbcplayView, AssitTool.getLayoutParams());

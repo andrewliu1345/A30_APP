@@ -224,9 +224,11 @@ public class ICBCPlayView extends FrameLayout implements OnPlayListener {
 //            } else
             if (AssitTool.isImgCanPlay() & !AssitTool.isVideoCanPlay()) {
                 SharedpreferencesData.getInstance().setPoster_type(0);
+																		 Log.d(TAG, "poster_type 0 is " + SharedpreferencesData.getInstance().getPoster_type());
                 play(SharedpreferencesData.getInstance().getShowTime());
-            } else if (AssitTool.isImgCanPlay() & !AssitTool.isVideoCanPlay()) {
+            } else if (AssitTool.isVideoCanPlay() & !AssitTool.isImgCanPlay()) {
                 SharedpreferencesData.getInstance().setPoster_type(1);
+                Log.d(TAG, "poster_type 1 is " + SharedpreferencesData.getInstance().getPoster_type());
                 play(SharedpreferencesData.getInstance().getShowTime());
             } else if (AssitTool.isImgCanPlay() & AssitTool.isVideoCanPlay()) {
                 whtype = 0;
@@ -235,8 +237,8 @@ public class ICBCPlayView extends FrameLayout implements OnPlayListener {
                 addView(mediaImages, mparams);
                 mediaImages.setSource(AssitTool.getFileUrls_IMG(FileInf.IMAGE), playSecond);
                 mediaImages.setVisibility(View.VISIBLE);
-//            isImgFinish = false;
-//            isVidFinish = true;
+                curIndex_video = 0;
+                fileUrls_VIDEO = AssitTool.getFileUrls_VIDEO(FileInf.VIDEO);
             }
 
         }
@@ -290,11 +292,11 @@ public class ICBCPlayView extends FrameLayout implements OnPlayListener {
             play(SharedpreferencesData.getInstance().getShowTime());
         }
         if (SharedpreferencesData.getInstance().getPoster_type() == 2) {
-            if (whtype == 0) {
+            if (whtype == 0 & curIndex_video < fileUrls_VIDEO.size()){
                 LogMg.d(TAG, "playvideo()");
                 //curIndex_video++;
                 playvideo();
-            } else if (whtype == 1 && curIndex_video < fileUrls_VIDEO.size()) {
+            } else if (whtype == 1 & curIndex_video < fileUrls_VIDEO.size()) {
                 playvideo();
             } else {
                 play(SharedpreferencesData.getInstance().getShowTime());
