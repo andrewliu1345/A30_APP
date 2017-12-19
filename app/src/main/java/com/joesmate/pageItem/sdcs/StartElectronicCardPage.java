@@ -133,18 +133,18 @@ public class StartElectronicCardPage extends BasePageItem implements View.OnClic
                 }
                 else
                 {
-                    return getResources().getDrawable(R.drawable.number209023);
+                    return getResources().getDrawable(R.drawable.defaulthead);
                 }
 
             }
             else
             {
-                return getResources().getDrawable(R.drawable.number209023);
+                return getResources().getDrawable(R.drawable.defaulthead);
             }
         }
         else
         {
-            return getResources().getDrawable(R.drawable.number209023);
+            return getResources().getDrawable(R.drawable.defaulthead);
         }
 
     }

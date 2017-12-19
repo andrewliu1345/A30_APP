@@ -22,6 +22,8 @@ import com.joesmate.bin.sdcs.SDCSResetPinData;
 import com.joesmate.page.PlayActivity;
 import com.joesmate.util.LogMg;
 
+import org.w3c.dom.Text;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -464,6 +466,7 @@ public class SetPassWord extends LinearLayout implements TimerView.OnTimerListen
     HtmlView htmlContent;
     //TextView maincontent;
     TextView txtMsg;
+    TextView txtpassword;
     //TextView txtMsgAgain;
     //密码长度
 
@@ -733,7 +736,8 @@ public class SetPassWord extends LinearLayout implements TimerView.OnTimerListen
         passwordGrp.setVisibility(VISIBLE);
         //passwordAgainGrp = (LinearLayout) findViewById(R.id.passowdAgainGrp);
 
-
+        txtpassword = (TextView) findViewById(R.id.txtpassword);
+        txtpassword.setText(SDCSReadPinData.getInstance().getDisplayContent());
         txtMsg = (TextView) findViewById(R.id.txtmsg);
         //txtMsgAgain = (TextView) findViewById(R.id.txtmsgagain);
         txtMsg.setVisibility(INVISIBLE);
@@ -741,6 +745,10 @@ public class SetPassWord extends LinearLayout implements TimerView.OnTimerListen
 
         htmlContent = (HtmlView) findViewById(R.id.htmlContent);
         htmlContent.loadChar(SDCSReadPinData.getInstance().getDisplayContent());
+        // htmlContent.setBackgroundColor(0); // 设置背景色
+        //   htmlContent.setBackgroundResource(R.drawable.play_nothing_bg);
+        //htmlContent.setBackground();
+//        htmlContent.getBackground().setAlpha(0); // 设置填充透明度 范围：0-255
        /* if (passwordNumber == 1) {
             passwordAgainGrp.setVisibility(GONE);
 

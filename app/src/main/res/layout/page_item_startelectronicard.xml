@@ -8,9 +8,9 @@
 <ImageView
     android:id="@+id/photo"
     android:layout_width="300dp"
-    android:scaleType="fitXY"
+    android:scaleType="fitStart"
     android:layout_height="400dp"
-    android:src="@drawable/number209023"/>
+    android:src="@drawable/defaulthead"/>
 
     <TextView
         android:id="@+id/person"

@@ -88,7 +88,10 @@ public class AppraiseCommon extends BasePageItem {
         setTimer(baseData.getTimeOut());
         App.getInstance().tts.Read(baseData.getVoiceText(), 1);
 
-        ivPhoto.setImageDrawable(getPhotoImage());
+        Drawable db=getPhotoImage();
+//        Bitmap dm=db.getBi
+//        ViewGroup.LayoutParams layoutParams= ivPhoto.getLayoutParams();
+        ivPhoto.setImageDrawable(db);
 
         for (int i = 0; i < listButton.size(); i++) {
             int bgResid = i;
@@ -132,14 +135,14 @@ public class AppraiseCommon extends BasePageItem {
                     Bitmap bmp = BitmapFactory.decodeFile(photoUrl, options);
                     return new BitmapDrawable(bmp);
                 } else {
-                    return getResources().getDrawable(R.drawable.number209023);
+                    return getResources().getDrawable(R.drawable.defaulthead);
                 }
 
             } else {
-                return getResources().getDrawable(R.drawable.number209023);
+                return getResources().getDrawable(R.drawable.defaulthead);
             }
         } else {
-            return getResources().getDrawable(R.drawable.number209023);
+            return getResources().getDrawable(R.drawable.defaulthead);
         }
 
     }

@@ -295,7 +295,7 @@ public class ICBCPage extends LinearLayout implements OnTimerListener, OnJsListe
             if (baseData.getDisplayType() == 1) {
                 btOK.setVisibility(VISIBLE);
                 btCancel.setVisibility(VISIBLE);
-            } else {//不需要确认
+            } else if (baseData.getDisplayType()==0){//不需要确认
                 btOK.setVisibility(GONE);
                 btCancel.setVisibility(GONE);
 
@@ -308,6 +308,21 @@ public class ICBCPage extends LinearLayout implements OnTimerListener, OnJsListe
                         toPlay();
                     }
                 });
+            }else if (baseData.getDisplayType()==2)
+            {
+                btOK.setVisibility(GONE);
+                btCancel.setVisibility(GONE);
+
+                btSignature.setVisibility(VISIBLE);
+                btSignature.setText("返回");
+                btSignature.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        baseData.sendConfirmResult("0");
+                        toPlay();
+                    }
+                });
+                baseData.sendConfirmResult("0");
             }
             btOK.setOnClickListener(new OnClickListener() {
                 @Override
@@ -330,6 +345,7 @@ public class ICBCPage extends LinearLayout implements OnTimerListener, OnJsListe
                         baseData.sendConfirmResult("2");
                         toPlay();
                     } else {
+                        baseData.sendConfirmResult("2");
                         toPlay();
                     }
                 }
