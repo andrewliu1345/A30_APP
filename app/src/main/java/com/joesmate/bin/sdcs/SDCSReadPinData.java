@@ -236,7 +236,7 @@ public class SDCSReadPinData extends BaseData {
             String WorkKey = preferences.getString(Cmds.WORK_KEY, "");
             byte[] iPinBlock = ANSIFormat_SM.process(result, iAccNo);
 
-            if (WorkKey.length() > 0) {
+            if (WorkKey.length() > 0&& result.length()>0) {
                 byte[] arrayWorkKey = AssitTool.HexStringToBytes(WorkKey);
                 //KeyBordProtocol.getInstance().SM4Encrypt(iPinBlock, arrayWorkKey);
                 byte[] cipher = SM4Utils.SM4_ECB(iPinBlock, arrayWorkKey, SM4.SM4_ENCRYPT);

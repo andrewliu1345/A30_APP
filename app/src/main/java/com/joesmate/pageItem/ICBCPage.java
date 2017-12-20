@@ -291,11 +291,12 @@ public class ICBCPage extends LinearLayout implements OnTimerListener, OnJsListe
             topTitle.setVisibility(VISIBLE);
             btSignature.setVisibility(GONE);
             btContainer.setVisibility(VISIBLE);
+            topTitle.setText("  请确认信息");
             //需要确认
             if (baseData.getDisplayType() == 1) {
                 btOK.setVisibility(VISIBLE);
                 btCancel.setVisibility(VISIBLE);
-            } else if (baseData.getDisplayType()==0){//不需要确认
+            } else if (baseData.getDisplayType() == 0) {//不需要确认
                 btOK.setVisibility(GONE);
                 btCancel.setVisibility(GONE);
 
@@ -308,13 +309,14 @@ public class ICBCPage extends LinearLayout implements OnTimerListener, OnJsListe
                         toPlay();
                     }
                 });
-            }else if (baseData.getDisplayType()==2)
+            } else if (baseData.getDisplayType() == 2)//显示
             {
                 btOK.setVisibility(GONE);
                 btCancel.setVisibility(GONE);
-
+                topTitle.setText(baseData.getHtmlData());
+                baseData.sendConfirmResult("0");
                 btSignature.setVisibility(VISIBLE);
-                btSignature.setText("返回");
+                btSignature.setText("取消");
                 btSignature.setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -322,7 +324,7 @@ public class ICBCPage extends LinearLayout implements OnTimerListener, OnJsListe
                         toPlay();
                     }
                 });
-                baseData.sendConfirmResult("0");
+
             }
             btOK.setOnClickListener(new OnClickListener() {
                 @Override
@@ -356,7 +358,7 @@ public class ICBCPage extends LinearLayout implements OnTimerListener, OnJsListe
             SharedpreferencesData.getInstance().setTop_font_size(32);
             SharedpreferencesData.getInstance().setTop_font_weight(1);
             SharedpreferencesData.getInstance().setTop_font_color(1);
-            topTitle.setText("  请确认信息");
+
             topTitle.setGravity(Gravity.CENTER);
             pageContent.setLayoutParams(params);
             htmlView = new HtmlView(context);
@@ -364,7 +366,10 @@ public class ICBCPage extends LinearLayout implements OnTimerListener, OnJsListe
             LayoutParams params1 = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
             pageContent.addView(htmlView, params1);
             //htmlView.loadChar("<b>dshhsjj</b>djdj99399999");
-            htmlView.loadChar(baseData.getHtmlData());
+            if (baseData.getDisplayType() == 2)
+                htmlView.loadUrl("file:///android_asset/content.html");//loadDataWithBaseURL("file:///android_asset/content.html", "", "text/html", "UTF-8", null);
+            else
+                htmlView.loadChar(baseData.getHtmlData());
             App.getInstance().tts.Read(baseData.getVoiceText(), 1);
 
         }
@@ -472,9 +477,17 @@ public class ICBCPage extends LinearLayout implements OnTimerListener, OnJsListe
             btContainer.setVisibility(GONE);
             topTitle.setVisibility(GONE);
             timerView.setVisibility(VISIBLE);
-            btSignature.setVisibility(GONE);
-
-
+            //btSignature.setVisibility(GONE);
+            btSignature.setVisibility(VISIBLE);
+            btSignature.setText("取消");
+            btSignature.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    baseData.closeInputChar();
+                    baseData.sendConfirmResult("");
+                    toPlay();
+                }
+            });
             SharedpreferencesData.getInstance().setTop_bgcolor(7);
             SharedpreferencesData.getInstance().setTop_font_size(32);
             SharedpreferencesData.getInstance().setTop_font_weight(1);
