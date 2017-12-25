@@ -28,7 +28,8 @@ public class SetPosterTypeData extends BaseData {
         setCmd(cmd);
         if (Arrays.equals(Cmds.CMD_PT.getBytes(), cmd)) {
             SharedpreferencesData.getInstance().setPoster_type(buffer[2]);
-            SharedpreferencesData.getInstance().setShowTime(buffer[3] & 0xffff);
+            if (SharedpreferencesData.getInstance().getPoster_type() == 0)
+                SharedpreferencesData.getInstance().setShowTime(buffer[3] & 0xffff);
             Log.v(TAG, "Poster_type: " + buffer[2]);
             Log.v(TAG, "ShowTime: " + buffer[3]);
             backPTData();
