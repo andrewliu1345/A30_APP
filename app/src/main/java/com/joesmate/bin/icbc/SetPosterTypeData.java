@@ -14,26 +14,30 @@ import java.util.Arrays;
  */
 public class SetPosterTypeData extends BaseData {
 
-    private static SetPosterTypeData  setPosterTypeData;
-    public static SetPosterTypeData getInstance(){
-        if(setPosterTypeData == null){
+    private static SetPosterTypeData setPosterTypeData;
+
+    public static SetPosterTypeData getInstance() {
+        if (setPosterTypeData == null) {
             setPosterTypeData = new SetPosterTypeData();
         }
         return setPosterTypeData;
     }
+
     @Override
     public void setData(byte[] buffer, byte[] cmd) {
         setCmd(cmd);
-        if(Arrays.equals(Cmds.CMD_PT.getBytes(), cmd)){
+        if (Arrays.equals(Cmds.CMD_PT.getBytes(), cmd)) {
             SharedpreferencesData.getInstance().setPoster_type(buffer[2]);
+            SharedpreferencesData.getInstance().setShowTime(buffer[3] & 0xffff);
             Log.v(TAG, "Poster_type: " + buffer[2]);
+            Log.v(TAG, "ShowTime: " + buffer[3]);
             backPTData();
             legalData();
         }
 
     }
 
-    private void backPTData(){
+    private void backPTData() {
         String backCode = Cmds.CMD_PT + BackCode.CODE_00;
         backData(backCode.getBytes());
     }
