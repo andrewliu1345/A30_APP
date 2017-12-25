@@ -18,7 +18,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.github.gcacace.signaturepad.views.SignaturePad;
+import com.joesmate.signaturepad.views.SignaturePad;
 import com.joesmate.App;
 import com.joesmate.AppAction;
 import com.joesmate.Cmds;

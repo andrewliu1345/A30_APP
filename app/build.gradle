@@ -12,7 +12,7 @@ android {
     buildToolsVersion '27.0.1'
     defaultConfig {
         applicationId 'com.joesmate.App'
-        minSdkVersion 18
+        minSdkVersion 15
         targetSdkVersion 26
     }
     buildTypes {
@@ -40,8 +40,8 @@ dependencies {
     compile 'com.android.support:support-v4:26.1.0'
     compile files('src/main/jniLibs/tts.jar')
     compile files('src/main/jniLibs/droidText.0.5.jar')
-    compile project(':signature-pad')
     implementation project(':crypto')
     implementation files('src/main/jniLibs/pensoon_android_3.jar')
-    compile(name:'library-release',ext:'aar')
+    compile(name: 'library-release', ext: 'aar')
+    implementation files('src/main/jniLibs/signa.jar')
 }

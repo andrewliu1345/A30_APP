@@ -15,7 +15,7 @@
         android:background="@drawable/blue_dot_rectangle"
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true">
-        <com.github.gcacace.signaturepad.views.SignaturePad
+        <com.joesmate.signaturepad.views.SignaturePad
             android:id="@+id/signature_frame_view"
             android:layout_width="600dp"
             android:layout_height="350dp"

@@ -1,1 +1,1 @@
-include ':app',  ':tests', ':signature-pad', ':crypto'
+include ':app',  ':crypto'
