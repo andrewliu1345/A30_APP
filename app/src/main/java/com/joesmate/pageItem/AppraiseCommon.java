@@ -3,6 +3,9 @@ package com.joesmate.pageItem;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Matrix;
+import android.graphics.PixelFormat;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
@@ -50,13 +53,13 @@ public class AppraiseCommon extends BasePageItem {
     public AppraiseCommon(Context context) {
         super(context);
         mContext = context;
-        layoutTellerInf = (LinearLayout) findViewById(R.id.tellerinf);
-        layoutBtGroup = (LinearLayout) findViewById(R.id.appraise_bt_group);
-        tvHit = (TextView) findViewById(R.id.appraise_hit);
-        tvId = (TextView) findViewById(R.id.personNumber);
-        tvName = (TextView) findViewById(R.id.personName);
-        ivPhoto = (ImageView) findViewById(R.id.photo);
-        linearLayoutStarGrp = (LinearLayout) findViewById(R.id.starlist);
+        layoutTellerInf = (LinearLayout) findViewById(id.tellerinf);
+        layoutBtGroup = (LinearLayout) findViewById(id.appraise_bt_group);
+        tvHit = (TextView) findViewById(id.appraise_hit);
+        tvId = (TextView) findViewById(id.personNumber);
+        tvName = (TextView) findViewById(id.personName);
+        ivPhoto = (ImageView) findViewById(id.photo);
+        linearLayoutStarGrp = (LinearLayout) findViewById(id.starlist);
         baseData = SDCSStartEvaluateData.getInstance();
 
         //commonData = AppraiseCommonData.getinstance();
@@ -88,7 +91,7 @@ public class AppraiseCommon extends BasePageItem {
         setTimer(baseData.getTimeOut());
         App.getInstance().tts.Read(baseData.getVoiceText(), 1);
 
-        Drawable db=getPhotoImage();
+        Drawable db = getPhotoImage();
 //        Bitmap dm=db.getBi
 //        ViewGroup.LayoutParams layoutParams= ivPhoto.getLayoutParams();
         ivPhoto.setImageDrawable(db);
@@ -127,13 +130,15 @@ public class AppraiseCommon extends BasePageItem {
                 photoUrl = "/sdcard/MEDIA/head/" + baseData.getPhotoName();
                 File file = new File(photoUrl);
                 if (file.isFile() && file.exists()) {
-                    BitmapFactory.Options options = new BitmapFactory.Options();
-                    options.inPreferredConfig = Bitmap.Config.RGB_565;
-                    options.inPurgeable = true;
-                    options.inInputShareable = true;
-                    options.inSampleSize = 1;
-                    Bitmap bmp = BitmapFactory.decodeFile(photoUrl, options);
-                    return new BitmapDrawable(bmp);
+//                    BitmapFactory.Options options = new BitmapFactory.Options();
+//                    options.inPreferredConfig = Bitmap.Config.RGB_565;
+//                    options.inPurgeable = true;
+//                    options.inInputShareable = true;
+//                    options.inSampleSize = 1;
+//                    Drawable drawable = Drawable.createFromPath(photoUrl);
+//                    Bitmap bmp = BitmapFactory.decodeFile(photoUrl, options);
+                    Drawable zoomDrawable = zoomDrawable(Drawable.createFromPath(photoUrl), 250, 300);
+                    return zoomDrawable;
                 } else {
                     return getResources().getDrawable(R.drawable.defaulthead);
                 }
@@ -145,6 +150,30 @@ public class AppraiseCommon extends BasePageItem {
             return getResources().getDrawable(R.drawable.defaulthead);
         }
 
+    }
+
+    public static Bitmap drawableToBitmap(Drawable drawable) // drawable 转换成 bitmap
+    {
+        int width = drawable.getIntrinsicWidth();   // 取 drawable 的长宽
+        int height = drawable.getIntrinsicHeight();
+        Bitmap.Config config = drawable.getOpacity() != PixelFormat.OPAQUE ? Bitmap.Config.ARGB_8888 : Bitmap.Config.RGB_565;         // 取 drawable 的颜色格式
+        Bitmap bitmap = Bitmap.createBitmap(width, height, config);     // 建立对应 bitmap
+        Canvas canvas = new Canvas(bitmap);         // 建立对应 bitmap 的画布
+        drawable.setBounds(0, 0, width, height);
+        drawable.draw(canvas);      // 把 drawable 内容画到画布中
+        return bitmap;
+    }
+
+    public static Drawable zoomDrawable(Drawable drawable, int w, int h) {
+        int width = drawable.getIntrinsicWidth();
+        int height = drawable.getIntrinsicHeight();
+        Bitmap oldbmp = drawableToBitmap(drawable); // drawable 转换成 bitmap
+        Matrix matrix = new Matrix();   // 创建操作图片用的 Matrix 对象
+        float scaleWidth = ((float) w / width);   // 计算缩放比例
+        float scaleHeight = ((float) h / height);
+        matrix.postScale(scaleWidth, scaleHeight);         // 设置缩放比例
+        Bitmap newbmp = Bitmap.createBitmap(oldbmp, 0, 0, width, height, matrix, true);       // 建立新的 bitmap ，其内容是对原 bitmap 的缩放后的图
+        return new BitmapDrawable(newbmp);       // 把 bitmap 转换成 drawable 并返回
     }
 
 
@@ -184,13 +213,14 @@ public class AppraiseCommon extends BasePageItem {
                 }
                 if (i == 1) {
                     baseData.sendConfirmResult(String.valueOf(2));
-                    baseData.setResult("满意");
+                    baseData.setResult("一般");
                 }
                 if (i == 2) {
                     baseData.sendConfirmResult(String.valueOf(1));
-                    baseData.setResult("非常满意");
+                    baseData.setResult("满意");
                 }
                 toPlay(PlayActivity.PAGE_APPRAISE_OVER);
+                App.getInstance().tts.Read("感谢您的评价", 1);
             }
         }
     }

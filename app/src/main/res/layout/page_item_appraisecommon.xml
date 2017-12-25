@@ -1,46 +1,43 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:layout_gravity="center_horizontal"
-    android:gravity="center">
-    
+    android:layout_height="fill_parent">
+
 
     <include
         android:id="@+id/tellerinf"
+        layout="@layout/page_item_appraise"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_centerInParent="true"
         android:layout_marginBottom="20dp"
         android:layout_marginLeft="540dp"
-        android:gravity="center_horizontal"
-        layout="@layout/page_item_appraise" />
+        android:layout_marginTop="20dp" />
+
     <TextView
         android:id="@+id/appraise_hit"
-         android:layout_marginTop="50dp"
-        android:textSize="48dp"
-        android:textColor="@color/white"
-        android:gravity="center_horizontal"
-         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"></TextView>
-
-
-    <ImageView
-         android:id="@+id/appraise_line2"
         android:layout_width="fill_parent"
-        android:layout_height="2dp"
-        android:layout_alignBottom="@id/tellerinf"
-        android:layout_marginTop="20dp"
-        android:background="@color/white" />
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:gravity="center_horizontal"
+        android:textColor="@color/white"
+        android:textSize="48dp"></TextView>
+
+
+    <!--<ImageView-->
+    <!--android:id="@+id/appraise_line2"-->
+    <!--android:layout_width="fill_parent"-->
+    <!--android:layout_height="2dp"-->
+    <!--android:layout_alignParentBottom="true"-->
+    <!--android:layout_marginTop="20dp"-->
+    <!--android:background="@color/white" />-->
 
     <LinearLayout
         android:id="@+id/appraise_bt_group"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/appraise_line2"
-       android:layout_marginTop="20dp"
-        android:orientation="horizontal" >
-    </LinearLayout>
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"></LinearLayout>
 
 
 </RelativeLayout>

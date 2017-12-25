@@ -1,10 +1,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:layout_width="fill_parent"
-              android:layout_height="fill_parent"
-              android:layout_marginBottom="20dp"
-              android:orientation="vertical"
-    >
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:layout_marginBottom="20dp"
+    android:orientation="vertical">
 
 
     <RelativeLayout
@@ -15,12 +14,11 @@
         <ImageView
             android:id="@+id/photo"
             android:layout_width="wrap_content"
-
             android:layout_height="wrap_content"
             android:adjustViewBounds="true"
             android:maxHeight="400dp"
-            android:maxWidth="300dp"
-            android:src="@drawable/defaulthead"/>
+            android:minHeight="399dp"
+            android:src="@drawable/defaulthead" />
         <!--android:scaleType="fitCenter"-->
         <TextView
             android:id="@+id/person"
@@ -30,7 +28,7 @@
             android:layout_marginTop="10dp"
             android:text="@string/personname"
             android:textColor="@color/black"
-            android:textSize="30dp"/>
+            android:textSize="30dp" />
 
         <TextView
             android:id="@+id/personName"
@@ -41,7 +39,7 @@
             android:layout_toRightOf="@id/person"
             android:text="XXX"
             android:textColor="@color/black"
-            android:textSize="30dp"/>
+            android:textSize="30dp" />
 
 
         <TextView
@@ -52,7 +50,7 @@
             android:layout_marginTop="10dp"
             android:text="@string/personnumber"
             android:textColor="@color/black"
-            android:textSize="30dp"/>
+            android:textSize="30dp" />
 
         <TextView
             android:id="@+id/personNumber"
@@ -63,7 +61,7 @@
             android:layout_toRightOf="@id/number"
             android:text="20160704"
             android:textColor="@color/black"
-            android:textSize="30dp"/>
+            android:textSize="30dp" />
 
         <TextView
             android:id="@+id/rate"
@@ -73,7 +71,7 @@
             android:layout_marginTop="10dp"
             android:text="@string/ratestar"
             android:textColor="@color/black"
-            android:textSize="30dp"/>
+            android:textSize="30dp" />
 
         <LinearLayout
             android:id="@+id/starlist"
@@ -87,32 +85,32 @@
             <ImageView
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:src="@drawable/star"/>
+                android:src="@drawable/star" />
 
             <ImageView
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:src="@drawable/star"/>
+                android:src="@drawable/star" />
 
             <ImageView
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:src="@drawable/star"/>
+                android:src="@drawable/star" />
 
             <ImageView
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:src="@drawable/star"/>
+                android:src="@drawable/star" />
 
             <ImageView
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:src="@drawable/star"/>
+                android:src="@drawable/star" />
 
             <ImageView
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:src="@drawable/star"/>
+                android:src="@drawable/star" />
         </LinearLayout>
 
     </RelativeLayout>
