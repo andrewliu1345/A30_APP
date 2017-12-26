@@ -9,7 +9,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
-import com.github.gcacace.signaturepad.views.SignaturePad;
+import com.joesmate.signaturepad.views.SignaturePad;
 import com.joesmate.R;
 import com.joesmate.R.id;
 import com.joesmate.SharedpreferencesData;
