@@ -92,7 +92,7 @@ public class SignatureFrame extends LinearLayout implements OnClickListener {
             }
         } else if (v == btFinger) {
             //SignatureData.getInstance().backData();
-            onSignatureListener.hide();
+            onSignatureListener.fingerSigna();
         }
 
 
@@ -151,6 +151,8 @@ public class SignatureFrame extends LinearLayout implements OnClickListener {
 
     public static interface OnSignatureListener {
         public void hide();
+
+        public void fingerSigna();
 
         public void confirm();
     }

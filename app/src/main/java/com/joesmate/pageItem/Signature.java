@@ -17,6 +17,7 @@ import com.artifex.mupdfdemo.MuPDFReaderView;
 import com.joesmate.App;
 import com.joesmate.AssitTool;
 import com.joesmate.CMD;
+import com.joesmate.Cmds;
 import com.joesmate.R;
 import com.joesmate.R.id;
 import com.joesmate.bin.ResposeSignatureData;
@@ -125,6 +126,16 @@ public class Signature extends BasePageItem {
         public void hide() {
             btSignature.setVisibility(View.VISIBLE);
             signatureFrame.setVisibility(GONE);
+        }
+
+        @Override
+        public void fingerSigna() {
+            btSignature.setVisibility(View.VISIBLE);
+            signatureFrame.setVisibility(GONE);
+            App.getInstance().fitManagerCCB.getBaseFitBin().setData(CMD.RF,
+                    CMD.RF.length);
+            testSignature();
+            toPlay();
         }
 
         @Override

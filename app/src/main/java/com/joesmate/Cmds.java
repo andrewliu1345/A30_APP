@@ -65,6 +65,8 @@ public class Cmds {
     public static final String CMD_SG = "SG";
     //Send Sign Image
     public static final String CMD_RG = "RG";
+    //选择指纹签名
+    public static final String CMD_RF = "RF";
     //取消
     public static final String CMD_CL = "CL";
     // back send a one frame image
@@ -192,11 +194,11 @@ public class Cmds {
 
     public static final String CMD_ST = "ST";
 
-    public static final String LOAD_MASTER_KEY="LOAD_MASTER_KEY";
+    public static final String LOAD_MASTER_KEY = "LOAD_MASTER_KEY";
 
-    public static final String MASTER_KEY="MASTER_KEY";
+    public static final String MASTER_KEY = "MASTER_KEY";
 
-    public static final String WORK_KEY="WORK_KEY";
+    public static final String WORK_KEY = "WORK_KEY";
 
 
 }

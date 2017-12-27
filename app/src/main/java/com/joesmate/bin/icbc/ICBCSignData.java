@@ -393,7 +393,7 @@ public class ICBCSignData extends BaseData {
 		}
 	};
 
-	private void sendConfirmCode(String backCmd) {
+	public void sendConfirmCode(String backCmd) {
 		Log.d(TAG, "sendConfirmCode");
 		String backCode = backCmd + BackCode.CODE_00;
 		backData(backCode.getBytes());

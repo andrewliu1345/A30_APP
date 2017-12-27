@@ -15,6 +15,7 @@ public class CMD {
     public static final byte[] BR = {0x42, 0x52};
     public static final byte[] SG = {0x53, 0x47};
     public static final byte[] SR = {0x53, 0x52};
+    public static final byte[] RF = {'R', 'F'};
     public static final byte[] AF = {0x41, 0x46};
     public static final byte[] SF = {0x53, 0x46};
     public static final byte[] RR = {0x52, 0x52};
