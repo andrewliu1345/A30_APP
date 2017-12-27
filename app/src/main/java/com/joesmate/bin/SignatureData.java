@@ -144,7 +144,7 @@ public class SignatureData extends BaseData{
 		
 	}
 	
-	private void sendConfirmCode(String code){
+	public void sendConfirmCode(String code){
 		Log.d(TAG, "sendConfirmCode");
 		String backCode = Cmds.BACK_DB+code;
 		backData(backCode.getBytes());

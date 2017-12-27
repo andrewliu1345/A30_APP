@@ -3,7 +3,7 @@ package com.joesmate.widget;
 import android.content.Context;
 import android.util.AttributeSet;
 
-import com.github.gcacace.signaturepad.views.SignaturePad;
+import com.joesmate.signaturepad.views.SignaturePad;
 
 
 public class ChildSignatureView extends SignaturePad {

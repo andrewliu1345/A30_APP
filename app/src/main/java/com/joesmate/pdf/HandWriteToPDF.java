@@ -72,7 +72,7 @@ public class HandWriteToPDF {
 			//调用书写pdf位置方法
 			//writingPosition(img ,pa.getAsNumber(pa.size()-1).floatValue());
 			//img.setAbsolutePosition(rectangle.getWidth() / 2 - 200, rectangle.getHeight() - 40);
-			img.setAbsolutePosition(leftDownX,pdfheight-picHeight-leftDownY);
+			img.setAbsolutePosition(leftDownX,leftDownY);
 			if(over != null) {
 				over.addImage(img);
 			}

@@ -54,11 +54,11 @@ public class ICBCSignatureFrame extends LinearLayout implements OnClickListener 
         init(context);
     }
 
-    public ICBCSignatureFrame(Context context) {
-        super(context);
-        this.context = context;
-        init(context);
-    }
+//    public ICBCSignatureFrame(Context context) {
+//        super(context);
+//        this.context = context;
+//        init(context);
+//    }
 
 
     public void setSignatureSize(int width, int height) {
@@ -122,6 +122,7 @@ public class ICBCSignatureFrame extends LinearLayout implements OnClickListener 
     }
 
     public void init(Context context) {
+
         inflate(context, R.layout.icbc_signature_frame, this);
         Log.d("bill", "slop:" + ViewConfiguration.get(context).getScaledTouchSlop());
         IntentFilter filter = new IntentFilter();
