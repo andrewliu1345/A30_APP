@@ -43,7 +43,7 @@ public class Cmds {
     //public static final String CMD_SG = "SG";
     public static final String CMD_DB = "DB";
     //public static final String CMD_GS = "GS";
-    public static final String CMD_SF = "SF"; //获取最后一次签名命令
+    //public static final String CMD_SF = "SF"; //获取最后一次签名命令
     public static final String CMD_SR = "SR"; //返回电子签名命令
     public static final String CMD_DH = "DH";
     public static final String CMD_HH = "HH";
@@ -65,8 +65,10 @@ public class Cmds {
     public static final String CMD_SG = "SG";
     //Send Sign Image
     public static final String CMD_RG = "RG";
-    //选择指纹签名
+    //指纹签名返回
     public static final String CMD_RF = "RF";
+    //选择指纹签名
+    public static final String CMD_SF = "SF";
     //取消
     public static final String CMD_CL = "CL";
     // back send a one frame image

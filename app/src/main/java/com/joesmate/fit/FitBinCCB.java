@@ -16,6 +16,7 @@ import com.joesmate.bin.DeleteFileData;
 import com.joesmate.bin.DevRebootData;
 import com.joesmate.bin.DeviceIdData;
 import com.joesmate.bin.ExistFileData;
+import com.joesmate.bin.FingerSignerData;
 import com.joesmate.bin.GenerateKeyPw;
 import com.joesmate.bin.GetPwCrc;
 import com.joesmate.bin.GetSignPDFStateData;
@@ -23,6 +24,7 @@ import com.joesmate.bin.InteractiveMsgData;
 import com.joesmate.bin.OptionPlayData;
 import com.joesmate.bin.QueryFileData;
 import com.joesmate.bin.QuestionData;
+import com.joesmate.bin.ResposeFingerSignerData;
 import com.joesmate.bin.SecretKeyData;
 import com.joesmate.bin.SetPwMkey;
 import com.joesmate.bin.SetPwWkey;
@@ -197,6 +199,10 @@ public class FitBinCCB extends BaseFitBin {
             baseData = CheckKeyData.getInstance();
         } else if (Arrays.equals(Cmds.CMD_ST.getBytes(), cmd)) {
             baseData = SettingEncryption.getInstance();
+        } else if (Arrays.equals(Cmds.CMD_SF.getBytes(), cmd)) {
+            baseData = FingerSignerData.getInstance();
+        } else if (Arrays.equals(Cmds.CMD_RF.getBytes(), cmd)) {
+            baseData = ResposeFingerSignerData.getInstance();
         }
         return baseData;
     }

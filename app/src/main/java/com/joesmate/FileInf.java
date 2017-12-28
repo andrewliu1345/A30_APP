@@ -10,6 +10,7 @@ public class FileInf {
     public static final int FILE_TYPE_HTML = 5;
     public static final int FILE_TYPE_PDF = 6;
     public static final int FILE_TYPE_OTHER = 7;
+    public static final int FILE_TYPE_SIGNA = 8;
 
     public static final String MEDIA = "/mnt/sdcard/MEDIA";
     public static final String RES = MEDIA + "/res";
@@ -25,6 +26,7 @@ public class FileInf {
     public static final String APK_NAME = "InhuaSoft_ICBC.apk";
     public static final String KEYS_PATH = MEDIA + "/key";
     public static final String KEY_NAME = "key.xml";
+    public static final String SIGNA = MEDIA + "/signa";
     public static final String SYSTEM_LOG = MEDIA + "/log";
     public static final String LOG_NAME = "log.txt";
 
@@ -38,27 +40,26 @@ public class FileInf {
     public static final String[] PROVIDE_HTML = {"html", "htm"};
 
     public static enum FileType {
-        IMG, VIDEO, AUDIO, HTML, PDF, OTHER
+        IMG, VIDEO, AUDIO, HTML, PDF, OTHER, SIGNA
     }
 
     public static int getFileType(FileType fileType) {
         switch (fileType) {
             case IMG:
                 return FILE_TYPE_IMG;
-
             case PDF:
                 return FILE_TYPE_PDF;
-
             case HTML:
                 return FILE_TYPE_HTML;
-
             case AUDIO:
                 return FILE_TYPE_AUDIO;
 
             case VIDEO:
                 return FILE_TYPE_VEDIO;
-
+            case SIGNA:
+                return FILE_TYPE_SIGNA;
             case OTHER:
+
             default:
                 return FILE_TYPE_OTHER;
 
@@ -81,6 +82,8 @@ public class FileInf {
             return PDF;
         } else if (fileType == FILE_TYPE_HTML) {
             return HTML;
+        } else if (fileType == FILE_TYPE_SIGNA) {
+            return SIGNA;
         } else if (fileType == FILE_TYPE_OTHER) {
             return OTHER;
         }
