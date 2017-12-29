@@ -20,6 +20,7 @@ import com.joesmate.CMD;
 import com.joesmate.Cmds;
 import com.joesmate.R;
 import com.joesmate.R.id;
+import com.joesmate.bin.FingerSignerData;
 import com.joesmate.bin.ResposeSignatureData;
 import com.joesmate.bin.SignatureData;
 import com.joesmate.widget.HtmlView;
@@ -132,9 +133,7 @@ public class Signature extends BasePageItem {
         public void fingerSigna() {
             btSignature.setVisibility(View.VISIBLE);
             signatureFrame.setVisibility(GONE);
-            App.getInstance().fitManagerCCB.getBaseFitBin().setData(CMD.RF,
-                    CMD.RF.length);
-            testSignature();
+            App.getInstance().fitManagerCCB.getBaseFitBin().backData(Cmds.CMD_SF.getBytes());
             toPlay();
         }
 

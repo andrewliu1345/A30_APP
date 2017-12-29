@@ -31,10 +31,12 @@ import com.joesmate.AndroidBug5497Workaround;
 import com.joesmate.App;
 import com.joesmate.AppAction;
 import com.joesmate.AssitTool;
+import com.joesmate.CMD;
 import com.joesmate.Cmds;
 import com.joesmate.FileInf;
 import com.joesmate.R;
 import com.joesmate.SharedpreferencesData;
+import com.joesmate.bin.FingerSignerData;
 import com.joesmate.bin.GetSignPDFStateData;
 import com.joesmate.bin.InputPw;
 import com.joesmate.bin.icbc.ICBCAddWebFileData;
@@ -985,6 +987,16 @@ public class ICBCPage extends LinearLayout implements OnTimerListener, OnJsListe
     }
 
     ICBCSignatureFrame.OnSignatureListener signatureListener = new ICBCSignatureFrame.OnSignatureListener() {
+
+
+        @Override
+        public void fingerSigna() {
+            btSignature.setVisibility(View.VISIBLE);
+            signatureFrame.setVisibility(GONE);
+            App.getInstance().fitManagerCCB.getBaseFitBin().backData(Cmds.CMD_SF.getBytes());
+
+            toPlay();
+        }
 
         @Override
         public void hide() {

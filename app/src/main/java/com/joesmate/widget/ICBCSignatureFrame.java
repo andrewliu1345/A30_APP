@@ -39,7 +39,7 @@ public class ICBCSignatureFrame extends LinearLayout implements OnClickListener 
     boolean isFullScreen;
     public SignaturePad signatureView;
     LinearLayout signatureLinearLayout;
-    Button btReturn, btReset, btConfirm;
+    Button btReturn, btReset, btConfirm,btFinger;
     OnSignatureListener onSignatureListener;
     Bitmap cacheBitmp;
     TextView txtSignMsg;
@@ -177,11 +177,12 @@ public class ICBCSignatureFrame extends LinearLayout implements OnClickListener 
 //		btReturn = (Button) findViewById(id.signature_frame_bt_return);
         btReset = (Button) findViewById(id.signature_frame_bt_reset);
         btConfirm = (Button) findViewById(id.signature_frame_bt_confirm);
+        btFinger = (Button) findViewById(id.signature_frame_bt_finger);
 
         txtSignMsg = (TextView) findViewById(id.sign_msg);
         signatureLinearLayout = (LinearLayout) findViewById(id.signature_grp);
         setButtonEnabled(false);
-
+        btFinger.setOnClickListener(this);
         //btFullScreen.setOnClickListener(this);
 //		btReturn.setOnClickListener(this);
         btReset.setOnClickListener(this);
@@ -229,6 +230,9 @@ public class ICBCSignatureFrame extends LinearLayout implements OnClickListener 
                 onSignatureListener.confirm();
                 signatureView.clear();
             }
+        } else if (v == btFinger) {
+            //SignatureData.getInstance().backData();
+            onSignatureListener.fingerSigna();
         }
 
     }
@@ -338,7 +342,7 @@ public class ICBCSignatureFrame extends LinearLayout implements OnClickListener 
 
     public static interface OnSignatureListener {
         public void hide();
-
+        public void fingerSigna();
         public void confirm();
     }
 
